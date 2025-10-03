@@ -1,7 +1,7 @@
 import { tokenService } from './tokenService'
 
 export const gmailService = {
-  async getEmails(accessToken?: string) {
+  async getEmails(_accessToken?: string): Promise<any> {
     try {
       // Obtener token válido
       const validToken = await tokenService.getValidToken()
@@ -45,7 +45,7 @@ export const gmailService = {
     }
   },
 
-  async markAsRead(accessToken: string, emailId: string) {
+  async markAsRead(accessToken: string, emailId: string): Promise<any> {
     try {
       const validToken = await tokenService.getValidToken()
       if (!validToken) {

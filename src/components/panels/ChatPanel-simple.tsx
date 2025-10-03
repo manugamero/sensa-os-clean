@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 const ChatPanelSimple: React.FC = () => {
-  const [rooms, setRooms] = useState([
+  const [rooms] = useState([
     { id: '1', name: 'General', participants: ['user1@example.com', 'user2@example.com'] },
     { id: '2', name: 'Proyecto Alpha', participants: ['user1@example.com', 'user3@example.com'] }
   ])

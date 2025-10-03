@@ -42,7 +42,7 @@ export class TokenService {
     }
   }
 
-  private async refreshToken(): Promise<string | null> {
+  private async refreshToken(): Promise<string> {
     // Evitar múltiples llamadas simultáneas
     if (this.refreshPromise) {
       return await this.refreshPromise
@@ -54,12 +54,12 @@ export class TokenService {
     return result
   }
 
-  private async performTokenRefresh(): Promise<string | null> {
+  private async performTokenRefresh(): Promise<string> {
     try {
       const user = auth.currentUser
       if (!user) {
         console.log('No user found, need to login')
-        return null
+        throw new Error('No user found, need to login')
       }
 
       // Forzar renovación del token
@@ -74,7 +74,7 @@ export class TokenService {
       // Limpiar tokens inválidos
       localStorage.removeItem('googleAccessToken')
       localStorage.removeItem('googleTokenExpiry')
-      return null
+      throw error
     }
   }
 

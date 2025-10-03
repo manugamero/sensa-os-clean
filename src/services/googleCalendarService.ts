@@ -9,7 +9,7 @@ interface CreateEventData {
 }
 
 export const googleCalendarService = {
-  async getEvents(accessToken?: string) {
+  async getEvents(_accessToken?: string): Promise<any> {
     try {
       // Obtener token válido
       const validToken = await tokenService.getValidToken()
@@ -53,7 +53,7 @@ export const googleCalendarService = {
     }
   },
 
-  async createEvent(accessToken: string, eventData: CreateEventData) {
+  async createEvent(accessToken: string, eventData: CreateEventData): Promise<any> {
     try {
       const validToken = await tokenService.getValidToken()
       if (!validToken) {

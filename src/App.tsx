@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth'
 import { auth } from './lib/firebase'
 import { AuthContext } from './contexts/AuthContext'
@@ -47,32 +47,12 @@ function App() {
         localStorage.setItem('googleTokenExpiry', (Date.now() + 3600000).toString())
         console.log('ID token almacenado como fallback')
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error signing in:', error)
       alert('Error al iniciar sesión: ' + error.message)
     }
   }
 
-  const refreshGoogleToken = async () => {
-    try {
-      if (!user) return null
-      
-      const result = await user.getIdToken(true) // Force refresh
-      localStorage.setItem('googleAccessToken', result)
-      localStorage.setItem('googleTokenExpiry', (Date.now() + 3600000).toString())
-      console.log('Google token refreshed')
-      return result
-    } catch (error) {
-      console.error('Error refreshing token:', error)
-      return null
-    }
-  }
-
-  const isTokenExpired = () => {
-    const expiry = localStorage.getItem('googleTokenExpiry')
-    if (!expiry) return true
-    return Date.now() > parseInt(expiry)
-  }
 
   const handleSignOut = async () => {
     try {
@@ -102,7 +82,7 @@ function App() {
             ) : user ? (
               <Dashboard />
             ) : (
-              <LoginPage />
+              <LoginPage onSignIn={signInWithGoogle} />
             )}
           </div>
         </ThemeProvider>
