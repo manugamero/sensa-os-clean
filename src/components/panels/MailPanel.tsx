@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Mail, MailOpen, Paperclip, Filter, Search, Star } from 'lucide-react'
+import { Mail, MailOpen, Paperclip, Filter, Search, Star, Plus } from 'lucide-react'
 import { gmailService } from '../../services/gmailService'
 
 interface Email {
@@ -98,19 +98,17 @@ const MailPanel: React.FC = () => {
 
   return (
     <div className="h-full flex flex-col">
-      {/* Filtros y búsqueda */}
-      <div className="mb-4 space-y-2">
+      {/* Header con iconos colapsados */}
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Email</h2>
         <div className="flex items-center gap-2">
-          <div className="relative flex-1">
-            <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Buscar emails..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-8 pr-3 py-1 text-sm border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-gray-500"
-            />
-          </div>
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-500 dark:text-gray-400"
+            title="Buscar"
+          >
+            <Search className="w-4 h-4" />
+          </button>
           <button
             onClick={() => setShowFilters(!showFilters)}
             className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-500 dark:text-gray-400"
@@ -118,9 +116,31 @@ const MailPanel: React.FC = () => {
           >
             <Filter className="w-4 h-4" />
           </button>
+          <button
+            className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-500 dark:text-gray-400"
+            title="Añadir"
+          >
+            <Plus className="w-4 h-4" />
+          </button>
         </div>
-        
-        {showFilters && (
+      </div>
+
+      {/* Búsqueda expandida */}
+      {showFilters && (
+        <div className="mb-4 space-y-2">
+          <div className="flex items-center gap-2">
+            <div className="relative flex-1">
+              <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Buscar emails..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-8 pr-3 py-1 text-sm border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-gray-500"
+              />
+            </div>
+          </div>
+          
           <div className="flex items-center gap-2 text-sm">
             <span className="text-gray-500 dark:text-gray-400">Filtrar:</span>
             <button
@@ -165,8 +185,8 @@ const MailPanel: React.FC = () => {
               Importantes
             </button>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       <div className="flex-1 overflow-y-auto">
         <div className="space-y-3">
@@ -187,7 +207,7 @@ const MailPanel: React.FC = () => {
               }}
               className={`p-3 rounded-lg border cursor-pointer transition-colors ${
                 !email.isRead 
-                  ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800' 
+                  ? 'bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-700' 
                   : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800'
               }`}
             >
@@ -196,7 +216,7 @@ const MailPanel: React.FC = () => {
                   {email.isRead ? (
                     <MailOpen className="w-4 h-4 text-gray-400 dark:text-gray-500" />
                   ) : (
-                    <Mail className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                    <Mail className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">

@@ -116,7 +116,7 @@ const CalendarPanelSafe: React.FC = () => {
                         href={event.hangoutLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                        className="inline-flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400 hover:underline"
                       >
                         <Video className="w-4 h-4" />
                         Unirse
