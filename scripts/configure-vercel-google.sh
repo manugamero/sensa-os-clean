@@ -71,3 +71,4 @@ echo "1. 🔧 Configura las URLs en Google Cloud Console"
 echo "2. 🔄 Haz push de los cambios al repositorio"
 echo "3. 🚀 Vercel hará deploy automático"
 echo "4. 🧪 Prueba la aplicación en: $VERCEL_URL"
+

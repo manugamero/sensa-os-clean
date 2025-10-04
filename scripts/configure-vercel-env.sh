@@ -58,3 +58,4 @@ echo "   vercel env add GOOGLE_CLIENT_SECRET"
 echo ""
 echo "✅ Después de configurar las variables, haz un nuevo deploy:"
 echo "   vercel --prod"
+

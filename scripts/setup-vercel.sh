@@ -38,3 +38,4 @@ echo "4. 🔄 Haz push de los cambios para deploy automático"
 echo ""
 echo "📋 Para configurar Google Cloud con la nueva URL:"
 echo "   ./scripts/configure-production-google.sh"
+
