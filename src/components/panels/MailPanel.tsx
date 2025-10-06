@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Mail, MailOpen, Paperclip, Star } from 'lucide-react'
+import { Mail, MailOpen, Paperclip } from 'lucide-react'
 import { useStackModal } from '../../contexts/StackModalContext'
 import { gmailService } from '../../services/gmailService'
 
@@ -17,7 +17,6 @@ const MailPanel: React.FC = () => {
   const { openEmailModal } = useStackModal()
   const [emails, setEmails] = useState<Email[]>([])
   const [loading, setLoading] = useState(true)
-  const [showFilters, setShowFilters] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterType, setFilterType] = useState<'all' | 'unread' | 'starred' | 'important'>('all')
 
@@ -114,7 +113,7 @@ const MailPanel: React.FC = () => {
             <div
               key={email.id}
               onClick={() => {
-                openEmailModal(email.id)
+                openEmailModal(email)
                 if (!email.isRead) {
                   markAsRead(email.id)
                 }

@@ -237,30 +237,30 @@ const DashboardContent: React.FC = () => {
       </div>
 
       {/* Stack Modals */}
-      {calendarModal.isOpen && (
+      {calendarModal.isOpen && calendarModal.event && (
         <EventDetailModal
-          event={{ id: calendarModal.eventId || '', summary: 'Evento de prueba', start: { dateTime: new Date().toISOString(), timeZone: 'UTC' }, end: { dateTime: new Date(Date.now() + 3600000).toISOString(), timeZone: 'UTC' } }}
+          event={calendarModal.event}
           onClose={closeAllModals}
         />
       )}
       
-      {emailModal.isOpen && (
+      {emailModal.isOpen && emailModal.email && (
         <EmailDetailModal
-          email={{ id: emailModal.emailId || '', subject: 'Email de prueba', from: 'test@example.com', snippet: 'Contenido del email', date: new Date().toISOString(), isRead: false, hasAttachments: false }}
+          email={emailModal.email}
           onClose={closeAllModals}
         />
       )}
       
-      {chatModal.isOpen && (
+      {chatModal.isOpen && chatModal.room && (
         <ChatDetailModal
-          room={{ id: chatModal.roomId || '', name: 'Conversación de prueba', participants: ['user1@example.com', 'user2@example.com'], isActive: true }}
+          room={chatModal.room}
           onClose={closeAllModals}
         />
       )}
       
-      {notesModal.isOpen && (
+      {notesModal.isOpen && notesModal.note && (
         <NoteDetailModal
-          note={{ id: notesModal.noteId || '', title: '', content: 'Nota de prueba', completed: false, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), mentions: [], author: 'user@example.com' }}
+          note={notesModal.note}
           onClose={closeAllModals}
         />
       )}

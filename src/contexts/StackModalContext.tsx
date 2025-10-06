@@ -1,29 +1,68 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react'
 
+interface Event {
+  id: string
+  summary: string
+  start: { dateTime: string; timeZone: string }
+  end: { dateTime: string; timeZone: string }
+  description?: string
+  location?: string
+  attendees?: Array<{ email: string; displayName?: string }>
+  hangoutLink?: string
+}
+
+interface Email {
+  id: string
+  subject: string
+  from: string
+  snippet: string
+  date: string
+  isRead: boolean
+  hasAttachments: boolean
+}
+
+interface ChatRoom {
+  id: string
+  name: string
+  participants: string[]
+  isActive: boolean
+}
+
+interface Note {
+  id: string
+  title: string
+  content: string
+  completed: boolean
+  createdAt: string
+  updatedAt: string
+  mentions: string[]
+  author: string
+}
+
 interface StackModalContextType {
-  // Estados para cada columna
+  // Estados para cada columna con datos completos
   calendarModal: {
     isOpen: boolean
-    eventId: string | null
+    event: Event | null
   }
   emailModal: {
     isOpen: boolean
-    emailId: string | null
+    email: Email | null
   }
   chatModal: {
     isOpen: boolean
-    roomId: string | null
+    room: ChatRoom | null
   }
   notesModal: {
     isOpen: boolean
-    noteId: string | null
+    note: Note | null
   }
   
-  // Funciones para abrir modales
-  openCalendarModal: (eventId: string) => void
-  openEmailModal: (emailId: string) => void
-  openChatModal: (roomId: string) => void
-  openNotesModal: (noteId: string) => void
+  // Funciones para abrir modales con datos
+  openCalendarModal: (event: Event) => void
+  openEmailModal: (email: Email) => void
+  openChatModal: (room: ChatRoom) => void
+  openNotesModal: (note: Note) => void
   
   // Funciones para cerrar modales
   closeCalendarModal: () => void
@@ -48,48 +87,48 @@ interface StackModalProviderProps {
 }
 
 export const StackModalProvider: React.FC<StackModalProviderProps> = ({ children }) => {
-  const [calendarModal, setCalendarModal] = useState({ isOpen: false, eventId: null })
-  const [emailModal, setEmailModal] = useState({ isOpen: false, emailId: null })
-  const [chatModal, setChatModal] = useState({ isOpen: false, roomId: null })
-  const [notesModal, setNotesModal] = useState({ isOpen: false, noteId: null })
+  const [calendarModal, setCalendarModal] = useState({ isOpen: false, event: null as Event | null })
+  const [emailModal, setEmailModal] = useState({ isOpen: false, email: null as Email | null })
+  const [chatModal, setChatModal] = useState({ isOpen: false, room: null as ChatRoom | null })
+  const [notesModal, setNotesModal] = useState({ isOpen: false, note: null as Note | null })
 
-  const openCalendarModal = (eventId: string) => {
-    setCalendarModal({ isOpen: true, eventId })
+  const openCalendarModal = (event: Event) => {
+    setCalendarModal({ isOpen: true, event })
   }
 
-  const openEmailModal = (emailId: string) => {
-    setEmailModal({ isOpen: true, emailId })
+  const openEmailModal = (email: Email) => {
+    setEmailModal({ isOpen: true, email })
   }
 
-  const openChatModal = (roomId: string) => {
-    setChatModal({ isOpen: true, roomId })
+  const openChatModal = (room: ChatRoom) => {
+    setChatModal({ isOpen: true, room })
   }
 
-  const openNotesModal = (noteId: string) => {
-    setNotesModal({ isOpen: true, noteId })
+  const openNotesModal = (note: Note) => {
+    setNotesModal({ isOpen: true, note })
   }
 
   const closeCalendarModal = () => {
-    setCalendarModal({ isOpen: false, eventId: null })
+    setCalendarModal({ isOpen: false, event: null })
   }
 
   const closeEmailModal = () => {
-    setEmailModal({ isOpen: false, emailId: null })
+    setEmailModal({ isOpen: false, email: null })
   }
 
   const closeChatModal = () => {
-    setChatModal({ isOpen: false, roomId: null })
+    setChatModal({ isOpen: false, room: null })
   }
 
   const closeNotesModal = () => {
-    setNotesModal({ isOpen: false, noteId: null })
+    setNotesModal({ isOpen: false, note: null })
   }
 
   const closeAllModals = () => {
-    setCalendarModal({ isOpen: false, eventId: null })
-    setEmailModal({ isOpen: false, emailId: null })
-    setChatModal({ isOpen: false, roomId: null })
-    setNotesModal({ isOpen: false, noteId: null })
+    setCalendarModal({ isOpen: false, event: null })
+    setEmailModal({ isOpen: false, email: null })
+    setChatModal({ isOpen: false, room: null })
+    setNotesModal({ isOpen: false, note: null })
   }
 
   return (

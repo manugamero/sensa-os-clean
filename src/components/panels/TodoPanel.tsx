@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { CheckSquare, Square, Users, Hash, Bold, Italic, List, X, CheckCircle, Circle } from 'lucide-react'
+import { CheckSquare, Square, Users, Hash, Bold, Italic, List, X } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { useSocket } from '../../contexts/SocketContext'
 import { useStackModal } from '../../contexts/StackModalContext'
@@ -223,7 +223,7 @@ const TodoPanel: React.FC = () => {
             {todos.map((todoItem) => (
               <div 
                 key={todoItem.id} 
-                onClick={() => openNotesModal(todoItem.id)}
+                onClick={() => openNotesModal(todoItem)}
                 className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 hover:shadow-md transition-shadow bg-white dark:bg-gray-900 cursor-pointer"
               >
                 <div className="flex items-start gap-3">
