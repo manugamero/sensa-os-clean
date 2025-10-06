@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { Search, Filter, Plus } from 'lucide-react'
+import { useStackModal } from '../../contexts/StackModalContext'
 
 const ChatPanelSimple: React.FC = () => {
+  const { openChatModal } = useStackModal()
   const [rooms] = useState([
     { id: '1', name: 'General', participants: ['user1@example.com', 'user2@example.com'] },
     { id: '2', name: 'Proyecto Alpha', participants: ['user1@example.com', 'user3@example.com'] }
@@ -14,6 +15,7 @@ const ChatPanelSimple: React.FC = () => {
           {rooms.map((room) => (
             <div
               key={room.id}
+              onClick={() => openChatModal(room.id)}
               className="p-3 rounded-lg border cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-gray-800 border-gray-200 dark:border-gray-700"
             >
               <div className="flex items-center justify-between">

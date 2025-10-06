@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Clock, Users, Video, Filter, Search, Plus } from 'lucide-react'
+import { Clock, Users, Video } from 'lucide-react'
+import { useStackModal } from '../../contexts/StackModalContext'
 import { googleCalendarService } from '../../services/googleCalendarService'
 
 interface Event {
@@ -21,12 +22,10 @@ interface Event {
 }
 
 const CalendarPanel: React.FC = () => {
+  const { openCalendarModal } = useStackModal()
   const [events, setEvents] = useState<Event[]>([])
   const [loading, setLoading] = useState(true)
   const [showCreateForm, setShowCreateForm] = useState(false)
-  const [showFilters, setShowFilters] = useState(false)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [filterType, setFilterType] = useState<'all' | 'today' | 'week' | 'month'>('all')
   const [newEvent, setNewEvent] = useState({
     summary: 'Event',
     start: new Date().toISOString().slice(0, 16),
@@ -103,27 +102,6 @@ const CalendarPanel: React.FC = () => {
     })
   }
 
-  const filteredEvents = events.filter(event => {
-    const matchesSearch = event.summary.toLowerCase().includes(searchTerm.toLowerCase())
-    if (!matchesSearch) return false
-
-    const eventDate = new Date(event.start.dateTime)
-    const now = new Date()
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-    const weekFromNow = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000)
-    const monthFromNow = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000)
-
-    switch (filterType) {
-      case 'today':
-        return eventDate.toDateString() === today.toDateString()
-      case 'week':
-        return eventDate >= today && eventDate <= weekFromNow
-      case 'month':
-        return eventDate >= today && eventDate <= monthFromNow
-      default:
-        return true
-    }
-  })
 
   if (loading) {
     return (
@@ -240,15 +218,17 @@ const CalendarPanel: React.FC = () => {
         )}
 
         <div className="space-y-3">
-        {filteredEvents.length === 0 ? (
+        {events.length === 0 ? (
           <div className="text-center py-8">
-            <p className="text-gray-500 dark:text-gray-400">
-              {events.length === 0 ? 'No hay eventos próximos' : 'No se encontraron eventos con los filtros aplicados'}
-            </p>
+            <p className="text-gray-500 dark:text-gray-400">No hay eventos próximos</p>
           </div>
         ) : (
-          filteredEvents.map((event) => (
-            <div key={event.id} className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-3 hover:shadow-md transition-shadow">
+          events.map((event) => (
+            <div 
+              key={event.id} 
+              onClick={() => openCalendarModal(event.id)}
+              className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-3 hover:shadow-md transition-shadow cursor-pointer"
+            >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{event.summary}</h3>

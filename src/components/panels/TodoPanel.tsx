@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Plus, CheckSquare, Square, Users, Hash, Bold, Italic, List, X, Filter, Search, CheckCircle, Circle } from 'lucide-react'
+import { CheckSquare, Square, Users, Hash, Bold, Italic, List, X, CheckCircle, Circle } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { useSocket } from '../../contexts/SocketContext'
+import { useStackModal } from '../../contexts/StackModalContext'
 import { todoService } from '../../services/todoService'
 
 interface Todo {
@@ -18,12 +19,10 @@ interface Todo {
 const TodoPanel: React.FC = () => {
   const { user } = useAuth()
   const { socket } = useSocket()
+  const { openNotesModal } = useStackModal()
   const [todos, setTodos] = useState<Todo[]>([])
   const [loading, setLoading] = useState(true)
   const [showCreateForm, setShowCreateForm] = useState(false)
-  const [showFilters, setShowFilters] = useState(false)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [filterType, setFilterType] = useState<'all' | 'completed' | 'pending' | 'shared'>('all')
   const [newTodo, setNewTodo] = useState({
     content: '',
     mentions: ''
@@ -118,21 +117,6 @@ const TodoPanel: React.FC = () => {
       .replace(/\n/g, '<br>')
   }
 
-  const filteredTodos = todos.filter(todo => {
-    const matchesSearch = todo.content.toLowerCase().includes(searchTerm.toLowerCase())
-    if (!matchesSearch) return false
-
-    switch (filterType) {
-      case 'completed':
-        return todo.completed
-      case 'pending':
-        return !todo.completed
-      case 'shared':
-        return todo.mentions.length > 0
-      default:
-        return true
-    }
-  })
 
   const insertMarkdown = (before: string, after: string) => {
     if (textareaRef.current) {
@@ -163,15 +147,6 @@ const TodoPanel: React.FC = () => {
     <div className="h-full flex flex-col">
 
       <div className="flex-1 overflow-y-auto">
-        <div className="flex justify-end mb-4">
-        <button
-          onClick={() => setShowCreateForm(true)}
-          className="p-2 hover:bg-gray-100 rounded text-gray-500"
-          title="Nueva nota"
-        >
-          <Plus className="w-5 h-5" />
-        </button>
-      </div>
 
       {showCreateForm && (
         <div className="mb-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
@@ -239,16 +214,18 @@ const TodoPanel: React.FC = () => {
         )}
 
         <div className="space-y-4">
-        {filteredTodos.length === 0 ? (
+        {todos.length === 0 ? (
           <div className="text-center py-8">
-            <p className="text-gray-500 dark:text-gray-400">
-              {todos.length === 0 ? 'No hay notas' : 'No se encontraron notas con los filtros aplicados'}
-            </p>
+            <p className="text-gray-500 dark:text-gray-400">No hay notas</p>
           </div>
         ) : (
           <div className="space-y-4">
-            {filteredTodos.map((todoItem) => (
-              <div key={todoItem.id} className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 hover:shadow-md transition-shadow bg-white dark:bg-gray-900">
+            {todos.map((todoItem) => (
+              <div 
+                key={todoItem.id} 
+                onClick={() => openNotesModal(todoItem.id)}
+                className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 hover:shadow-md transition-shadow bg-white dark:bg-gray-900 cursor-pointer"
+              >
                 <div className="flex items-start gap-3">
                   <button
                     onClick={() => toggleTodo(todoItem.id, !todoItem.completed)}

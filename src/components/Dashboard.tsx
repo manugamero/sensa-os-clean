@@ -2,14 +2,20 @@ import React, { useState } from 'react'
 import { RefreshCw, Plus, Sun, Moon, Calendar, Mail, MessageCircle, StickyNote, Search, Filter } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useTheme } from '../contexts/ThemeContext'
+import { StackModalProvider, useStackModal } from '../contexts/StackModalContext'
 import CalendarPanel from './panels/CalendarPanel'
 import MailPanel from './panels/MailPanel'
 import TodoPanel from './panels/TodoPanel'
 import ChatPanel from './panels/ChatPanel-simple'
+import EventDetailModal from './modals/EventDetailModal'
+import EmailDetailModal from './modals/EmailDetailModal'
+import ChatDetailModal from './modals/ChatDetailModal'
+import NoteDetailModal from './modals/NoteDetailModal'
 
-const Dashboard: React.FC = () => {
+const DashboardContent: React.FC = () => {
   const { user, signOut } = useAuth()
   const { isDark, toggleTheme } = useTheme()
+  const { calendarModal, emailModal, chatModal, notesModal, closeAllModals } = useStackModal()
   const [activeTab, setActiveTab] = useState(0)
   const [showSearch, setShowSearch] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
@@ -229,7 +235,44 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Stack Modals */}
+      {calendarModal.isOpen && (
+        <EventDetailModal
+          event={{ id: calendarModal.eventId || '', summary: 'Evento de prueba', start: { dateTime: new Date().toISOString(), timeZone: 'UTC' }, end: { dateTime: new Date(Date.now() + 3600000).toISOString(), timeZone: 'UTC' } }}
+          onClose={closeAllModals}
+        />
+      )}
+      
+      {emailModal.isOpen && (
+        <EmailDetailModal
+          email={{ id: emailModal.emailId || '', subject: 'Email de prueba', from: 'test@example.com', snippet: 'Contenido del email', date: new Date().toISOString(), isRead: false, hasAttachments: false }}
+          onClose={closeAllModals}
+        />
+      )}
+      
+      {chatModal.isOpen && (
+        <ChatDetailModal
+          room={{ id: chatModal.roomId || '', name: 'Conversación de prueba', participants: ['user1@example.com', 'user2@example.com'], isActive: true }}
+          onClose={closeAllModals}
+        />
+      )}
+      
+      {notesModal.isOpen && (
+        <NoteDetailModal
+          note={{ id: notesModal.noteId || '', title: '', content: 'Nota de prueba', completed: false, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), mentions: [], author: 'user@example.com' }}
+          onClose={closeAllModals}
+        />
+      )}
     </div>
+  )
+}
+
+const Dashboard: React.FC = () => {
+  return (
+    <StackModalProvider>
+      <DashboardContent />
+    </StackModalProvider>
   )
 }
 
