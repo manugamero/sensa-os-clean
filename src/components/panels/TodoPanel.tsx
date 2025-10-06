@@ -154,7 +154,7 @@ const TodoPanel: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600"></div>
       </div>
     )
   }
@@ -304,7 +304,7 @@ const TodoPanel: React.FC = () => {
               <div className="flex-1"></div>
               <button
                 type="submit"
-                className="p-1 hover:bg-green-200 rounded text-green-600"
+                className="p-1 hover:bg-gray-200 rounded text-gray-600"
                 title="Guardar"
               >
                 <CheckSquare className="w-4 h-4" />
@@ -312,7 +312,7 @@ const TodoPanel: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowCreateForm(false)}
-                className="p-1 hover:bg-red-200 rounded text-red-600"
+                className="p-1 hover:bg-gray-200 rounded text-gray-600"
                 title="Cerrar"
               >
                 <X className="w-4 h-4" />
@@ -347,7 +347,7 @@ const TodoPanel: React.FC = () => {
                     className="flex-shrink-0 mt-1"
                   >
                     {todoItem.completed ? (
-                      <CheckSquare className="w-5 h-5 text-green-600" />
+                      <CheckSquare className="w-5 h-5 text-gray-600" />
                     ) : (
                       <Square className="w-5 h-5 text-gray-400" />
                     )}
@@ -382,7 +382,7 @@ const TodoPanel: React.FC = () => {
                       
                       <button
                         onClick={() => deleteTodo(todoItem.id)}
-                        className="p-1 hover:bg-red-100 rounded text-gray-400 hover:text-red-600"
+                        className="p-1 hover:bg-gray-100 rounded text-gray-400 hover:text-gray-600"
                         title="Eliminar"
                       >
                         <X className="w-4 h-4" />

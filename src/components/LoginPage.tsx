@@ -7,35 +7,35 @@ interface LoginPageProps {
 
 const LoginPage: React.FC<LoginPageProps> = ({ onSignIn }) => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
+    <div className="min-h-screen bg-gray-50 dark:bg-black flex items-center justify-center p-4">
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-8 w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Sensa OS</h1>
-          <p className="text-gray-600">Cliente integrado para productividad</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">sensa os</h1>
+          <p className="text-gray-600 dark:text-gray-400">Cliente integrado para productividad</p>
         </div>
 
         <div className="grid grid-cols-2 gap-4 mb-8">
-          <div className="flex flex-col items-center p-4 bg-primary-50 rounded-lg">
-            <Calendar className="h-8 w-8 text-primary-600 mb-2" />
-            <span className="text-sm font-medium text-gray-700">Calendario</span>
+          <div className="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <Calendar className="h-8 w-8 text-gray-600 dark:text-gray-400 mb-2" />
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Calendario</span>
           </div>
-          <div className="flex flex-col items-center p-4 bg-primary-50 rounded-lg">
-            <Mail className="h-8 w-8 text-primary-600 mb-2" />
-            <span className="text-sm font-medium text-gray-700">Email</span>
+          <div className="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <Mail className="h-8 w-8 text-gray-600 dark:text-gray-400 mb-2" />
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Email</span>
           </div>
-          <div className="flex flex-col items-center p-4 bg-primary-50 rounded-lg">
-            <CheckSquare className="h-8 w-8 text-primary-600 mb-2" />
-            <span className="text-sm font-medium text-gray-700">Todos</span>
+          <div className="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <CheckSquare className="h-8 w-8 text-gray-600 dark:text-gray-400 mb-2" />
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Notas</span>
           </div>
-          <div className="flex flex-col items-center p-4 bg-primary-50 rounded-lg">
-            <MessageCircle className="h-8 w-8 text-primary-600 mb-2" />
-            <span className="text-sm font-medium text-gray-700">Chat</span>
+          <div className="flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <MessageCircle className="h-8 w-8 text-gray-600 dark:text-gray-400 mb-2" />
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Chat</span>
           </div>
         </div>
 
         <button
           onClick={onSignIn}
-          className="w-full btn-primary flex items-center justify-center gap-2"
+          className="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 px-4 py-2 rounded-md font-medium transition-colors flex items-center justify-center gap-2"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path

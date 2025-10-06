@@ -128,7 +128,7 @@ const CalendarPanel: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600"></div>
       </div>
     )
   }
@@ -359,7 +359,7 @@ const CalendarPanel: React.FC = () => {
                       href={event.hangoutLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-primary-600 hover:text-primary-700 text-sm font-medium"
+                      className="flex items-center gap-1 text-gray-600 hover:text-gray-700 text-sm font-medium"
                     >
                       <Video className="w-4 h-4" />
                       Unirse
