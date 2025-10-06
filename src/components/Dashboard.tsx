@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { RefreshCw, Plus, Sun, Moon, Calendar, Mail, MessageCircle, StickyNote } from 'lucide-react'
+import { RefreshCw, Plus, Sun, Moon, Calendar, Mail, MessageCircle, StickyNote, Search, Filter } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useTheme } from '../contexts/ThemeContext'
 import CalendarPanel from './panels/CalendarPanel'
@@ -11,6 +11,9 @@ const Dashboard: React.FC = () => {
   const { user, signOut } = useAuth()
   const { isDark, toggleTheme } = useTheme()
   const [activeTab, setActiveTab] = useState(0)
+  const [showSearch, setShowSearch] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [showFilters, setShowFilters] = useState(false)
 
   const tabs = [
     { id: 0, name: 'Calendario', icon: Calendar, component: CalendarPanel },
@@ -20,6 +23,7 @@ const Dashboard: React.FC = () => {
   ]
 
   const ActiveComponent = tabs[activeTab].component
+  const activeTabName = tabs[activeTab].name
 
   return (
     <div className="h-screen bg-gray-50 dark:bg-black">
@@ -80,8 +84,113 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
+      {/* Unified Controls */}
+      <div className="px-4 pb-2">
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4">
+          <div className="flex items-center justify-between">
+            {/* Title */}
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{activeTabName}</h2>
+            
+            {/* Controls Row */}
+            <div className="flex items-center gap-2">
+              {/* Search */}
+              <button
+                onClick={() => setShowSearch(!showSearch)}
+                className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-500 dark:text-gray-400"
+                title="Buscar"
+              >
+                <Search className="w-4 h-4" />
+              </button>
+              
+              {/* Filter */}
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-500 dark:text-gray-400"
+                title="Filtros"
+              >
+                <Filter className="w-4 h-4" />
+              </button>
+              
+              {/* Refresh */}
+              <button
+                onClick={() => window.location.reload()}
+                className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-500 dark:text-gray-400"
+                title="Actualizar"
+              >
+                <RefreshCw className="w-4 h-4" />
+              </button>
+              
+              {/* Add */}
+              <button
+                className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-500 dark:text-gray-400"
+                title="Añadir"
+              >
+                <Plus className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+          
+          {/* Search Bar (when expanded) */}
+          {showSearch && (
+            <div className="mt-3">
+              <div className="relative">
+                <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder={`Buscar en ${activeTabName.toLowerCase()}...`}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-gray-500"
+                />
+              </div>
+            </div>
+          )}
+          
+          {/* Filters (when expanded) */}
+          {showFilters && (
+            <div className="mt-3">
+              <div className="flex items-center gap-2 text-sm">
+                <span className="text-gray-500 dark:text-gray-400">Filtrar:</span>
+                {activeTabName === 'Calendario' && (
+                  <>
+                    <button className="px-2 py-1 rounded text-xs bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white">Todos</button>
+                    <button className="px-2 py-1 rounded text-xs text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">Hoy</button>
+                    <button className="px-2 py-1 rounded text-xs text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">Esta semana</button>
+                    <button className="px-2 py-1 rounded text-xs text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">Este mes</button>
+                  </>
+                )}
+                {activeTabName === 'Email' && (
+                  <>
+                    <button className="px-2 py-1 rounded text-xs bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white">Todos</button>
+                    <button className="px-2 py-1 rounded text-xs text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">No leídos</button>
+                    <button className="px-2 py-1 rounded text-xs text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">Destacados</button>
+                    <button className="px-2 py-1 rounded text-xs text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">Importantes</button>
+                  </>
+                )}
+                {activeTabName === 'Chat' && (
+                  <>
+                    <button className="px-2 py-1 rounded text-xs bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white">Todos</button>
+                    <button className="px-2 py-1 rounded text-xs text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">Directos</button>
+                    <button className="px-2 py-1 rounded text-xs text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">Grupos</button>
+                    <button className="px-2 py-1 rounded text-xs text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">Activos</button>
+                  </>
+                )}
+                {activeTabName === 'Notas' && (
+                  <>
+                    <button className="px-2 py-1 rounded text-xs bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white">Todas</button>
+                    <button className="px-2 py-1 rounded text-xs text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">Completadas</button>
+                    <button className="px-2 py-1 rounded text-xs text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">Pendientes</button>
+                    <button className="px-2 py-1 rounded text-xs text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">Compartidas</button>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* Main Content */}
-      <div className="h-[calc(100vh-140px)] lg:h-[calc(100vh-80px)] p-4">
+      <div className="h-[calc(100vh-200px)] lg:h-[calc(100vh-140px)] p-4">
         {/* Desktop: Grid Layout */}
         <div className="hidden lg:grid grid-cols-4 gap-4 h-full">
           {/* Calendario */}

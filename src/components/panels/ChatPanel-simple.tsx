@@ -9,31 +9,6 @@ const ChatPanelSimple: React.FC = () => {
 
   return (
     <div className="h-full flex flex-col">
-      {/* Header con iconos colapsados */}
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Chat</h2>
-        <div className="flex items-center gap-2">
-          <button
-            className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-500 dark:text-gray-400"
-            title="Buscar"
-          >
-            <Search className="w-4 h-4" />
-          </button>
-          <button
-            className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-500 dark:text-gray-400"
-            title="Filtros"
-          >
-            <Filter className="w-4 h-4" />
-          </button>
-          <button
-            className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-500 dark:text-gray-400"
-            title="Nueva conversación"
-          >
-            <Plus className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
-
       <div className="flex-1 overflow-y-auto">
         <div className="space-y-2">
           {rooms.map((room) => (
