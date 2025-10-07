@@ -17,8 +17,8 @@ const MailPanel: React.FC = () => {
   const { openEmailModal } = useStackModal()
   const [emails, setEmails] = useState<Email[]>([])
   const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [filterType, setFilterType] = useState<'all' | 'unread' | 'starred' | 'important'>('all')
+  const [searchTerm] = useState('')
+  const [filterType] = useState<'all' | 'unread' | 'starred' | 'important'>('all')
 
   useEffect(() => {
     loadEmails()

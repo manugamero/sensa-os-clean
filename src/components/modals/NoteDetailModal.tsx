@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { X, CheckSquare, Square, Users, Hash, Bold, Italic, List, Edit, Trash2 } from 'lucide-react'
+import { X, CheckSquare, Square, Users, Edit, Trash2 } from 'lucide-react'
 
 interface Note {
   id: string
