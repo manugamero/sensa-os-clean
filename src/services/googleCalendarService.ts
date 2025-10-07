@@ -17,36 +17,27 @@ export const googleCalendarService = {
         throw new Error('No valid authentication token available')
       }
 
-      console.log('Sending Calendar request with token:', validToken)
+      console.log('Fetching calendar events directly from Google API')
 
-      const response = await fetch('/api/calendar/events', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${validToken}`
-        },
-        body: JSON.stringify({ accessToken: validToken })
-      })
-
-      console.log('Calendar API response status:', response.status)
+      // Llamar directamente a la API de Google Calendar
+      const response = await fetch(
+        'https://www.googleapis.com/calendar/v3/calendars/primary/events?maxResults=10&orderBy=startTime&singleEvents=true&timeMin=' + new Date().toISOString(),
+        {
+          headers: {
+            'Authorization': `Bearer ${validToken}`
+          }
+        }
+      )
 
       if (!response.ok) {
         const errorData = await response.json()
-        console.error('Calendar API error response:', errorData)
-        
-        // Intentar manejar el error de credenciales
-        const shouldRetry = await tokenService.handleApiError(errorData)
-        if (shouldRetry) {
-          // Reintentar con el nuevo token
-          return await this.getEvents()
-        }
-        
-        throw new Error(`Failed to fetch events: ${JSON.stringify(errorData)}`)
+        console.error('Google Calendar API error:', errorData)
+        throw new Error(`Failed to fetch events: ${errorData.error?.message || 'Unknown error'}`)
       }
 
       const data = await response.json()
-      console.log('Calendar API success response:', data)
-      return data
+      console.log('Google Calendar API success:', data.items?.length || 0, 'events')
+      return data.items || []
     } catch (error) {
       console.error('Error fetching events:', error)
       throw error

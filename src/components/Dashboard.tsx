@@ -14,6 +14,8 @@ const Dashboard: React.FC = () => {
   const [showSearch, setShowSearch] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [showFilters, setShowFilters] = useState(false)
+  const [touchStart, setTouchStart] = useState(0)
+  const [touchEnd, setTouchEnd] = useState(0)
 
   const tabs = [
     { id: 0, name: 'Calendario', icon: Calendar, component: CalendarPanel },
@@ -24,6 +26,33 @@ const Dashboard: React.FC = () => {
 
   const ActiveComponent = tabs[activeTab].component
   const activeTabName = tabs[activeTab].name
+
+  // Manejar swipe en móvil
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+    
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > 50
+    const isRightSwipe = distance < -50
+
+    if (isLeftSwipe && activeTab < tabs.length - 1) {
+      setActiveTab(activeTab + 1)
+    }
+    if (isRightSwipe && activeTab > 0) {
+      setActiveTab(activeTab - 1)
+    }
+
+    setTouchStart(0)
+    setTouchEnd(0)
+  }
 
   return (
     <div className="h-screen bg-gray-50 dark:bg-black">
@@ -61,26 +90,24 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Navigation */}
+      {/* Mobile Pagination Indicator */}
       <div className="lg:hidden px-4 pb-2">
-        <div className="flex space-x-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
-          {tabs.map((tab) => {
-            const Icon = tab.icon
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  activeTab === tab.id
-                    ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
-                    : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
-                }`}
-              >
-                <Icon className="w-4 h-4" />
-                <span className="hidden sm:inline">{tab.name}</span>
-              </button>
-            )
-          })}
+        <div className="flex justify-center items-center gap-2 py-2">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`transition-all ${
+                activeTab === tab.id
+                  ? 'w-8 h-2 bg-gray-900 dark:bg-white rounded-full'
+                  : 'w-2 h-2 bg-gray-300 dark:bg-gray-600 rounded-full'
+              }`}
+              aria-label={tab.name}
+            />
+          ))}
+        </div>
+        <div className="text-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+          {activeTabName}
         </div>
       </div>
 
@@ -222,8 +249,13 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Mobile: Single Column */}
-        <div className="lg:hidden h-full">
+        {/* Mobile: Single Column with Swipe */}
+        <div 
+          className="lg:hidden h-full"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4 h-full">
             <ActiveComponent />
           </div>
