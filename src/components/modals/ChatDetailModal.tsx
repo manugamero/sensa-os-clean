@@ -79,15 +79,7 @@ const ChatDetailModal: React.FC<ChatDetailModalProps> = ({ room, onClose }) => {
   }
 
   return (
-    <div 
-      className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4"
-      onClick={onClose}
-    >
-      {/* Modal Card */}
-      <div 
-        className="relative bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col"
-        onClick={(e) => e.stopPropagation()}
-      >
+    <div className="h-full w-full flex flex-col bg-white dark:bg-gray-900 rounded-lg shadow-xl overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-3">

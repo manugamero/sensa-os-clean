@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import { CheckSquare, Square, Users, Hash, Bold, Italic, List, X } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { useSocket } from '../../contexts/SocketContext'
-import { useStackModal } from '../../contexts/StackModalContext'
 import { todoService } from '../../services/todoService'
+import NoteDetailModal from '../modals/NoteDetailModal'
 
 interface Todo {
   id: string
@@ -19,10 +19,10 @@ interface Todo {
 const TodoPanel: React.FC = () => {
   const { user } = useAuth()
   const { socket } = useSocket()
-  const { openNotesModal } = useStackModal()
   const [todos, setTodos] = useState<Todo[]>([])
   const [loading, setLoading] = useState(true)
   const [showCreateForm, setShowCreateForm] = useState(false)
+  const [selectedNote, setSelectedNote] = useState<Todo | null>(null)
   const [newTodo, setNewTodo] = useState({
     content: '',
     mentions: ''
@@ -173,7 +173,7 @@ const TodoPanel: React.FC = () => {
   }
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col relative">
 
       <div className="flex-1 overflow-y-auto">
 
@@ -252,7 +252,7 @@ const TodoPanel: React.FC = () => {
             {todos.map((todoItem) => (
               <div 
                 key={todoItem.id} 
-                onClick={() => openNotesModal(todoItem)}
+                onClick={() => setSelectedNote(todoItem)}
                 className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 hover:shadow-md transition-shadow bg-white dark:bg-gray-900 cursor-pointer"
               >
                 <div className="flex items-start gap-3">
@@ -313,6 +313,23 @@ const TodoPanel: React.FC = () => {
         )}
         </div>
       </div>
+
+      {/* Stack Modal dentro de la columna */}
+      {selectedNote && (
+        <div className="absolute inset-0 z-10 bg-white dark:bg-black">
+          <NoteDetailModal
+            note={selectedNote}
+            onClose={() => setSelectedNote(null)}
+            onUpdate={(noteId, updates) => {
+              setTodos(todos.map(t => t.id === noteId ? { ...t, ...updates } : t))
+            }}
+            onDelete={(noteId) => {
+              deleteTodo(noteId)
+              setSelectedNote(null)
+            }}
+          />
+        </div>
+      )}
     </div>
   )
 }

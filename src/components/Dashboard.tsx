@@ -2,20 +2,14 @@ import React, { useState } from 'react'
 import { RefreshCw, Plus, Sun, Moon, Calendar, Mail, MessageCircle, StickyNote, Search, Filter } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useTheme } from '../contexts/ThemeContext'
-import { StackModalProvider, useStackModal } from '../contexts/StackModalContext'
 import CalendarPanel from './panels/CalendarPanel'
 import MailPanel from './panels/MailPanel'
 import TodoPanel from './panels/TodoPanel'
 import ChatPanel from './panels/ChatPanel-simple'
-import EventDetailModal from './modals/EventDetailModal'
-import EmailDetailModal from './modals/EmailDetailModal'
-import ChatDetailModal from './modals/ChatDetailModal'
-import NoteDetailModal from './modals/NoteDetailModal'
 
-const DashboardContent: React.FC = () => {
+const Dashboard: React.FC = () => {
   const { user, signOut } = useAuth()
   const { isDark, toggleTheme } = useTheme()
-  const { calendarModal, emailModal, chatModal, notesModal, closeAllModals } = useStackModal()
   const [activeTab, setActiveTab] = useState(0)
   const [showSearch, setShowSearch] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
@@ -236,43 +230,7 @@ const DashboardContent: React.FC = () => {
         </div>
       </div>
 
-      {/* Stack Modals */}
-      {calendarModal.isOpen && calendarModal.event && (
-        <EventDetailModal
-          event={calendarModal.event}
-          onClose={closeAllModals}
-        />
-      )}
-      
-      {emailModal.isOpen && emailModal.email && (
-        <EmailDetailModal
-          email={emailModal.email}
-          onClose={closeAllModals}
-        />
-      )}
-      
-      {chatModal.isOpen && chatModal.room && (
-        <ChatDetailModal
-          room={chatModal.room}
-          onClose={closeAllModals}
-        />
-      )}
-      
-      {notesModal.isOpen && notesModal.note && (
-        <NoteDetailModal
-          note={notesModal.note}
-          onClose={closeAllModals}
-        />
-      )}
     </div>
-  )
-}
-
-const Dashboard: React.FC = () => {
-  return (
-    <StackModalProvider>
-      <DashboardContent />
-    </StackModalProvider>
   )
 }
 
