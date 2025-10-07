@@ -32,6 +32,34 @@ const TodoPanel: React.FC = () => {
   useEffect(() => {
     loadTodos()
     
+    // Si falla, mostrar notas de ejemplo
+    setTimeout(() => {
+      if (todos.length === 0 && !loading) {
+        setTodos([
+          {
+            id: '1',
+            title: '',
+            content: 'Bienvenido a Sensa OS! Esta es una nota de ejemplo.',
+            completed: false,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            mentions: [],
+            author: user?.email || 'user@example.com'
+          },
+          {
+            id: '2',
+            title: '',
+            content: 'Puedes crear notas con **markdown** y menciones @example@example.com',
+            completed: true,
+            createdAt: new Date(Date.now() - 86400000).toISOString(),
+            updatedAt: new Date(Date.now() - 86400000).toISOString(),
+            mentions: ['example@example.com'],
+            author: user?.email || 'user@example.com'
+          }
+        ])
+      }
+    }, 3000)
+    
     if (socket) {
       socket.on('todo:created', (todo: Todo) => {
         setTodos(prev => [todo, ...prev])
@@ -63,6 +91,7 @@ const TodoPanel: React.FC = () => {
       setTodos(todosData)
     } catch (error) {
       console.error('Error loading todos:', error)
+      setTodos([])
     } finally {
       setLoading(false)
     }
