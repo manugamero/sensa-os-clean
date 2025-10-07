@@ -237,6 +237,7 @@ const DashboardContent: React.FC = () => {
       </div>
 
       {/* Stack Modals */}
+      {console.log('Dashboard render - calendarModal:', calendarModal)}
       {calendarModal.isOpen && calendarModal.event && (
         <EventDetailModal
           event={calendarModal.event}

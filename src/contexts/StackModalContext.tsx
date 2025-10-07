@@ -93,6 +93,7 @@ export const StackModalProvider: React.FC<StackModalProviderProps> = ({ children
   const [notesModal, setNotesModal] = useState({ isOpen: false, note: null as Note | null })
 
   const openCalendarModal = (event: Event) => {
+    console.log('StackModalContext: Opening calendar modal', event)
     setCalendarModal({ isOpen: true, event })
   }
 

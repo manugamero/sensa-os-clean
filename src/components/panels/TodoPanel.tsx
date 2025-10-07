@@ -228,7 +228,10 @@ const TodoPanel: React.FC = () => {
               >
                 <div className="flex items-start gap-3">
                   <button
-                    onClick={() => toggleTodo(todoItem.id, !todoItem.completed)}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      toggleTodo(todoItem.id, !todoItem.completed)
+                    }}
                     className="flex-shrink-0 mt-1"
                   >
                     {todoItem.completed ? (

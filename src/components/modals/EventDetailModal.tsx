@@ -116,7 +116,7 @@ const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClose }) =
                   href={event.hangoutLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 dark:text-blue-400 hover:underline"
+                  className="text-gray-900 dark:text-white hover:underline"
                 >
                   Unirse a la videollamada
                 </a>
