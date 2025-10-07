@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Mail, MailOpen, Paperclip } from 'lucide-react'
-import { useStackModal } from '../../contexts/StackModalContext'
 import { gmailService } from '../../services/gmailService'
+import EmailDetailModal from '../modals/EmailDetailModal'
 
 interface Email {
   id: string
@@ -14,11 +14,11 @@ interface Email {
 }
 
 const MailPanel: React.FC = () => {
-  const { openEmailModal } = useStackModal()
   const [emails, setEmails] = useState<Email[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm] = useState('')
   const [filterType] = useState<'all' | 'unread' | 'starred' | 'important'>('all')
+  const [selectedEmail, setSelectedEmail] = useState<Email | null>(null)
 
   useEffect(() => {
     loadEmails()
@@ -115,7 +115,7 @@ const MailPanel: React.FC = () => {
   }
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col relative">
 
       <div className="flex-1 overflow-y-auto">
         <div className="space-y-3">
@@ -130,7 +130,7 @@ const MailPanel: React.FC = () => {
             <div
               key={email.id}
               onClick={() => {
-                openEmailModal(email)
+                setSelectedEmail(email)
                 if (!email.isRead) {
                   markAsRead(email.id)
                 }
@@ -178,6 +178,16 @@ const MailPanel: React.FC = () => {
         )}
         </div>
       </div>
+
+      {/* Stack Modal dentro de la columna */}
+      {selectedEmail && (
+        <div className="absolute inset-0 z-10 bg-white dark:bg-black">
+          <EmailDetailModal
+            email={selectedEmail}
+            onClose={() => setSelectedEmail(null)}
+          />
+        </div>
+      )}
     </div>
   )
 }

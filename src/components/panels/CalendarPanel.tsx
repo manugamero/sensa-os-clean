@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Clock, Users, Video } from 'lucide-react'
-import { useStackModal } from '../../contexts/StackModalContext'
 import { googleCalendarService } from '../../services/googleCalendarService'
+import EventDetailModal from '../modals/EventDetailModal'
 
 interface Event {
   id: string
@@ -22,10 +22,10 @@ interface Event {
 }
 
 const CalendarPanel: React.FC = () => {
-  const { openCalendarModal } = useStackModal()
   const [events, setEvents] = useState<Event[]>([])
   const [loading, setLoading] = useState(true)
   const [showCreateForm, setShowCreateForm] = useState(false)
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
   const [newEvent, setNewEvent] = useState({
     summary: 'Event',
     start: new Date().toISOString().slice(0, 16),
@@ -126,7 +126,7 @@ const CalendarPanel: React.FC = () => {
   }
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col relative">
 
       <div className="flex-1 overflow-y-auto">
         {showCreateForm && (
@@ -240,7 +240,7 @@ const CalendarPanel: React.FC = () => {
           events.map((event) => (
             <div 
               key={event.id} 
-              onClick={() => openCalendarModal(event)}
+              onClick={() => setSelectedEvent(event)}
               className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-3 hover:shadow-md transition-shadow cursor-pointer"
             >
                 <div className="flex items-start justify-between">
@@ -276,6 +276,16 @@ const CalendarPanel: React.FC = () => {
         )}
         </div>
       </div>
+
+      {/* Stack Modal dentro de la columna */}
+      {selectedEvent && (
+        <div className="absolute inset-0 z-10 bg-white dark:bg-black">
+          <EventDetailModal
+            event={selectedEvent}
+            onClose={() => setSelectedEvent(null)}
+          />
+        </div>
+      )}
     </div>
   )
 }

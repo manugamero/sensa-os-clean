@@ -38,15 +38,7 @@ const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClose }) =
   }
 
   return (
-    <div 
-      className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4"
-      onClick={onClose}
-    >
-      {/* Modal Card */}
-      <div 
-        className="relative bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden"
-        onClick={(e) => e.stopPropagation()}
-      >
+    <div className="h-full w-full flex flex-col bg-white dark:bg-gray-900 rounded-lg shadow-xl overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-3">
@@ -67,7 +59,7 @@ const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClose }) =
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+        <div className="p-6 space-y-6 overflow-y-auto flex-1">
           {/* Título del evento */}
           <div>
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
@@ -134,29 +126,6 @@ const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClose }) =
             </div>
           )}
         </div>
-
-        {/* Footer */}
-        <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
-          <div className="flex justify-end gap-3">
-            <button
-              onClick={onClose}
-              className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
-            >
-              Cerrar
-            </button>
-            {event.hangoutLink && (
-              <a
-                href={event.hangoutLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-4 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
-              >
-                Unirse
-              </a>
-            )}
-          </div>
-        </div>
-      </div>
     </div>
   )
 }
