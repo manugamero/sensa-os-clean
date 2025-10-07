@@ -36,28 +36,6 @@ const CalendarPanel: React.FC = () => {
 
   useEffect(() => {
     loadEvents()
-    
-    // Si falla, mostrar eventos de ejemplo
-    setTimeout(() => {
-      if (events.length === 0 && !loading) {
-        setEvents([
-          {
-            id: '1',
-            summary: 'Reunión de equipo',
-            start: { dateTime: new Date().toISOString(), timeZone: 'America/New_York' },
-            end: { dateTime: new Date(Date.now() + 3600000).toISOString(), timeZone: 'America/New_York' },
-            attendees: [{ email: 'user@example.com', displayName: 'Usuario Ejemplo' }]
-          },
-          {
-            id: '2',
-            summary: 'Presentación proyecto',
-            start: { dateTime: new Date(Date.now() + 7200000).toISOString(), timeZone: 'America/New_York' },
-            end: { dateTime: new Date(Date.now() + 10800000).toISOString(), timeZone: 'America/New_York' },
-            hangoutLink: 'https://meet.google.com/example'
-          }
-        ])
-      }
-    }, 3000)
   }, [])
 
   const loadEvents = async () => {
@@ -279,11 +257,13 @@ const CalendarPanel: React.FC = () => {
 
       {/* Stack Modal dentro de la columna */}
       {selectedEvent && (
-        <div className="absolute inset-0 z-10 bg-white dark:bg-black">
-          <EventDetailModal
-            event={selectedEvent}
-            onClose={() => setSelectedEvent(null)}
-          />
+        <div className="absolute inset-0 z-10 bg-gray-50 dark:bg-gray-950 p-2">
+          <div className="h-full rounded-lg border-2 border-gray-300 dark:border-gray-700 shadow-2xl overflow-hidden">
+            <EventDetailModal
+              event={selectedEvent}
+              onClose={() => setSelectedEvent(null)}
+            />
+          </div>
         </div>
       )}
     </div>

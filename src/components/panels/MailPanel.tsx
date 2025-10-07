@@ -22,32 +22,6 @@ const MailPanel: React.FC = () => {
 
   useEffect(() => {
     loadEmails()
-    
-    // Si falla, mostrar emails de ejemplo
-    setTimeout(() => {
-      if (emails.length === 0 && !loading) {
-        setEmails([
-          {
-            id: '1',
-            subject: 'Bienvenido a Sensa OS',
-            from: 'hello@sensa.app',
-            snippet: 'Gracias por usar Sensa OS. Aquí tienes algunos consejos para empezar...',
-            date: new Date().toISOString(),
-            isRead: false,
-            hasAttachments: false
-          },
-          {
-            id: '2',
-            subject: 'Actualización del proyecto',
-            from: 'team@example.com',
-            snippet: 'El proyecto ha sido actualizado con nuevas funcionalidades...',
-            date: new Date(Date.now() - 3600000).toISOString(),
-            isRead: true,
-            hasAttachments: true
-          }
-        ])
-      }
-    }, 3000)
   }, [])
 
   const loadEmails = async () => {
@@ -181,11 +155,13 @@ const MailPanel: React.FC = () => {
 
       {/* Stack Modal dentro de la columna */}
       {selectedEmail && (
-        <div className="absolute inset-0 z-10 bg-white dark:bg-black">
-          <EmailDetailModal
-            email={selectedEmail}
-            onClose={() => setSelectedEmail(null)}
-          />
+        <div className="absolute inset-0 z-10 bg-gray-50 dark:bg-gray-950 p-2">
+          <div className="h-full rounded-lg border-2 border-gray-300 dark:border-gray-700 shadow-2xl overflow-hidden">
+            <EmailDetailModal
+              email={selectedEmail}
+              onClose={() => setSelectedEmail(null)}
+            />
+          </div>
         </div>
       )}
     </div>

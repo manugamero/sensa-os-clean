@@ -47,11 +47,13 @@ const ChatPanelSimple: React.FC = () => {
 
       {/* Stack Modal dentro de la columna */}
       {selectedRoom && (
-        <div className="absolute inset-0 z-10 bg-white dark:bg-black">
-          <ChatDetailModal
-            room={selectedRoom}
-            onClose={() => setSelectedRoom(null)}
-          />
+        <div className="absolute inset-0 z-10 bg-gray-50 dark:bg-gray-950 p-2">
+          <div className="h-full rounded-lg border-2 border-gray-300 dark:border-gray-700 shadow-2xl overflow-hidden">
+            <ChatDetailModal
+              room={selectedRoom}
+              onClose={() => setSelectedRoom(null)}
+            />
+          </div>
         </div>
       )}
     </div>
