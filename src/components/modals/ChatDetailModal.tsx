@@ -175,7 +175,6 @@ const ChatDetailModal: React.FC<ChatDetailModalProps> = ({ room, onClose }) => {
             </button>
           </div>
         </div>
-      </div>
     </div>
   )
 }
