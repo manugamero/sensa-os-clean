@@ -226,10 +226,7 @@ const CalendarPanel: React.FC = () => {
           events.map((event) => (
             <div 
               key={event.id} 
-              onClick={() => {
-                console.log('Opening calendar modal with event:', event)
-                openCalendarModal(event)
-              }}
+              onClick={() => openCalendarModal(event)}
               className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-3 hover:shadow-md transition-shadow cursor-pointer"
             >
                 <div className="flex items-start justify-between">

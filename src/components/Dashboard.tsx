@@ -236,8 +236,14 @@ const DashboardContent: React.FC = () => {
         </div>
       </div>
 
+      {/* Debug Indicator */}
+      {(calendarModal.isOpen || emailModal.isOpen || chatModal.isOpen || notesModal.isOpen) && (
+        <div className="fixed top-4 right-4 z-[10000] bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg">
+          Modal Abierto ✓
+        </div>
+      )}
+
       {/* Stack Modals */}
-      {console.log('Dashboard render - calendarModal:', calendarModal)}
       {calendarModal.isOpen && calendarModal.event && (
         <EventDetailModal
           event={calendarModal.event}
