@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Clock, Users, Video } from 'lucide-react'
 import { googleCalendarService } from '../../services/googleCalendarService'
 import EventDetailModal from '../modals/EventDetailModal'
+import ModalWrapper from '../modals/ModalWrapper'
 
 interface Event {
   id: string
@@ -257,14 +258,12 @@ const CalendarPanel: React.FC = () => {
 
       {/* Stack Modal dentro de la columna */}
       {selectedEvent && (
-        <div className="absolute inset-0 z-10 bg-gray-50 dark:bg-gray-950 p-2">
-          <div className="h-full rounded-lg border-2 border-gray-300 dark:border-gray-700 shadow-2xl overflow-hidden">
-            <EventDetailModal
-              event={selectedEvent}
-              onClose={() => setSelectedEvent(null)}
-            />
-          </div>
-        </div>
+        <ModalWrapper>
+          <EventDetailModal
+            event={selectedEvent}
+            onClose={() => setSelectedEvent(null)}
+          />
+        </ModalWrapper>
       )}
     </div>
   )

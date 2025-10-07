@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { RefreshCw, Plus, Sun, Moon, Calendar, Mail, MessageCircle, StickyNote, Search, Filter } from 'lucide-react'
+import { RefreshCw, Plus, Sun, Moon, Calendar, Mail, MessageCircle, StickyNote, Search, Filter, Settings } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useTheme } from '../contexts/ThemeContext'
+import { useSettings } from '../contexts/SettingsContext'
 import CalendarPanel from './panels/CalendarPanel'
 import MailPanel from './panels/MailPanel'
 import TodoPanel from './panels/TodoPanel'
@@ -10,10 +11,12 @@ import ChatPanel from './panels/ChatPanel-simple'
 const Dashboard: React.FC = () => {
   const { user, signOut } = useAuth()
   const { isDark, toggleTheme } = useTheme()
+  const { colorScheme, setColorScheme, modalStyle, setModalStyle } = useSettings()
   const [activeTab, setActiveTab] = useState(0)
   const [showSearch, setShowSearch] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [showFilters, setShowFilters] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
   const [touchStart, setTouchStart] = useState(0)
   const [touchEnd, setTouchEnd] = useState(0)
 
@@ -72,6 +75,13 @@ const Dashboard: React.FC = () => {
             {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
           <button
+            onClick={() => setShowSettings(!showSettings)}
+            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-500 dark:text-gray-400"
+            title="Ajustes"
+          >
+            <Settings className="w-4 h-4" />
+          </button>
+          <button
             onClick={() => window.location.reload()}
             className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-500 dark:text-gray-400"
             title="Actualizar todo"
@@ -89,6 +99,56 @@ const Dashboard: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* Settings Panel */}
+      {showSettings && (
+        <div className="px-4 pb-2">
+          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4">
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Ajustes</h3>
+            
+            {/* Color Scheme */}
+            <div className="mb-4">
+              <label className="text-xs text-gray-600 dark:text-gray-400 mb-2 block">Esquema de Color</label>
+              <div className="flex gap-2">
+                {(['gray', 'blue', 'green', 'purple', 'red', 'orange'] as const).map((color) => (
+                  <button
+                    key={color}
+                    onClick={() => setColorScheme(color)}
+                    className={`w-8 h-8 rounded-full border-2 ${
+                      colorScheme === color ? 'border-gray-900 dark:border-white' : 'border-transparent'
+                    }`}
+                    style={{
+                      backgroundColor: 
+                        color === 'gray' ? '#6B7280' :
+                        color === 'blue' ? '#3B82F6' :
+                        color === 'green' ? '#10B981' :
+                        color === 'purple' ? '#8B5CF6' :
+                        color === 'red' ? '#EF4444' : '#F59E0B'
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Modal Style */}
+            <div>
+              <label className="text-xs text-gray-600 dark:text-gray-400 mb-2 block">Estilo de Modal</label>
+              <select
+                value={modalStyle}
+                onChange={(e) => setModalStyle(Number(e.target.value) as any)}
+                className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white"
+              >
+                <option value={1}>Estilo 1: Borde grueso + sombra</option>
+                <option value={2}>Estilo 2: Sin borde + blur</option>
+                <option value={3}>Estilo 3: Borde fino + padding grande</option>
+                <option value={4}>Estilo 4: Card elevado</option>
+                <option value={5}>Estilo 5: Fullscreen con padding</option>
+                <option value={6}>Estilo 6: Slide from right</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Mobile Pagination Indicator */}
       <div className="lg:hidden px-4 pb-2">

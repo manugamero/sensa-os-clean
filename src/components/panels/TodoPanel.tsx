@@ -4,6 +4,7 @@ import { useAuth } from '../../contexts/AuthContext'
 import { useSocket } from '../../contexts/SocketContext'
 import { todoService } from '../../services/todoService'
 import NoteDetailModal from '../modals/NoteDetailModal'
+import ModalWrapper from '../modals/ModalWrapper'
 
 interface Todo {
   id: string
@@ -288,21 +289,19 @@ const TodoPanel: React.FC = () => {
 
       {/* Stack Modal dentro de la columna */}
       {selectedNote && (
-        <div className="absolute inset-0 z-10 bg-gray-50 dark:bg-gray-950 p-2">
-          <div className="h-full rounded-lg border-2 border-gray-300 dark:border-gray-700 shadow-2xl overflow-hidden">
-            <NoteDetailModal
-              note={selectedNote}
-              onClose={() => setSelectedNote(null)}
-              onUpdate={(noteId, updates) => {
-                setTodos(todos.map(t => t.id === noteId ? { ...t, ...updates } : t))
-              }}
-              onDelete={(noteId) => {
-                deleteTodo(noteId)
-                setSelectedNote(null)
-              }}
-            />
-          </div>
-        </div>
+        <ModalWrapper>
+          <NoteDetailModal
+            note={selectedNote}
+            onClose={() => setSelectedNote(null)}
+            onUpdate={(noteId, updates) => {
+              setTodos(todos.map(t => t.id === noteId ? { ...t, ...updates } : t))
+            }}
+            onDelete={(noteId) => {
+              deleteTodo(noteId)
+              setSelectedNote(null)
+            }}
+          />
+        </ModalWrapper>
       )}
     </div>
   )

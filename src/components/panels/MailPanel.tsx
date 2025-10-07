@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Mail, MailOpen, Paperclip } from 'lucide-react'
 import { gmailService } from '../../services/gmailService'
 import EmailDetailModal from '../modals/EmailDetailModal'
+import ModalWrapper from '../modals/ModalWrapper'
 
 interface Email {
   id: string
@@ -155,14 +156,12 @@ const MailPanel: React.FC = () => {
 
       {/* Stack Modal dentro de la columna */}
       {selectedEmail && (
-        <div className="absolute inset-0 z-10 bg-gray-50 dark:bg-gray-950 p-2">
-          <div className="h-full rounded-lg border-2 border-gray-300 dark:border-gray-700 shadow-2xl overflow-hidden">
-            <EmailDetailModal
-              email={selectedEmail}
-              onClose={() => setSelectedEmail(null)}
-            />
-          </div>
-        </div>
+        <ModalWrapper>
+          <EmailDetailModal
+            email={selectedEmail}
+            onClose={() => setSelectedEmail(null)}
+          />
+        </ModalWrapper>
       )}
     </div>
   )
