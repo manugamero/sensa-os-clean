@@ -57,11 +57,13 @@ const NoteDetailModal: React.FC<NoteDetailModalProps> = ({ note, onClose, onUpda
     })
   }
 
+  console.log('NoteDetailModal rendering with note:', note)
+  
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
       {/* Backdrop con blur */}
       <div 
-        className="absolute inset-0 bg-black/20 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/30 backdrop-blur-sm"
         onClick={onClose}
       />
       
