@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Search, Filter, RefreshCw, Plus } from 'lucide-react'
 import ChatDetailModal from '../modals/ChatDetailModal'
 import ModalWrapper from '../modals/ModalWrapper'
 
@@ -19,6 +20,37 @@ const ChatPanelSimple: React.FC = () => {
 
   return (
     <div className={`h-full flex flex-col relative transition-transform duration-300 ${selectedRoom ? 'scale-95' : 'scale-100'}`}>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-200 dark:border-gray-800">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Chat</h2>
+        <div className="flex items-center gap-1">
+          <button
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+            title="Buscar"
+          >
+            <Search className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+          </button>
+          <button
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+            title="Filtrar"
+          >
+            <Filter className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+          </button>
+          <button
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+            title="Actualizar"
+          >
+            <RefreshCw className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+          </button>
+          <button
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+            title="Nueva conversación"
+          >
+            <Plus className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+          </button>
+        </div>
+      </div>
+      
       <div className="flex-1 overflow-y-auto">
         <div className="space-y-2">
           {rooms.map((room) => (
