@@ -146,7 +146,9 @@ const TodoPanel: React.FC = () => {
   }
 
   return (
-    <div className={`h-full flex flex-col relative transition-transform duration-300 ${selectedNote ? 'scale-95' : 'scale-100'}`}>
+    <div className="h-full flex flex-col relative">
+      {/* Contenido de la lista - se reduce cuando hay modal */}
+      <div className={`h-full flex flex-col transition-all duration-300 ${selectedNote ? 'scale-95 opacity-30 pointer-events-none' : 'scale-100 opacity-100'}`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-200 dark:border-gray-800">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Notas</h2>
@@ -318,6 +320,7 @@ const TodoPanel: React.FC = () => {
           </div>
         )}
         </div>
+      </div>
       </div>
 
       {/* Stack Modal dentro de la columna */}

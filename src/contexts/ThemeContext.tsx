@@ -16,28 +16,24 @@ export const useTheme = () => {
 }
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isDark, setIsDark] = useState(false)
-
-  useEffect(() => {
-    // Check system preference
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    setIsDark(mediaQuery.matches)
-
-    // Listen for changes
-    const handleChange = (e: MediaQueryListEvent) => {
-      setIsDark(e.matches)
+  const [isDark, setIsDark] = useState(() => {
+    // Check localStorage first
+    const saved = localStorage.getItem('theme')
+    if (saved !== null) {
+      return saved === 'dark'
     }
-
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [])
+    // Fallback to system preference
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+  })
 
   useEffect(() => {
     // Apply theme to document
     if (isDark) {
       document.documentElement.classList.add('dark')
+      localStorage.setItem('theme', 'dark')
     } else {
       document.documentElement.classList.remove('dark')
+      localStorage.setItem('theme', 'light')
     }
   }, [isDark])
 

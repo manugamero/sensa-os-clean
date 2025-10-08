@@ -190,22 +190,22 @@ const Dashboard: React.FC = () => {
         {/* Desktop: Grid Layout */}
         <div className="hidden lg:grid grid-cols-4 gap-4 h-full">
           {/* Calendario */}
-          <div className="bg-white dark:bg-gray-900 rounded-lg border-2 border-white dark:border-gray-700 p-4 h-full overflow-hidden shadow-sm">
+          <div className="rounded-lg border-2 border-gray-200 dark:border-gray-700 p-4 h-full overflow-hidden">
             <CalendarPanel />
           </div>
 
           {/* Email */}
-          <div className="bg-white dark:bg-gray-900 rounded-lg border-2 border-white dark:border-gray-700 p-4 h-full overflow-hidden shadow-sm">
+          <div className="rounded-lg border-2 border-gray-200 dark:border-gray-700 p-4 h-full overflow-hidden">
             <MailPanel />
           </div>
 
           {/* Chat */}
-          <div className="bg-white dark:bg-gray-900 rounded-lg border-2 border-white dark:border-gray-700 p-4 h-full overflow-hidden shadow-sm">
+          <div className="rounded-lg border-2 border-gray-200 dark:border-gray-700 p-4 h-full overflow-hidden">
             <ChatPanel />
           </div>
 
           {/* Notas */}
-          <div className="bg-white dark:bg-gray-900 rounded-lg border-2 border-white dark:border-gray-700 p-4 h-full overflow-hidden shadow-sm">
+          <div className="rounded-lg border-2 border-gray-200 dark:border-gray-700 p-4 h-full overflow-hidden">
             <TodoPanel />
           </div>
         </div>
