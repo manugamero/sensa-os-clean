@@ -27,7 +27,7 @@ function App() {
       console.log('Iniciando login con Google...')
       const provider = new GoogleAuthProvider()
       provider.addScope('https://www.googleapis.com/auth/calendar')
-      provider.addScope('https://www.googleapis.com/auth/gmail.readonly')
+      provider.addScope('https://www.googleapis.com/auth/gmail.modify') // Permite leer, enviar y modificar
       provider.addScope('https://www.googleapis.com/auth/userinfo.email')
       provider.addScope('https://www.googleapis.com/auth/userinfo.profile')
       console.log('Provider configurado:', provider)

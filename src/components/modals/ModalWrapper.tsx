@@ -11,7 +11,7 @@ const ModalWrapper: React.FC<ModalWrapperProps> = ({ children }) => {
   const getModalStyles = () => {
     switch (modalStyle) {
       case 1:
-        // Estilo 1: Lista se reduce 5% - SIN OVERLAY
+        // Estilo 1: Modal ocupa el espacio completo de la columna - SIN OVERLAY
         return 'absolute inset-0 z-10'
       case 2:
         // Estilo 2: Slide from right
@@ -27,16 +27,16 @@ const ModalWrapper: React.FC<ModalWrapperProps> = ({ children }) => {
   const getContentStyles = () => {
     switch (modalStyle) {
       case 1:
-        // Lista se reduce - card con sombra fuerte
-        return 'h-full w-full rounded-none shadow-[0_0_40px_rgba(0,0,0,0.3)] overflow-hidden bg-white dark:bg-gray-900'
+        // Modal con borde como las columnas, sin overlay
+        return 'h-full w-full rounded-lg border-2 border-gray-200 dark:border-gray-700 overflow-hidden bg-white dark:bg-gray-900'
       case 2:
-        // Slide from right
-        return 'h-full overflow-hidden border-l-2 border-white dark:border-gray-700 shadow-[-10px_0_30px_rgba(0,0,0,0.2)] bg-white dark:bg-gray-900'
+        // Slide from right con borde
+        return 'h-full overflow-hidden rounded-lg border-2 border-gray-200 dark:border-gray-700 animate-slide-in-right bg-white dark:bg-gray-900'
       case 3:
-        // Slide from bottom
-        return 'h-full overflow-hidden border-t-2 border-white dark:border-gray-700 shadow-[0_-10px_30px_rgba(0,0,0,0.2)] bg-white dark:bg-gray-900'
+        // Slide from bottom con borde
+        return 'h-full overflow-hidden rounded-lg border-2 border-gray-200 dark:border-gray-700 animate-slide-in-bottom bg-white dark:bg-gray-900'
       default:
-        return 'h-full w-full rounded-none shadow-[0_0_40px_rgba(0,0,0,0.3)] overflow-hidden bg-white dark:bg-gray-900'
+        return 'h-full w-full rounded-lg border-2 border-gray-200 dark:border-gray-700 overflow-hidden bg-white dark:bg-gray-900'
     }
   }
 

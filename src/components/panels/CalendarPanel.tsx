@@ -264,35 +264,38 @@ const CalendarPanel: React.FC = () => {
               onClick={() => setSelectedEvent(event)}
               className={`bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-3 hover:shadow-md transition-shadow cursor-pointer ${!isTodayEvent ? 'opacity-50' : ''}`}
             >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{event.summary}</h3>
-                    <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-                      <div className="flex items-center gap-1">
-                        <Clock className="w-4 h-4" />
-                        {formatDateTime(event.start.dateTime)}
-                      </div>
-                      {event.attendees && event.attendees.length > 0 && (
-                        <div className="flex items-center gap-1">
-                          <Users className="w-4 h-4" />
-                          {event.attendees.length} invitado{event.attendees.length !== 1 ? 's' : ''}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  {event.hangoutLink && (
-                    <a
-                      href={event.hangoutLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-gray-600 hover:text-gray-700 text-sm font-medium"
-                    >
-                      <Video className="w-4 h-4" />
-                      Unirse
-                    </a>
-                  )}
-                </div>
+              {/* Fila 1: Título */}
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-2 truncate">{event.summary}</h3>
+              
+              {/* Fila 2: Hora */}
+              <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400 mb-1">
+                <Clock className="w-4 h-4 flex-shrink-0" />
+                <span className="truncate">{formatDateTime(event.start.dateTime)}</span>
               </div>
+              
+              {/* Fila 3: Invitados y botón */}
+              <div className="flex items-center justify-between gap-2">
+                {event.attendees && event.attendees.length > 0 ? (
+                  <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
+                    <Users className="w-4 h-4 flex-shrink-0" />
+                    <span>{event.attendees.length}</span>
+                  </div>
+                ) : (
+                  <div></div>
+                )}
+                {event.hangoutLink && (
+                  <a
+                    href={event.hangoutLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex items-center gap-1 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-xs"
+                  >
+                    <Video className="w-4 h-4" />
+                  </a>
+                )}
+              </div>
+            </div>
             )
           })
         )}

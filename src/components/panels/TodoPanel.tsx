@@ -258,59 +258,60 @@ const TodoPanel: React.FC = () => {
               <div 
                 key={todoItem.id} 
                 onClick={() => setSelectedNote(todoItem)}
-                className={`border border-gray-200 dark:border-gray-800 rounded-lg p-4 hover:shadow-md transition-shadow bg-white dark:bg-gray-900 cursor-pointer ${todoItem.completed ? 'opacity-50' : ''}`}
+                className={`border border-gray-200 dark:border-gray-800 rounded-lg p-3 hover:shadow-md transition-shadow bg-white dark:bg-gray-900 cursor-pointer ${todoItem.completed ? 'opacity-50' : ''}`}
               >
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-2">
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
                       toggleTodo(todoItem.id, !todoItem.completed)
                     }}
-                    className="flex-shrink-0 mt-1"
+                    className="flex-shrink-0"
                   >
                     {todoItem.completed ? (
-                      <CheckSquare className="w-5 h-5 text-gray-600" />
+                      <CheckSquare className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                     ) : (
-                      <Square className="w-5 h-5 text-gray-400" />
+                      <Square className="w-4 h-4 text-gray-400 dark:text-gray-500" />
                     )}
                   </button>
                   
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        {todoItem.content && (
-                          <div 
-                            className={`text-gray-700 mb-3 ${
-                              todoItem.completed ? 'line-through text-gray-500' : ''
-                            }`}
-                            dangerouslySetInnerHTML={{ 
-                              __html: formatMarkdown(todoItem.content) 
-                            }}
-                          />
-                        )}
-                        
-                        <div className="flex items-center gap-4 text-xs text-gray-500">
-                          <span>
-                            {new Date(todoItem.createdAt).toLocaleDateString('es-ES')}
-                          </span>
-                          {todoItem.mentions.length > 0 && (
-                            <div className="flex items-center gap-1">
-                              <Users className="w-3 h-3" />
-                              <span>{todoItem.mentions.length} mención{todoItem.mentions.length !== 1 ? 'es' : ''}</span>
-                            </div>
-                          )}
+                    {/* Fila 1-2: Contenido (máx 2 líneas) */}
+                    {todoItem.content && (
+                      <div 
+                        className={`text-sm text-gray-900 dark:text-white mb-1 line-clamp-2 ${
+                          todoItem.completed ? 'line-through opacity-70' : ''
+                        }`}
+                        dangerouslySetInnerHTML={{ 
+                          __html: formatMarkdown(todoItem.content) 
+                        }}
+                      />
+                    )}
+                    
+                    {/* Fila 3: Fecha y menciones */}
+                    <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+                      <span>
+                        {new Date(todoItem.createdAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
+                      </span>
+                      {todoItem.mentions.length > 0 && (
+                        <div className="flex items-center gap-1">
+                          <Users className="w-3 h-3" />
+                          <span>{todoItem.mentions.length}</span>
                         </div>
-                      </div>
-                      
-                      <button
-                        onClick={() => deleteTodo(todoItem.id)}
-                        className="p-1 hover:bg-gray-100 rounded text-gray-400 hover:text-gray-600"
-                        title="Eliminar"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
+                      )}
                     </div>
                   </div>
+                  
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      deleteTodo(todoItem.id)
+                    }}
+                    className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 flex-shrink-0"
+                    title="Eliminar"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
             ))}

@@ -219,29 +219,28 @@ const ChatPanelEmail: React.FC = () => {
             <div
               key={thread.id}
               onClick={() => openThread(thread)}
-              className="p-3 rounded-lg border cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-gray-800 border-gray-200 dark:border-gray-700"
+              className="p-3 rounded-lg border cursor-pointer transition-colors bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 hover:shadow-md"
             >
-              <div className="flex items-start justify-between mb-2">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-medium text-gray-900 dark:text-white">{thread.subject}</h3>
-                    {thread.unreadCount > 0 && (
-                      <span className="px-2 py-0.5 text-xs bg-gray-600 dark:bg-gray-300 text-white dark:text-gray-900 rounded-full">
-                        {thread.unreadCount}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
-                    <Users className="w-3 h-3" />
-                    <span>{thread.participants.join(', ')}</span>
-                  </div>
-                </div>
+              {/* Fila 1: Título y badge */}
+              <div className="flex items-center gap-2 mb-2">
+                <h3 className="font-medium text-gray-900 dark:text-white truncate flex-1">{thread.subject}</h3>
+                {thread.unreadCount > 0 && (
+                  <span className="px-2 py-0.5 text-xs bg-gray-600 dark:bg-gray-300 text-white dark:text-gray-900 rounded-full flex-shrink-0">
+                    {thread.unreadCount}
+                  </span>
+                )}
               </div>
-              {thread.lastMessage && (
-                <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
-                  {thread.lastMessage}
-                </p>
-              )}
+              
+              {/* Fila 2: Participantes */}
+              <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 mb-1">
+                <Users className="w-3 h-3 flex-shrink-0" />
+                <span className="truncate">{thread.participants.join(', ')}</span>
+              </div>
+              
+              {/* Fila 3: Último mensaje */}
+              <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
+                {thread.lastMessage || 'Sin mensajes'}
+              </p>
             </div>
           ))}
         </div>

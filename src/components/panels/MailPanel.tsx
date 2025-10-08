@@ -141,44 +141,41 @@ const MailPanel: React.FC = () => {
                   markAsRead(email.id)
                 }
               }}
-              className={`p-3 rounded-lg border cursor-pointer transition-colors ${
-                !email.isRead 
-                  ? 'bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-700' 
-                  : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 opacity-50'
+              className={`p-3 rounded-lg border cursor-pointer transition-colors bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 hover:shadow-md ${
+                email.isRead ? 'opacity-50' : ''
               }`}
             >
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0">
+              {/* Fila 1: De y Fecha */}
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2 flex-1 min-w-0">
                   {email.isRead ? (
-                    <MailOpen className="w-4 h-4 text-gray-400 dark:text-gray-500" />
+                    <MailOpen className="w-4 h-4 text-gray-400 dark:text-gray-500 flex-shrink-0" />
                   ) : (
-                    <Mail className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                    <Mail className="w-4 h-4 text-gray-600 dark:text-gray-400 flex-shrink-0" />
                   )}
+                  <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                    {email.from}
+                  </p>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between mb-1">
-                    <p className={`text-sm font-medium truncate ${
-                      !email.isRead ? 'text-gray-900 dark:text-white' : 'text-gray-700 dark:text-gray-300'
-                    }`}>
-                      {email.from}
-                    </p>
-                    <div className="flex items-center gap-2">
-                      {email.hasAttachments && (
-                        <Paperclip className="w-3 h-3 text-gray-400 dark:text-gray-500" />
-                      )}
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
-                        {formatDate(email.date)}
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 truncate mb-1">
-                    {email.subject}
-                  </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate mt-1">
-                    {email.snippet}
-                  </p>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  {email.hasAttachments && (
+                    <Paperclip className="w-3 h-3 text-gray-400 dark:text-gray-500" />
+                  )}
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                    {formatDate(email.date)}
+                  </span>
                 </div>
               </div>
+              
+              {/* Fila 2: Asunto */}
+              <p className="text-sm text-gray-900 dark:text-white truncate mb-1">
+                {email.subject}
+              </p>
+              
+              {/* Fila 3: Preview */}
+              <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                {email.snippet}
+              </p>
             </div>
           ))
         )}

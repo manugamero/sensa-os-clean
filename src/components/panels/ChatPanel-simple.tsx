@@ -57,17 +57,23 @@ const ChatPanelSimple: React.FC = () => {
             <div
               key={room.id}
               onClick={() => setSelectedRoom(room)}
-              className={`p-3 rounded-lg border cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-gray-800 border-gray-200 dark:border-gray-700 ${!room.isActive ? 'opacity-50' : ''}`}
+              className={`p-3 rounded-lg border cursor-pointer transition-colors bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 hover:shadow-md ${!room.isActive ? 'opacity-50' : ''}`}
             >
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="font-medium text-gray-900 dark:text-white">{room.name}</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {room.participants.length} participantes
-                  </p>
-                </div>
-                <div className="w-2 h-2 bg-gray-500 rounded-full"></div>
+              {/* Fila 1: Título y estado */}
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="font-medium text-gray-900 dark:text-white truncate flex-1">{room.name}</h3>
+                <div className={`w-2 h-2 rounded-full flex-shrink-0 ${room.isActive ? 'bg-gray-600 dark:bg-gray-400' : 'bg-gray-300 dark:bg-gray-700'}`}></div>
               </div>
+              
+              {/* Fila 2: Participantes */}
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                {room.participants.length} participantes
+              </p>
+              
+              {/* Fila 3: Último mensaje (placeholder) */}
+              <p className="text-xs text-gray-400 dark:text-gray-500 truncate mt-1">
+                {room.isActive ? 'Conversación activa' : 'Sin actividad reciente'}
+              </p>
             </div>
           ))}
         </div>
