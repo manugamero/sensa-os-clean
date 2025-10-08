@@ -72,6 +72,8 @@ const TodoPanel: React.FC = () => {
 
   const createTodo = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!newTodo.content.trim()) return
+    
     try {
       const token = await user?.getIdToken()
       const mentions = newTodo.mentions
@@ -87,8 +89,11 @@ const TodoPanel: React.FC = () => {
 
       setNewTodo({ content: '', mentions: '' })
       setShowCreateForm(false)
+      // Recargar todos
+      await loadTodos()
     } catch (error) {
       console.error('Error creating todo:', error)
+      alert('Error al crear la nota. Por favor, intenta de nuevo.')
     }
   }
 
@@ -150,7 +155,7 @@ const TodoPanel: React.FC = () => {
       {/* Contenido de la lista - se reduce cuando hay modal */}
       <div className={`h-full flex flex-col transition-all duration-300 origin-top ${selectedNote ? 'scale-[0.98] opacity-30 pointer-events-none' : 'scale-100 opacity-100'}`}>
       {/* Header */}
-      <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-200 dark:border-gray-800">
+      <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Notas</h2>
         <div className="flex items-center gap-1">
           <button
