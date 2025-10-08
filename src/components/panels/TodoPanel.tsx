@@ -146,7 +146,7 @@ const TodoPanel: React.FC = () => {
   }
 
   return (
-    <div className="h-full flex flex-col relative">
+    <div className={`h-full flex flex-col relative transition-transform duration-300 ${selectedNote ? 'scale-95' : 'scale-100'}`}>
 
       <div className="flex-1 overflow-y-auto">
 

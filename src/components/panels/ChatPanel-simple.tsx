@@ -18,7 +18,7 @@ const ChatPanelSimple: React.FC = () => {
   const [selectedRoom, setSelectedRoom] = useState<ChatRoom | null>(null)
 
   return (
-    <div className="h-full flex flex-col relative">
+    <div className={`h-full flex flex-col relative transition-transform duration-300 ${selectedRoom ? 'scale-95' : 'scale-100'}`}>
       <div className="flex-1 overflow-y-auto">
         <div className="space-y-2">
           {rooms.map((room) => (
