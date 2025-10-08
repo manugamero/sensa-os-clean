@@ -29,7 +29,7 @@ interface SettingsProviderProps {
 
 export const SettingsProvider: React.FC<SettingsProviderProps> = ({ children }) => {
   const [colorScheme, setColorScheme] = useState<ColorScheme>('gray')
-  const [modalStyle, setModalStyle] = useState<ModalStyle>(1)
+  const [modalStyle, setModalStyle] = useState<ModalStyle>(3) // Default: Slide from bottom
   const [chatType, setChatType] = useState<ChatType>('email')
 
   return (

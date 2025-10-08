@@ -12,7 +12,7 @@ import ChatPanelEmail from './panels/ChatPanel-email'
 const Dashboard: React.FC = () => {
   const { user, signOut } = useAuth()
   const { isDark, toggleTheme } = useTheme()
-  const { colorScheme, setColorScheme, modalStyle, setModalStyle, chatType, setChatType } = useSettings()
+  const { modalStyle, setModalStyle, chatType, setChatType } = useSettings()
   const [activeTab, setActiveTab] = useState(0)
   const [showSettings, setShowSettings] = useState(false)
   const [touchStart, setTouchStart] = useState(0)
@@ -58,39 +58,39 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="h-screen bg-gray-50 dark:bg-black">
+    <div className="h-screen bg-white dark:bg-black">
       {/* Header */}
       <div className="px-6 py-4">
         <div className="flex items-center space-x-4">
-          <h1 className="text-xl font-semibold text-gray-900 dark:text-white">sensa os</h1>
-          <span className="text-gray-400">/</span>
-          <span className="text-xl font-semibold text-gray-900 dark:text-white">
+          <h1 className="text-xl font-semibold text-black dark:text-white">sensa os</h1>
+          <span className="text-black/40 dark:text-white/40">/</span>
+          <span className="text-xl font-semibold text-black dark:text-white">
             {user?.displayName || user?.email}
           </span>
           <button
             onClick={toggleTheme}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-500 dark:text-gray-400"
+            className="p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded text-black/60 dark:text-white/60"
             title={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
           >
             {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
           <button
             onClick={() => setShowSettings(!showSettings)}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-500 dark:text-gray-400"
+            className="p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded text-black/60 dark:text-white/60"
             title="Ajustes"
           >
             <Settings className="w-4 h-4" />
           </button>
           <button
             onClick={() => window.location.reload()}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-500 dark:text-gray-400"
+            className="p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded text-black/60 dark:text-white/60"
             title="Actualizar todo"
           >
             <RefreshCw className="w-4 h-4" />
           </button>
           <button
             onClick={signOut}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-gray-500 dark:text-gray-400"
+            className="p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded text-black/60 dark:text-white/60"
             title="Cerrar sesión"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -103,59 +103,35 @@ const Dashboard: React.FC = () => {
       {/* Settings Panel */}
       {showSettings && (
         <div className="px-4 pb-2">
-          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4">
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Ajustes</h3>
+          <div className="bg-white dark:bg-black rounded-lg border border-black/10 dark:border-white/10 p-4">
+            <h3 className="text-sm font-semibold text-black dark:text-white mb-3">Ajustes</h3>
             
-            {/* Color Scheme */}
-            <div className="mb-4">
-              <label className="text-xs text-gray-600 dark:text-gray-400 mb-2 block">Esquema de Color</label>
-              <div className="flex gap-2">
-                {(['gray', 'blue', 'green', 'purple', 'red', 'orange'] as const).map((color) => (
-                  <button
-                    key={color}
-                    onClick={() => setColorScheme(color)}
-                    className={`w-8 h-8 rounded-full border-2 ${
-                      colorScheme === color ? 'border-gray-900 dark:border-white' : 'border-transparent'
-                    }`}
-                    style={{
-                      backgroundColor: 
-                        color === 'gray' ? '#6B7280' :
-                        color === 'blue' ? '#3B82F6' :
-                        color === 'green' ? '#10B981' :
-                        color === 'purple' ? '#8B5CF6' :
-                        color === 'red' ? '#EF4444' : '#F59E0B'
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-
             {/* Modal Style */}
             <div className="mb-4">
-              <label className="text-xs text-gray-600 dark:text-gray-400 mb-2 block">Estilo de Modal</label>
+              <label className="text-xs text-black/60 dark:text-white/60 mb-2 block">Estilo de Modal</label>
               <select
                 value={modalStyle}
                 onChange={(e) => setModalStyle(Number(e.target.value) as any)}
-                className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white"
+                className="w-full px-3 py-2 bg-white dark:bg-black border border-black/10 dark:border-white/10 rounded-lg text-sm text-black dark:text-white"
               >
-                <option value={1}>1. Lista se reduce 5% (default) ⭐</option>
+                <option value={1}>1. Sin animación</option>
                 <option value={2}>2. Slide from right →</option>
-                <option value={3}>3. Slide from bottom ↑</option>
+                <option value={3}>3. Slide from bottom ↑ (default)</option>
               </select>
             </div>
 
             {/* Chat Type */}
             <div>
-              <label className="text-xs text-gray-600 dark:text-gray-400 mb-2 block">Tipo de Chat</label>
+              <label className="text-xs text-black/60 dark:text-white/60 mb-2 block">Tipo de Chat</label>
               <select
                 value={chatType}
                 onChange={(e) => setChatType(e.target.value as any)}
-                className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white"
+                className="w-full px-3 py-2 bg-white dark:bg-black border border-black/10 dark:border-white/10 rounded-lg text-sm text-black dark:text-white"
               >
                 <option value="email">Email Threads (real) ⭐</option>
                 <option value="simple">Simple (demo)</option>
               </select>
-              <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+              <p className="mt-2 text-xs text-black/50 dark:text-white/50">
                 Email Threads: Conversaciones reales vía Gmail. También aparecen en la columna Email.
               </p>
             </div>
@@ -172,14 +148,14 @@ const Dashboard: React.FC = () => {
               onClick={() => setActiveTab(tab.id)}
               className={`transition-all ${
                 activeTab === tab.id
-                  ? 'w-8 h-2 bg-gray-900 dark:bg-white rounded-full'
-                  : 'w-2 h-2 bg-gray-300 dark:bg-gray-600 rounded-full'
+                  ? 'w-8 h-2 bg-black dark:bg-white rounded-full'
+                  : 'w-2 h-2 bg-black/20 dark:bg-white/20 rounded-full'
               }`}
               aria-label={tab.name}
             />
           ))}
         </div>
-        <div className="text-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+        <div className="text-center text-sm text-black/60 dark:text-white/60 mb-2">
           {activeTabName}
         </div>
       </div>
@@ -190,29 +166,29 @@ const Dashboard: React.FC = () => {
         {/* Desktop: Grid Layout */}
         <div className="hidden lg:grid grid-cols-4 gap-4 h-full">
           {/* Calendario */}
-          <div className="rounded-lg border-2 border-gray-200 dark:border-gray-700 p-4 h-full overflow-hidden">
+          <div className="rounded-lg border-2 border-black/10 dark:border-white/10 p-4 h-full overflow-hidden">
             <CalendarPanel />
           </div>
 
           {/* Email */}
-          <div className="rounded-lg border-2 border-gray-200 dark:border-gray-700 p-4 h-full overflow-hidden">
+          <div className="rounded-lg border-2 border-black/10 dark:border-white/10 p-4 h-full overflow-hidden">
             <MailPanel />
           </div>
 
           {/* Chat */}
-          <div className="rounded-lg border-2 border-gray-200 dark:border-gray-700 p-4 h-full overflow-hidden">
+          <div className="rounded-lg border-2 border-black/10 dark:border-white/10 p-4 h-full overflow-hidden">
             <ChatPanel />
           </div>
 
           {/* Notas */}
-          <div className="rounded-lg border-2 border-gray-200 dark:border-gray-700 p-4 h-full overflow-hidden">
+          <div className="rounded-lg border-2 border-black/10 dark:border-white/10 p-4 h-full overflow-hidden">
             <TodoPanel />
           </div>
         </div>
 
         {/* Mobile: Single Column with Swipe */}
         <div 
-          className="lg:hidden bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4 h-full overflow-hidden"
+          className="lg:hidden bg-white dark:bg-black rounded-lg border border-black/10 dark:border-white/10 p-4 h-full overflow-hidden"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}

@@ -115,7 +115,7 @@ const CalendarPanel: React.FC = () => {
   return (
     <div className="h-full flex flex-col relative">
       {/* Contenido de la lista - se reduce cuando hay modal */}
-      <div className={`h-full flex flex-col transition-all duration-300 ${selectedEvent ? 'scale-95 opacity-30 pointer-events-none' : 'scale-100 opacity-100'}`}>
+      <div className={`h-full flex flex-col transition-all duration-300 origin-top ${selectedEvent ? 'scale-[0.98] opacity-30 pointer-events-none' : 'scale-100 opacity-100'}`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-200 dark:border-gray-800">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Calendario</h2>
@@ -266,17 +266,17 @@ const CalendarPanel: React.FC = () => {
               onClick={() => setSelectedEvent(event)}
               className={`bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-3 hover:shadow-md transition-shadow cursor-pointer ${!isTodayEvent ? 'opacity-50' : ''}`}
             >
-              {/* Fila 1: Título */}
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-2 truncate">{event.summary}</h3>
+              {/* Fila 1: Título - altura fija */}
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-2 truncate h-5 leading-5">{event.summary}</h3>
               
-              {/* Fila 2: Hora */}
-              <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400 mb-1">
+              {/* Fila 2: Hora - altura fija */}
+              <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400 mb-1 h-5 leading-5">
                 <Clock className="w-4 h-4 flex-shrink-0" />
                 <span className="truncate">{formatDateTime(event.start.dateTime)}</span>
               </div>
               
-              {/* Fila 3: Invitados y botón */}
-              <div className="flex items-center justify-between gap-2">
+              {/* Fila 3: Invitados y botón - altura fija */}
+              <div className="flex items-center justify-between gap-2 h-5 leading-5">
                 {event.attendees && event.attendees.length > 0 ? (
                   <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
                     <Users className="w-4 h-4 flex-shrink-0" />

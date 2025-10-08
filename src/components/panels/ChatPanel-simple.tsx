@@ -21,7 +21,7 @@ const ChatPanelSimple: React.FC = () => {
   return (
     <div className="h-full flex flex-col relative">
       {/* Contenido de la lista - se reduce cuando hay modal */}
-      <div className={`h-full flex flex-col transition-all duration-300 ${selectedRoom ? 'scale-95 opacity-30 pointer-events-none' : 'scale-100 opacity-100'}`}>
+      <div className={`h-full flex flex-col transition-all duration-300 origin-top ${selectedRoom ? 'scale-[0.98] opacity-30 pointer-events-none' : 'scale-100 opacity-100'}`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-200 dark:border-gray-800">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Chat</h2>
