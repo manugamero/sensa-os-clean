@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Search, Filter, RefreshCw, Plus, Send, Users } from 'lucide-react'
+import { gmailThreadService } from '../../services/gmailThreadService'
 import ModalWrapper from '../modals/ModalWrapper'
 
 interface EmailThread {
@@ -23,6 +24,7 @@ const ChatPanelEmail: React.FC = () => {
   const [threads, setThreads] = useState<EmailThread[]>([])
   const [selectedThread, setSelectedThread] = useState<EmailThread | null>(null)
   const [loading, setLoading] = useState(true)
+  const [loadingThread, setLoadingThread] = useState(false)
   const [newMessage, setNewMessage] = useState('')
   const [showNewChat, setShowNewChat] = useState(false)
   const [newChatEmail, setNewChatEmail] = useState('')
@@ -35,41 +37,12 @@ const ChatPanelEmail: React.FC = () => {
   const loadThreads = async () => {
     try {
       setLoading(true)
-      // Aquí cargaríamos los threads de Gmail
-      // Por ahora usamos datos de ejemplo
-      const mockThreads: EmailThread[] = [
-        {
-          id: '1',
-          subject: 'Proyecto Q1',
-          participants: ['maria@example.com', 'juan@example.com'],
-          lastMessage: 'Perfecto, entonces quedamos así',
-          lastMessageDate: new Date().toISOString(),
-          unreadCount: 2,
-          messages: [
-            {
-              id: 'm1',
-              from: 'maria@example.com',
-              content: 'Hola, ¿cómo va el proyecto?',
-              date: new Date(Date.now() - 3600000).toISOString()
-            },
-            {
-              id: 'm2',
-              from: 'juan@example.com',
-              content: 'Muy bien, ya casi terminamos',
-              date: new Date(Date.now() - 1800000).toISOString()
-            },
-            {
-              id: 'm3',
-              from: 'maria@example.com',
-              content: 'Perfecto, entonces quedamos así',
-              date: new Date().toISOString()
-            }
-          ]
-        }
-      ]
-      setThreads(mockThreads)
+      const threadsData = await gmailThreadService.getThreads()
+      setThreads(threadsData)
     } catch (error) {
       console.error('Error loading threads:', error)
+      // En caso de error, mostrar array vacío
+      setThreads([])
     } finally {
       setLoading(false)
     }
@@ -78,45 +51,86 @@ const ChatPanelEmail: React.FC = () => {
   const sendMessage = async () => {
     if (!newMessage.trim() || !selectedThread) return
 
-    // Aquí enviaríamos el mensaje vía Gmail API
-    console.log('Sending message:', newMessage, 'to thread:', selectedThread.id)
-    
-    // Simular agregar mensaje
-    const newMsg: ThreadMessage = {
-      id: `m${Date.now()}`,
-      from: 'me',
-      content: newMessage,
-      date: new Date().toISOString()
+    try {
+      // Enviar mensaje vía Gmail API
+      await gmailThreadService.replyToThread(selectedThread.id, newMessage)
+      
+      // Agregar mensaje optimistamente a la UI
+      const newMsg: ThreadMessage = {
+        id: `m${Date.now()}`,
+        from: 'me',
+        content: newMessage,
+        date: new Date().toISOString()
+      }
+
+      setSelectedThread({
+        ...selectedThread,
+        messages: [...selectedThread.messages, newMsg],
+        lastMessage: newMessage,
+        lastMessageDate: new Date().toISOString()
+      })
+
+      // Actualizar también en la lista de threads
+      setThreads(threads.map(t => 
+        t.id === selectedThread.id 
+          ? { ...t, lastMessage: newMessage, lastMessageDate: new Date().toISOString() }
+          : t
+      ))
+
+      setNewMessage('')
+      
+      // Recargar threads después de un momento para obtener la respuesta real
+      setTimeout(() => loadThreads(), 2000)
+    } catch (error) {
+      console.error('Error sending message:', error)
+      alert('Error al enviar el mensaje. Por favor, intenta de nuevo.')
     }
-
-    setSelectedThread({
-      ...selectedThread,
-      messages: [...selectedThread.messages, newMsg]
-    })
-
-    setNewMessage('')
   }
 
   const createNewChat = async () => {
     if (!newChatEmail.trim() || !newChatSubject.trim()) return
 
-    // Aquí crearíamos un nuevo thread de email
-    console.log('Creating new chat/thread:', { to: newChatEmail, subject: newChatSubject })
-    
-    const newThread: EmailThread = {
-      id: `t${Date.now()}`,
-      subject: newChatSubject,
-      participants: [newChatEmail],
-      lastMessage: '',
-      lastMessageDate: new Date().toISOString(),
-      unreadCount: 0,
-      messages: []
+    try {
+      // Crear nuevo thread vía Gmail API
+      await gmailThreadService.createThread(newChatEmail, newChatSubject)
+      
+      setShowNewChat(false)
+      setNewChatEmail('')
+      setNewChatSubject('')
+      
+      // Recargar threads para mostrar el nuevo
+      setTimeout(() => loadThreads(), 1000)
+    } catch (error) {
+      console.error('Error creating new chat:', error)
+      alert('Error al crear la conversación. Por favor, intenta de nuevo.')
     }
+  }
 
-    setThreads([newThread, ...threads])
-    setShowNewChat(false)
-    setNewChatEmail('')
-    setNewChatSubject('')
+  const openThread = async (thread: EmailThread) => {
+    setSelectedThread(thread)
+    
+    // Cargar el thread completo con todos los mensajes
+    if (thread.messages.length <= 1) {
+      try {
+        setLoadingThread(true)
+        const fullThread = await gmailThreadService.getThread(thread.id)
+        if (fullThread) {
+          setSelectedThread(fullThread)
+          // Marcar como leído
+          if (fullThread.unreadCount > 0) {
+            gmailThreadService.markThreadAsRead(thread.id)
+            // Actualizar contador en la lista
+            setThreads(threads.map(t => 
+              t.id === thread.id ? { ...t, unreadCount: 0 } : t
+            ))
+          }
+        }
+      } catch (error) {
+        console.error('Error loading full thread:', error)
+      } finally {
+        setLoadingThread(false)
+      }
+    }
   }
 
   if (loading) {
@@ -204,7 +218,7 @@ const ChatPanelEmail: React.FC = () => {
           {threads.map((thread) => (
             <div
               key={thread.id}
-              onClick={() => setSelectedThread(thread)}
+              onClick={() => openThread(thread)}
               className="p-3 rounded-lg border cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-gray-800 border-gray-200 dark:border-gray-700"
             >
               <div className="flex items-start justify-between mb-2">
@@ -263,28 +277,34 @@ const ChatPanelEmail: React.FC = () => {
 
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-3">
-              {selectedThread.messages.map((msg) => (
-                <div
-                  key={msg.id}
-                  className={`flex ${msg.from === 'me' ? 'justify-end' : 'justify-start'}`}
-                >
-                  <div
-                    className={`max-w-[70%] rounded-lg p-3 ${
-                      msg.from === 'me'
-                        ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900'
-                        : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white'
-                    }`}
-                  >
-                    {msg.from !== 'me' && (
-                      <p className="text-xs font-medium mb-1 opacity-70">{msg.from}</p>
-                    )}
-                    <p className="text-sm">{msg.content}</p>
-                    <p className="text-xs mt-1 opacity-60">
-                      {new Date(msg.date).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
-                    </p>
-                  </div>
+              {loadingThread ? (
+                <div className="flex items-center justify-center h-full">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600"></div>
                 </div>
-              ))}
+              ) : (
+                selectedThread.messages.map((msg) => (
+                  <div
+                    key={msg.id}
+                    className={`flex ${msg.from === 'me' ? 'justify-end' : 'justify-start'}`}
+                  >
+                    <div
+                      className={`max-w-[70%] rounded-lg p-3 ${
+                        msg.from === 'me'
+                          ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900'
+                          : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white'
+                      }`}
+                    >
+                      {msg.from !== 'me' && (
+                        <p className="text-xs font-medium mb-1 opacity-70">{msg.from}</p>
+                      )}
+                      <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                      <p className="text-xs mt-1 opacity-60">
+                        {new Date(msg.date).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
+                      </p>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
 
             {/* Message Input */}
