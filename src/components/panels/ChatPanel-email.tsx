@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { Search, Filter, RefreshCw, Plus, Send, Users } from 'lucide-react'
-import { gmailService } from '../../services/gmailService'
 import ModalWrapper from '../modals/ModalWrapper'
 
 interface EmailThread {

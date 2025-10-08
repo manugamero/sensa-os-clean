@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { RefreshCw, Plus, Sun, Moon, Calendar, Mail, MessageCircle, StickyNote, Search, Filter, Settings } from 'lucide-react'
+import { RefreshCw, Sun, Moon, Calendar, Mail, MessageCircle, StickyNote, Settings } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useTheme } from '../contexts/ThemeContext'
 import { useSettings } from '../contexts/SettingsContext'
@@ -14,9 +14,6 @@ const Dashboard: React.FC = () => {
   const { isDark, toggleTheme } = useTheme()
   const { colorScheme, setColorScheme, modalStyle, setModalStyle, chatType, setChatType } = useSettings()
   const [activeTab, setActiveTab] = useState(0)
-  const [showSearch, setShowSearch] = useState(false)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [showFilters, setShowFilters] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
   const [touchStart, setTouchStart] = useState(0)
   const [touchEnd, setTouchEnd] = useState(0)
