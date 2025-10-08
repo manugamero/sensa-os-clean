@@ -77,7 +77,6 @@ export const gmailThreadService = {
           // Obtener información del último mensaje
           const lastMessage = messages[messages.length - 1]
           const lastHeaders = lastMessage.payload?.headers || []
-          const lastFrom = getHeader(lastHeaders, 'From') || 'Desconocido'
           const lastDate = getHeader(lastHeaders, 'Date') || new Date().toISOString()
 
           // Extraer participantes únicos
