@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Clock, Users, Video } from 'lucide-react'
 import { googleCalendarService } from '../../services/googleCalendarService'
+import { useSettings } from '../../contexts/SettingsContext'
 import EventDetailModal from '../modals/EventDetailModal'
 import ModalWrapper from '../modals/ModalWrapper'
 
@@ -23,6 +24,7 @@ interface Event {
 }
 
 const CalendarPanel: React.FC = () => {
+  const { modalStyle } = useSettings()
   const [events, setEvents] = useState<Event[]>([])
   const [loading, setLoading] = useState(true)
   const [showCreateForm, setShowCreateForm] = useState(false)

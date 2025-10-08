@@ -1,5 +1,5 @@
-import React from 'react'
-import { X, Mail, MailOpen, Paperclip, Clock, User } from 'lucide-react'
+import React, { useState } from 'react'
+import { X, Mail, MailOpen, Paperclip, Clock, User, Archive, Reply, ReplyAll, Forward, Trash2, MoreVertical, AlertOctagon, Star } from 'lucide-react'
 
 interface Email {
   id: string
@@ -19,6 +19,8 @@ interface EmailDetailModalProps {
 }
 
 const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onMarkAsRead }) => {
+  const [showMoreMenu, setShowMoreMenu] = useState(false)
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
     return date.toLocaleString('es-ES', {
@@ -35,6 +37,38 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
     if (!email.isRead && onMarkAsRead) {
       onMarkAsRead(email.id)
     }
+  }
+
+  const handleArchive = () => {
+    console.log('Archivando email:', email.id)
+    // Aquí iría la lógica para archivar
+    onClose()
+  }
+
+  const handleReply = () => {
+    console.log('Respondiendo email:', email.id)
+  }
+
+  const handleReplyAll = () => {
+    console.log('Responder a todos:', email.id)
+  }
+
+  const handleForward = () => {
+    console.log('Reenviar email:', email.id)
+  }
+
+  const handleDelete = () => {
+    console.log('Eliminar email:', email.id)
+    onClose()
+  }
+
+  const handleSpam = () => {
+    console.log('Marcar como spam:', email.id)
+    onClose()
+  }
+
+  const handleStar = () => {
+    console.log('Marcar con estrella:', email.id)
   }
 
   return (
@@ -60,6 +94,84 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
           >
             <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
           </button>
+        </div>
+
+        {/* Action Bar */}
+        <div className="flex items-center justify-between px-6 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+          <div className="flex items-center gap-2">
+            {/* Archive */}
+            <button
+              onClick={handleArchive}
+              className="flex items-center gap-2 px-3 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              title="Archivar"
+            >
+              <Archive className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+              <span className="text-gray-700 dark:text-gray-300">Archivar</span>
+            </button>
+
+            {/* Reply */}
+            <button
+              onClick={handleReply}
+              className="p-2 hover:bg-white dark:hover:bg-gray-900 rounded-lg transition-colors"
+              title="Responder"
+            >
+              <Reply className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+            </button>
+
+            {/* Star */}
+            <button
+              onClick={handleStar}
+              className="p-2 hover:bg-white dark:hover:bg-gray-900 rounded-lg transition-colors"
+              title="Destacar"
+            >
+              <Star className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+            </button>
+          </div>
+
+          {/* More Menu */}
+          <div className="relative">
+            <button
+              onClick={() => setShowMoreMenu(!showMoreMenu)}
+              className="p-2 hover:bg-white dark:hover:bg-gray-900 rounded-lg transition-colors"
+              title="Más opciones"
+            >
+              <MoreVertical className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+            </button>
+
+            {showMoreMenu && (
+              <div className="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
+                <button
+                  onClick={handleReplyAll}
+                  className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                >
+                  <ReplyAll className="w-4 h-4" />
+                  Responder a todos
+                </button>
+                <button
+                  onClick={handleForward}
+                  className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                >
+                  <Forward className="w-4 h-4" />
+                  Reenviar
+                </button>
+                <div className="border-t border-gray-200 dark:border-gray-700 my-1" />
+                <button
+                  onClick={handleSpam}
+                  className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                >
+                  <AlertOctagon className="w-4 h-4" />
+                  Marcar como spam
+                </button>
+                <button
+                  onClick={handleDelete}
+                  className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-b-lg"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Eliminar
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Content */}

@@ -138,12 +138,18 @@ const Dashboard: React.FC = () => {
                 onChange={(e) => setModalStyle(Number(e.target.value) as any)}
                 className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white"
               >
-                <option value={1}>Estilo 1: Borde grueso + sombra</option>
-                <option value={2}>Estilo 2: Sin borde + blur</option>
-                <option value={3}>Estilo 3: Borde fino + padding grande</option>
-                <option value={4}>Estilo 4: Card elevado</option>
-                <option value={5}>Estilo 5: Fullscreen con padding</option>
-                <option value={6}>Estilo 6: Slide from right</option>
+                <option value={1}>1. Borde grueso + sombra</option>
+                <option value={2}>2. Sin borde + blur</option>
+                <option value={3}>3. Borde fino + padding grande</option>
+                <option value={4}>4. Card elevado (lista se reduce) ⭐</option>
+                <option value={5}>5. Fullscreen con padding</option>
+                <option value={6}>6. Slide from right</option>
+                <option value={7}>7. Minimal sin padding</option>
+                <option value={8}>8. Card con mucho espacio</option>
+                <option value={9}>9. Borde doble decorativo</option>
+                <option value={10}>10. Glassmorphism blur intenso</option>
+                <option value={11}>11. Paper style sutil</option>
+                <option value={12}>12. Slide from left</option>
               </select>
             </div>
           </div>
@@ -281,44 +287,34 @@ const Dashboard: React.FC = () => {
         {/* Desktop: Grid Layout */}
         <div className="hidden lg:grid grid-cols-4 gap-4 h-full">
           {/* Calendario */}
-          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4">
-            <div className="h-full overflow-hidden">
-              <CalendarPanel />
-            </div>
+          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4 h-full overflow-hidden">
+            <CalendarPanel />
           </div>
 
           {/* Email */}
-          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4">
-            <div className="h-full overflow-hidden">
-              <MailPanel />
-            </div>
+          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4 h-full overflow-hidden">
+            <MailPanel />
           </div>
 
           {/* Chat */}
-          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4">
-            <div className="h-full overflow-hidden">
-              <ChatPanel />
-            </div>
+          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4 h-full overflow-hidden">
+            <ChatPanel />
           </div>
 
           {/* Notas */}
-          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4">
-            <div className="h-full overflow-hidden">
-              <TodoPanel />
-            </div>
+          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4 h-full overflow-hidden">
+            <TodoPanel />
           </div>
         </div>
 
         {/* Mobile: Single Column with Swipe */}
         <div 
-          className="lg:hidden h-full"
+          className="lg:hidden bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4 h-full overflow-hidden"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
-          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4 h-full">
-            <ActiveComponent />
-          </div>
+          <ActiveComponent />
         </div>
       </div>
 
