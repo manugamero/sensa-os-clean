@@ -97,6 +97,14 @@ const CalendarPanel: React.FC = () => {
     })
   }
 
+  const isToday = (dateTime: string) => {
+    const eventDate = new Date(dateTime)
+    const today = new Date()
+    return eventDate.getDate() === today.getDate() &&
+           eventDate.getMonth() === today.getMonth() &&
+           eventDate.getFullYear() === today.getFullYear()
+  }
+
 
   if (loading) {
     return (
@@ -218,11 +226,13 @@ const CalendarPanel: React.FC = () => {
             <p className="text-gray-500 dark:text-gray-400">No hay eventos próximos</p>
           </div>
         ) : (
-          events.map((event) => (
+          events.map((event) => {
+            const isTodayEvent = isToday(event.start.dateTime)
+            return (
             <div 
               key={event.id} 
               onClick={() => setSelectedEvent(event)}
-              className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-3 hover:shadow-md transition-shadow cursor-pointer"
+              className={`bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-3 hover:shadow-md transition-shadow cursor-pointer ${!isTodayEvent ? 'opacity-50' : ''}`}
             >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
@@ -253,7 +263,8 @@ const CalendarPanel: React.FC = () => {
                   )}
                 </div>
               </div>
-            ))
+            )
+          })
         )}
         </div>
       </div>

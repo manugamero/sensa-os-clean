@@ -226,7 +226,7 @@ const TodoPanel: React.FC = () => {
               <div 
                 key={todoItem.id} 
                 onClick={() => setSelectedNote(todoItem)}
-                className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 hover:shadow-md transition-shadow bg-white dark:bg-gray-900 cursor-pointer"
+                className={`border border-gray-200 dark:border-gray-800 rounded-lg p-4 hover:shadow-md transition-shadow bg-white dark:bg-gray-900 cursor-pointer ${todoItem.completed ? 'opacity-50' : ''}`}
               >
                 <div className="flex items-start gap-3">
                   <button

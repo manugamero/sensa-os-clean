@@ -113,7 +113,7 @@ const MailPanel: React.FC = () => {
               className={`p-3 rounded-lg border cursor-pointer transition-colors ${
                 !email.isRead 
                   ? 'bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-700' 
-                  : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800'
+                  : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 opacity-50'
               }`}
             >
               <div className="flex items-start gap-3">

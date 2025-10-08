@@ -12,7 +12,8 @@ interface ChatRoom {
 const ChatPanelSimple: React.FC = () => {
   const [rooms] = useState<ChatRoom[]>([
     { id: '1', name: 'General', participants: ['user1@example.com', 'user2@example.com'], isActive: true },
-    { id: '2', name: 'Proyecto Alpha', participants: ['user1@example.com', 'user3@example.com'], isActive: true }
+    { id: '2', name: 'Proyecto Alpha', participants: ['user1@example.com', 'user3@example.com'], isActive: false },
+    { id: '3', name: 'Soporte', participants: ['user1@example.com', 'soporte@example.com'], isActive: false }
   ])
   const [selectedRoom, setSelectedRoom] = useState<ChatRoom | null>(null)
 
@@ -24,7 +25,7 @@ const ChatPanelSimple: React.FC = () => {
             <div
               key={room.id}
               onClick={() => setSelectedRoom(room)}
-              className="p-3 rounded-lg border cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-gray-800 border-gray-200 dark:border-gray-700"
+              className={`p-3 rounded-lg border cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-gray-800 border-gray-200 dark:border-gray-700 ${!room.isActive ? 'opacity-50' : ''}`}
             >
               <div className="flex items-center justify-between">
                 <div>
