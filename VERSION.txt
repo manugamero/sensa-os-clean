@@ -1,4 +1,4 @@
-v054
+054
 Build: 2025-01-09
 Changes:
 - Removed login screen - app opens directly in Dashboard
