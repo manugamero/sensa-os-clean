@@ -184,24 +184,24 @@ const Dashboard: React.FC = () => {
       {/* Main Content */}
       <div className="h-[calc(100vh-200px)] lg:h-[calc(100vh-140px)] p-4">
         {/* Desktop: Grid Layout */}
-        <div className="hidden lg:grid grid-cols-4 gap-4 h-full border-8 border-orange-500">
+        <div className="hidden lg:grid grid-cols-4 gap-4 h-full">
           {/* Calendario */}
-          <div className="rounded-lg border-4 border-pink-500 p-4 h-full overflow-hidden bg-cyan-200">
+          <div className="rounded-lg border border-black/[0.08] dark:border-white/[0.08] p-4 h-full overflow-hidden">
             <CalendarPanel />
           </div>
 
           {/* Email */}
-          <div className="rounded-lg border-4 border-pink-500 p-4 h-full overflow-hidden bg-cyan-200">
+          <div className="rounded-lg border border-black/[0.08] dark:border-white/[0.08] p-4 h-full overflow-hidden">
             <MailPanel />
           </div>
 
           {/* Chat */}
-          <div className="rounded-lg border-4 border-pink-500 p-4 h-full overflow-hidden bg-cyan-200">
+          <div className="rounded-lg border border-black/[0.08] dark:border-white/[0.08] p-4 h-full overflow-hidden">
             <ChatPanel />
           </div>
 
           {/* Notas */}
-          <div className="rounded-lg border-4 border-pink-500 p-4 h-full overflow-hidden bg-cyan-200">
+          <div className="rounded-lg border border-black/[0.08] dark:border-white/[0.08] p-4 h-full overflow-hidden">
             <TodoPanel />
           </div>
         </div>

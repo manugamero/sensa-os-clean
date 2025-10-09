@@ -1,6 +1,7 @@
-067
+068
 Build: 2025-01-09
 Changes:
-- Unified all card heights to exactly 60px (3 rows of 20px each)
-- All cards now use h-[60px] container with flexbox justify-between
-- Fixed inconsistent heights across Email, Calendar, Chat, and Notes panels
+- Fixed modal width to occupy full column width (compensating for column padding)
+- Modal now uses -inset-x-4 and -bottom-4 to extend beyond column padding
+- Removed all debug colors from modals and columns
+- Modal detail now has same width as column border
