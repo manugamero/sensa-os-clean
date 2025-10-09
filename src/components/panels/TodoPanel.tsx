@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { CheckSquare, Square, Users, Hash, Bold, Italic, List, X, Search, Filter, RefreshCw, Plus } from 'lucide-react'
+import { CheckSquare, Square, Users, Hash, Bold, Italic, List, X, RefreshCw, Plus } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { useSocket } from '../../contexts/SocketContext'
 import NoteDetailModal from '../modals/NoteDetailModal'
