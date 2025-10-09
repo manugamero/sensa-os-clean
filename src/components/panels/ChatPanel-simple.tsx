@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Search, Filter, RefreshCw, Plus, X, Send, Users } from 'lucide-react'
+import { Search, Filter, RefreshCw, Plus, Users } from 'lucide-react'
 import ChatDetailModal from '../modals/ChatDetailModal'
 import ModalWrapper from '../modals/ModalWrapper'
 
