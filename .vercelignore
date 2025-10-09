@@ -1,17 +1,5 @@
+# Vercel ignore
 node_modules
-.env
-.env.local
-.env.production.local
-.env.development.local
-server.log
-frontend.log
+.git
 *.log
 .DS_Store
-.vscode
-.idea
-coverage
-.nyc_output
-dist
-build
-.cache
-

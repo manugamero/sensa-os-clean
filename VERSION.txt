@@ -1,0 +1,11 @@
+v054
+Build: 2025-01-09
+Changes:
+- Removed login screen - app opens directly in Dashboard
+- Added "Connect" button (rounded-full) in header
+- Gelion typography configured as primary font
+- Unified modal toolbars with icon-only buttons
+- Pure black/white colors (no blue tones)
+- Modal positioning: 32px from top, full width
+- No overlay shadow on modals
+
