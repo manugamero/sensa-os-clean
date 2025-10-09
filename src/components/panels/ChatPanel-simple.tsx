@@ -80,7 +80,7 @@ const ChatPanelSimple: React.FC = () => {
       
       {/* Create Form */}
       {showCreateForm && (
-        <div className="mb-4 p-4 border border-gray-200 dark:border-gray-800 rounded-lg bg-gray-50 dark:bg-black">
+        <div className="mb-4 p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-black">
           <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Nueva Conversación</h3>
           <form onSubmit={createConversation} className="space-y-3">
             <input

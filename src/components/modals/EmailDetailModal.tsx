@@ -72,7 +72,7 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
   }
 
   return (
-    <div className="h-full w-full flex flex-col bg-white dark:bg-black rounded-lg shadow-xl overflow-hidden">
+    <div className="h-full w-full flex flex-col bg-white dark:bg-black overflow-hidden">
         {/* Header simplificado: X a la izquierda, toolbar a la derecha */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
           <button

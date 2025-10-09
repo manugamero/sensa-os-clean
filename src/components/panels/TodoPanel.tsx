@@ -194,9 +194,9 @@ const TodoPanel: React.FC = () => {
       <div className="flex-1 overflow-y-auto">
 
       {showCreateForm && (
-        <div className="mb-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
+        <div className="mb-4 p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-black">
           <form onSubmit={createTodo} className="space-y-3">
-            <div className="flex items-center gap-2 p-2 border border-gray-300 rounded-md bg-white">
+            <div className="flex items-center gap-2 p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-black">
               <button
                 type="button"
                 onClick={() => insertMarkdown('**', '**')}
@@ -250,7 +250,7 @@ const TodoPanel: React.FC = () => {
               ref={textareaRef}
               value={newTodo.content}
               onChange={(e) => setNewTodo({ ...newTodo, content: e.target.value })}
-              className="w-full p-3 border border-gray-300 rounded-md focus:ring-0 resize-none"
+              className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-0 resize-none bg-white dark:bg-black text-gray-900 dark:text-white"
               placeholder="Escribe tu nota aquí..."
               rows={3}
             />
@@ -271,7 +271,8 @@ const TodoPanel: React.FC = () => {
                 onClick={() => setSelectedNote(todoItem)}
                 className={`card-hover border border-gray-200 dark:border-gray-700 rounded-lg p-3 bg-white dark:bg-black cursor-pointer ${todoItem.completed ? 'opacity-50' : ''}`}
               >
-                <div className="flex items-start gap-2">
+                {/* Fila 1: Checkbox y contenido principal */}
+                <div className="flex items-center gap-2 mb-1 h-5 leading-5">
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
@@ -280,38 +281,39 @@ const TodoPanel: React.FC = () => {
                     className="flex-shrink-0"
                   >
                     {todoItem.completed ? (
-                      <CheckSquare className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                      <CheckSquare className="w-3 h-3 text-gray-600 dark:text-gray-400" />
                     ) : (
-                      <Square className="w-4 h-4 text-gray-400 dark:text-gray-500" />
+                      <Square className="w-3 h-3 text-gray-400 dark:text-gray-500" />
                     )}
                   </button>
-                  
-                  <div className="flex-1 min-w-0">
-                    {/* Fila 1-2: Contenido (máx 2 líneas) */}
-                    {todoItem.content && (
-                      <div 
-                        className={`text-sm text-gray-900 dark:text-white mb-1 line-clamp-2 ${
-                          todoItem.completed ? 'line-through opacity-70' : ''
-                        }`}
-                        dangerouslySetInnerHTML={{ 
-                          __html: formatMarkdown(todoItem.content) 
-                        }}
-                      />
-                    )}
-                    
-                    {/* Fila 3: Fecha y menciones */}
-                    <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
-                      <span>
-                        {new Date(todoItem.createdAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
-                      </span>
-                      {todoItem.mentions.length > 0 && (
-                        <div className="flex items-center gap-1">
-                          <Users className="w-3 h-3" />
-                          <span>{todoItem.mentions.length}</span>
-                        </div>
-                      )}
+                  <div 
+                    className={`flex-1 text-sm font-semibold text-gray-900 dark:text-white truncate ${
+                      todoItem.completed ? 'line-through opacity-70' : ''
+                    }`}
+                    dangerouslySetInnerHTML={{ 
+                      __html: formatMarkdown(todoItem.content || 'Nota vacía') 
+                    }}
+                  />
+                </div>
+                
+                {/* Fila 2: Fecha - altura fija */}
+                <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400 mb-1 h-5 leading-5">
+                  <span className="truncate">
+                    {new Date(todoItem.createdAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
+                  </span>
+                </div>
+                
+                {/* Fila 3: Menciones - altura fija */}
+                <div className="flex items-center justify-between gap-2 h-5 leading-5">
+                  {todoItem.mentions.length > 0 ? (
+                    <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
+                      <Users className="w-3 h-3 flex-shrink-0" />
+                      <span>{todoItem.mentions.length}</span>
                     </div>
-                  </div>
+                  ) : (
+                    <div></div>
+                  )}
+                </div>
                   
                   <button
                     onClick={(e) => {

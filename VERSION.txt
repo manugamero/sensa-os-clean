@@ -1,6 +1,8 @@
-062
+063
 Build: 2025-01-09
 Changes:
-- Events: New date format "10:00-10:30 · Vie 17 Oct"
-- Fixed TypeScript errors in CalendarPanel
-- All cards maintain consistent 3-line height structure
+- Modal: Removed rounded corners for full width (no margins)
+- Icons: Unified to w-3 h-3 for consistent height in 20px rows
+- Borders: Unified all border colors across panels
+- Notes: Restructured to exact 3-row height like other cards
+- Dark mode: Fixed form styling consistency

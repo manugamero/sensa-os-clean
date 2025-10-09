@@ -286,7 +286,7 @@ const CalendarPanel: React.FC = () => {
               
               {/* Fila 2: Hora - altura fija */}
               <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400 mb-1 h-5 leading-5">
-                <Clock className="w-4 h-4 flex-shrink-0" />
+                <Clock className="w-3 h-3 flex-shrink-0" />
                 <span className="truncate">{formatDateTime(event.start.dateTime, event.end.dateTime)}</span>
               </div>
               

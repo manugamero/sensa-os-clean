@@ -17,16 +17,16 @@ const ModalWrapper: React.FC<ModalWrapperProps> = ({ children }) => {
   const getContentStyles = () => {
     switch (modalStyle) {
       case 1:
-        // Default: Modal con borde, sin animación especial
-        return 'h-full w-full rounded-lg border border-black/[0.24] dark:border-white/[0.24] overflow-hidden bg-white dark:bg-black'
+        // Default: Modal sin bordes redondeados para ancho completo
+        return 'h-full w-full border border-black/[0.24] dark:border-white/[0.24] overflow-hidden bg-white dark:bg-black'
       case 2:
         // Slide from right
-        return 'h-full w-full overflow-hidden rounded-lg border border-black/[0.24] dark:border-white/[0.24] animate-slide-in-right bg-white dark:bg-black'
+        return 'h-full w-full overflow-hidden border border-black/[0.24] dark:border-white/[0.24] animate-slide-in-right bg-white dark:bg-black'
       case 3:
         // Slide from bottom
-        return 'h-full w-full overflow-hidden rounded-lg border border-black/[0.24] dark:border-white/[0.24] animate-slide-in-bottom bg-white dark:bg-black'
+        return 'h-full w-full overflow-hidden border border-black/[0.24] dark:border-white/[0.24] animate-slide-in-bottom bg-white dark:bg-black'
       default:
-        return 'h-full w-full rounded-lg border border-black/[0.24] dark:border-white/[0.24] overflow-hidden bg-white dark:bg-black'
+        return 'h-full w-full border border-black/[0.24] dark:border-white/[0.24] overflow-hidden bg-white dark:bg-black'
     }
   }
 
