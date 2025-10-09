@@ -1,11 +1,13 @@
-056
+057
 Build: 2025-01-09
 Changes:
+- Card titles (email subject, event name, chat name) now semibold
+- All text remains 16px light by default
+- Only titles use semibold weight
+
+Note: Todo/Notes backend API not deployed yet - creates will fail until backend is up
+
+Previous (056):
 - Unified typography: All text 16px light (300)
 - Titles only: semibold (600)
-- Inactive elements: reduced opacity
 - Consistent line-height: 24px
-
-Previous (055):
-- Updated domain to sos001.vercel.app
-- All documentation and scripts updated

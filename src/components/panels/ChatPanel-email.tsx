@@ -225,7 +225,7 @@ const ChatPanelEmail: React.FC = () => {
             >
               {/* Fila 1: Título y badge */}
               <div className="flex items-center gap-2 mb-2">
-                <h3 className="font-medium text-gray-900 dark:text-white truncate flex-1">{thread.subject}</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white truncate flex-1">{thread.subject}</h3>
                 {thread.unreadCount > 0 && (
                   <span className="px-2 py-0.5 text-xs bg-gray-600 dark:bg-gray-300 text-white dark:text-gray-900 rounded-full flex-shrink-0">
                     {thread.unreadCount}

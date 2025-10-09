@@ -63,7 +63,7 @@ const ChatPanelSimple: React.FC = () => {
             >
               {/* Fila 1: Título y estado */}
               <div className="flex items-center justify-between mb-2">
-                <h3 className="font-medium text-gray-900 dark:text-white truncate flex-1">{room.name}</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white truncate flex-1">{room.name}</h3>
                 <div className={`w-2 h-2 rounded-full flex-shrink-0 ${room.isActive ? 'bg-gray-600 dark:bg-gray-400' : 'bg-gray-300 dark:bg-gray-700'}`}></div>
               </div>
               

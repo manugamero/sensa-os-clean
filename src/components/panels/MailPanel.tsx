@@ -155,7 +155,7 @@ const MailPanel: React.FC = () => {
                   ) : (
                     <Mail className="w-4 h-4 text-gray-600 dark:text-gray-400 flex-shrink-0" />
                   )}
-                  <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
                     {email.from}
                   </p>
                 </div>
@@ -170,7 +170,7 @@ const MailPanel: React.FC = () => {
               </div>
               
               {/* Fila 2: Asunto */}
-              <p className="text-sm text-gray-900 dark:text-white truncate mb-1">
+              <p className="font-semibold text-gray-900 dark:text-white truncate mb-1">
                 {email.subject}
               </p>
               
