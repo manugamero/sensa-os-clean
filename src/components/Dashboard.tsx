@@ -102,12 +102,12 @@ const Dashboard: React.FC = () => {
             </>
           ) : (
             <>
-              <button
-                onClick={signInWithGoogle}
-                className="px-6 py-2 bg-black dark:bg-white text-white dark:text-black rounded-full font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
-              >
-                Connect
-              </button>
+                  <span
+                    onClick={signInWithGoogle}
+                    className="text-gray-600 dark:text-gray-400 cursor-pointer hover:text-gray-900 dark:hover:text-white transition-colors"
+                  >
+                    Connect
+                  </span>
               <button
                 onClick={toggleTheme}
                 className="p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded text-black/60 dark:text-white/60"

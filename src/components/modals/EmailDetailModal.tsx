@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { X, Mail, MailOpen, Paperclip, Clock, User, Archive, Reply, ReplyAll, Forward, Trash2, AlertOctagon, Star, MoreVertical } from 'lucide-react'
+import { X, MailOpen, Paperclip, Clock, User, Archive, Reply, ReplyAll, Forward, Trash2, AlertOctagon, Star, MoreVertical } from 'lucide-react'
 
 interface Email {
   id: string
@@ -73,17 +73,10 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
 
   return (
     <div className="h-full w-full flex flex-col bg-white dark:bg-black rounded-lg shadow-xl overflow-hidden">
-        {/* Header unificado con toolbar de iconos */}
+        {/* Header simplificado: fecha a la izquierda, toolbar a la derecha */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-          <div className="flex items-center gap-2">
-            <div className="p-1.5 bg-gray-100 dark:bg-gray-950 rounded">
-              {email.isRead ? (
-                <MailOpen className="w-4 h-4 text-gray-600 dark:text-gray-400" />
-              ) : (
-                <Mail className="w-4 h-4 text-gray-600 dark:text-gray-400" />
-              )}
-            </div>
-            <h2 className="text-sm font-semibold text-gray-900 dark:text-white">Email</h2>
+          <div className="text-sm text-gray-600 dark:text-gray-400">
+            {formatDate(email.date)}
           </div>
           
           <div className="flex items-center gap-1">
@@ -205,13 +198,6 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
             </div>
           )}
 
-          {/* Estado de lectura */}
-          <div className="flex items-center gap-2">
-            <div className={`w-2 h-2 rounded-full ${email.isRead ? 'bg-gray-400' : 'bg-gray-600 dark:bg-gray-300'}`} />
-            <span className="text-sm text-gray-500 dark:text-gray-400">
-              {email.isRead ? 'Leído' : 'No leído'}
-            </span>
-          </div>
 
           {/* Contenido del email */}
           <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
@@ -220,6 +206,23 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
                 {email.body || email.snippet}
               </p>
             </div>
+          </div>
+        </div>
+
+        {/* Caja de respuesta */}
+        <div className="border-t border-gray-200 dark:border-gray-700 p-4">
+          <div className="flex gap-2">
+            <input
+              type="text"
+              placeholder="Responder a todos..."
+              className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400"
+            />
+            <button
+              onClick={handleReplyAll}
+              className="px-4 py-2 bg-black dark:bg-white text-white dark:text-black rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
+            >
+              Enviar
+            </button>
           </div>
         </div>
     </div>

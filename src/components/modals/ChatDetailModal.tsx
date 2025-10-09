@@ -81,18 +81,10 @@ const ChatDetailModal: React.FC<ChatDetailModalProps> = ({ room, onClose }) => {
 
   return (
     <div className="h-full w-full flex flex-col bg-white dark:bg-black rounded-lg shadow-xl overflow-hidden">
-        {/* Header unificado con toolbar de iconos */}
+        {/* Header simplificado: nombre del chat a la izquierda, toolbar a la derecha */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-          <div className="flex items-center gap-2">
-            <div className="p-1.5 bg-gray-100 dark:bg-gray-950 rounded">
-              <div className="w-4 h-4 bg-gray-600 dark:bg-gray-400 rounded-full" />
-            </div>
-            <div>
-              <h2 className="text-sm font-semibold text-gray-900 dark:text-white">{room.name}</h2>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                {room.participants.length} participantes
-              </p>
-            </div>
+          <div className="text-sm font-semibold text-gray-900 dark:text-white">
+            {room.name}
           </div>
           
           <div className="flex items-center gap-1">

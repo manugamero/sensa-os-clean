@@ -1,12 +1,8 @@
-058
+059
 Build: 2025-01-09
 Changes:
-- Chat default is now "simple" (demo) instead of email threads
-- Chat simple allows creating conversations by inviting email users
-- Email notification sent to invited users
-- Hover effect on all cards: 2px up + 2% white overlay in dark mode
-- Pin button on hover in email cards (top-right corner)
-- Pinned emails appear at top of list
-
-Previous (057):
-- Card titles (email subject, event name, chat name) now semibold
+- Modal headers simplificados (fecha a la izquierda, toolbar a la derecha)
+- Caja de respuesta en modal de email
+- Botón Connect cambiado a texto simple
+- Modal de notas ya implementado y funcional
+- Ancho completo de modales (sin márgenes laterales)

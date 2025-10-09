@@ -68,24 +68,24 @@ const NoteDetailModal: React.FC<NoteDetailModalProps> = ({ note, onClose, onUpda
 
   return (
     <div className="h-full w-full flex flex-col bg-white dark:bg-black rounded-lg shadow-xl overflow-hidden">
-        {/* Header unificado con toolbar de iconos */}
+        {/* Header simplificado: fecha a la izquierda, toolbar a la derecha */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-          <div className="flex items-center gap-2">
-            <button
-              onClick={toggleComplete}
-              className="p-1.5 bg-gray-100 dark:bg-gray-950 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-              title={note.completed ? 'Marcar como pendiente' : 'Marcar como completada'}
-            >
-              {note.completed ? (
-                <CheckSquare className="w-4 h-4 text-gray-600 dark:text-gray-400" />
-              ) : (
-                <Square className="w-4 h-4 text-gray-600 dark:text-gray-400" />
-              )}
-            </button>
-            <h2 className="text-sm font-semibold text-gray-900 dark:text-white">Nota</h2>
+          <div className="text-sm text-gray-600 dark:text-gray-400">
+            {formatDate(note.createdAt)}
           </div>
           
           <div className="flex items-center gap-1">
+            <button
+              onClick={toggleComplete}
+              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+              title={note.completed ? 'Marcar como pendiente' : 'Marcar como completada'}
+            >
+              {note.completed ? (
+                <CheckSquare className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+              ) : (
+                <Square className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+              )}
+            </button>
             {isEditing ? (
               <button
                 onClick={handleSave}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { X, Clock, Users, Video, Calendar, Edit, Trash2, MoreVertical, Copy } from 'lucide-react'
+import { X, Clock, Users, Video, Edit, Trash2, MoreVertical, Copy } from 'lucide-react'
 
 interface Event {
   id: string
@@ -56,13 +56,10 @@ const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClose }) =
 
   return (
     <div className="h-full w-full flex flex-col bg-white dark:bg-black rounded-lg shadow-xl overflow-hidden">
-        {/* Header unificado con toolbar de iconos */}
+        {/* Header simplificado: fecha a la izquierda, toolbar a la derecha */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-          <div className="flex items-center gap-2">
-            <div className="p-1.5 bg-gray-100 dark:bg-gray-950 rounded">
-              <Calendar className="w-4 h-4 text-gray-600 dark:text-gray-400" />
-            </div>
-            <h2 className="text-sm font-semibold text-gray-900 dark:text-white">Evento</h2>
+          <div className="text-sm text-gray-600 dark:text-gray-400">
+            {formatDateTime(event.start.dateTime)}
           </div>
           
           <div className="flex items-center gap-1">
