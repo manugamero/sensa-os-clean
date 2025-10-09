@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Search, Filter, RefreshCw, Plus, Users } from 'lucide-react'
+import { Search, Filter, RefreshCw, Plus, Users, Check } from 'lucide-react'
 import ChatDetailModal from '../modals/ChatDetailModal'
 import ModalWrapper from '../modals/ModalWrapper'
 
@@ -8,6 +8,7 @@ interface ChatRoom {
   name: string
   participants: string[]
   isActive: boolean
+  isDone?: boolean
 }
 
 const ChatPanelSimple: React.FC = () => {
@@ -17,6 +18,8 @@ const ChatPanelSimple: React.FC = () => {
     { id: '3', name: 'Soporte', participants: ['user1@example.com', 'soporte@example.com'], isActive: false }
   ])
   const [selectedRoom, setSelectedRoom] = useState<ChatRoom | null>(null)
+  const [hoveredRoom, setHoveredRoom] = useState<string | null>(null)
+  const [showDone, setShowDone] = useState(false)
   const [showCreateForm, setShowCreateForm] = useState(false)
   const [newConversation, setNewConversation] = useState({
     name: '',
@@ -42,6 +45,13 @@ const ChatPanelSimple: React.FC = () => {
     console.log('Invitación enviada a:', newConversation.email)
   }
 
+  const toggleDone = (roomId: string, e: React.MouseEvent) => {
+    e.stopPropagation()
+    setRooms(rooms.map(room => 
+      room.id === roomId ? { ...room, isDone: !room.isDone } : room
+    ))
+  }
+
   return (
     <div className="h-full flex flex-col relative">
       {/* Contenido de la lista - se reduce cuando hay modal */}
@@ -50,6 +60,13 @@ const ChatPanelSimple: React.FC = () => {
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Chat</h2>
         <div className="flex items-center gap-1">
+          <button
+            onClick={() => setShowDone(!showDone)}
+            className={`p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors ${showDone ? 'bg-gray-100 dark:bg-gray-900' : ''}`}
+            title={showDone ? 'Ocultar completados' : 'Mostrar completados'}
+          >
+            <Check className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+          </button>
           <button
             className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
             title="Buscar"
@@ -119,26 +136,38 @@ const ChatPanelSimple: React.FC = () => {
       
       <div className="flex-1 overflow-y-auto">
         <div className="space-y-2">
-          {rooms.map((room) => (
+          {rooms.filter(room => !room.isDone || showDone).map((room) => (
             <div
               key={room.id}
+              onMouseEnter={() => setHoveredRoom(room.id)}
+              onMouseLeave={() => setHoveredRoom(null)}
               onClick={() => setSelectedRoom(room)}
-              className={`card-hover p-3 rounded-lg border cursor-pointer bg-white dark:bg-black border-gray-200 dark:border-gray-700 ${!room.isActive ? 'opacity-50' : ''}`}
+              className={`card-hover p-3 rounded-lg border cursor-pointer bg-white dark:bg-black border-gray-200 dark:border-gray-700 relative ${!room.isActive ? 'opacity-50' : ''}`}
             >
+              {/* Done button on hover */}
+              {hoveredRoom === room.id && (
+                <button
+                  onClick={(e) => toggleDone(room.id, e)}
+                  className="absolute top-2 right-2 p-1.5 bg-white dark:bg-black rounded hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors z-10"
+                  title={room.isDone ? 'Marcar como pendiente' : 'Marcar como completado'}
+                >
+                  <Check className={`w-4 h-4 ${room.isDone ? 'text-gray-900 dark:text-white fill-current' : 'text-gray-500 dark:text-gray-400'}`} />
+                </button>
+              )}
               {/* Fila 1: Título y estado */}
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="font-semibold text-gray-900 dark:text-white truncate flex-1">{room.name}</h3>
+              <div className="flex items-center justify-between mb-1 h-5 leading-5">
+                <h3 className="font-semibold text-gray-900 dark:text-white truncate flex-1 text-sm">{room.name}</h3>
                 <div className={`w-2 h-2 rounded-full flex-shrink-0 ${room.isActive ? 'bg-gray-600 dark:bg-gray-400' : 'bg-gray-300 dark:bg-gray-700'}`}></div>
               </div>
               
               {/* Fila 2: Participantes */}
-              <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
-                <Users className="w-4 h-4" />
-                <span>{room.participants.length} participantes</span>
+              <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400 mb-1 h-5 leading-5">
+                <Users className="w-3 h-3" />
+                <span className="text-xs">{room.participants.length} participantes</span>
               </div>
               
               {/* Fila 3: Último mensaje (placeholder) */}
-              <p className="text-gray-400 dark:text-gray-500 truncate mt-1">
+              <p className="text-gray-400 dark:text-gray-500 truncate h-5 leading-5 text-xs">
                 {room.isActive ? 'Conversación activa' : 'Sin actividad reciente'}
               </p>
             </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Mail, MailOpen, Paperclip, Search, Filter, RefreshCw, Plus, Pin } from 'lucide-react'
+import { Mail, MailOpen, Paperclip, Search, Filter, RefreshCw, Plus, Pin, Check } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { gmailService } from '../../services/gmailService'
 import EmailDetailModal from '../modals/EmailDetailModal'
@@ -14,6 +14,7 @@ interface Email {
   isRead: boolean
   hasAttachments: boolean
   isPinned?: boolean
+  isDone?: boolean
 }
 
 const MailPanel: React.FC = () => {
@@ -24,6 +25,7 @@ const MailPanel: React.FC = () => {
   const [filterType] = useState<'all' | 'unread' | 'starred' | 'important'>('all')
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null)
   const [hoveredEmail, setHoveredEmail] = useState<string | null>(null)
+  const [showDone, setShowDone] = useState(false)
 
   useEffect(() => {
     loadEmails()
@@ -60,11 +62,23 @@ const MailPanel: React.FC = () => {
     ))
   }
 
+  const toggleDone = (emailId: string, e: React.MouseEvent) => {
+    e.stopPropagation()
+    setEmails(emails.map(email => 
+      email.id === emailId ? { ...email, isDone: !email.isDone } : email
+    ))
+  }
+
   const filteredEmails = emails
     .filter(email => {
       const matchesSearch = email.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            email.from.toLowerCase().includes(searchTerm.toLowerCase())
       if (!matchesSearch) return false
+
+      // Si no se muestran los done, filtrar elementos marcados como done
+      if (!showDone && email.isDone) {
+        return false
+      }
 
       switch (filterType) {
         case 'unread':
@@ -115,6 +129,13 @@ const MailPanel: React.FC = () => {
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Email</h2>
         <div className="flex items-center gap-1">
+          <button
+            onClick={() => setShowDone(!showDone)}
+            className={`p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors ${showDone ? 'bg-gray-100 dark:bg-gray-900' : ''}`}
+            title={showDone ? 'Ocultar completados' : 'Mostrar completados'}
+          >
+            <Check className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+          </button>
           <button
             className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
             title="Buscar"
@@ -167,26 +188,35 @@ const MailPanel: React.FC = () => {
                 email.isRead ? 'opacity-50' : ''
               }`}
             >
-              {/* Pin button on hover */}
+              {/* Pin and Done buttons on hover */}
               {hoveredEmail === email.id && (
-                <button
-                  onClick={(e) => togglePin(email.id, e)}
-                  className="absolute top-2 right-2 p-1.5 bg-white dark:bg-black rounded hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors z-10"
-                  title={email.isPinned ? 'Desanclar' : 'Anclar'}
-                >
-                  <Pin className={`w-4 h-4 ${email.isPinned ? 'text-gray-900 dark:text-white fill-current' : 'text-gray-500 dark:text-gray-400'}`} />
-                </button>
+                <div className="absolute top-2 right-2 flex gap-1 z-10">
+                  <button
+                    onClick={(e) => toggleDone(email.id, e)}
+                    className="p-1.5 bg-white dark:bg-black rounded hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
+                    title={email.isDone ? 'Marcar como pendiente' : 'Marcar como completado'}
+                  >
+                    <Check className={`w-4 h-4 ${email.isDone ? 'text-gray-900 dark:text-white fill-current' : 'text-gray-500 dark:text-gray-400'}`} />
+                  </button>
+                  <button
+                    onClick={(e) => togglePin(email.id, e)}
+                    className="p-1.5 bg-white dark:bg-black rounded hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
+                    title={email.isPinned ? 'Desanclar' : 'Anclar'}
+                  >
+                    <Pin className={`w-4 h-4 ${email.isPinned ? 'text-gray-900 dark:text-white fill-current' : 'text-gray-500 dark:text-gray-400'}`} />
+                  </button>
+                </div>
               )}
               
               {/* Fila 1: De y Fecha */}
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between mb-1 h-5 leading-5">
                 <div className="flex items-center gap-2 flex-1 min-w-0">
                   {email.isRead ? (
-                    <MailOpen className="w-4 h-4 text-gray-400 dark:text-gray-500 flex-shrink-0" />
+                    <MailOpen className="w-3 h-3 text-gray-400 dark:text-gray-500 flex-shrink-0" />
                   ) : (
-                    <Mail className="w-4 h-4 text-gray-600 dark:text-gray-400 flex-shrink-0" />
+                    <Mail className="w-3 h-3 text-gray-600 dark:text-gray-400 flex-shrink-0" />
                   )}
-                  <p className="font-semibold text-gray-900 dark:text-white truncate">
+                  <p className="font-semibold text-gray-900 dark:text-white truncate text-sm">
                     {email.from}
                   </p>
                 </div>
@@ -204,12 +234,12 @@ const MailPanel: React.FC = () => {
               </div>
               
               {/* Fila 2: Asunto */}
-              <p className="font-semibold text-gray-900 dark:text-white truncate mb-1">
+              <p className="font-semibold text-gray-900 dark:text-white truncate mb-1 h-5 leading-5 text-sm">
                 {email.subject}
               </p>
               
               {/* Fila 3: Preview */}
-              <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+              <p className="text-xs text-gray-500 dark:text-gray-400 truncate h-5 leading-5">
                 {email.snippet}
               </p>
             </div>

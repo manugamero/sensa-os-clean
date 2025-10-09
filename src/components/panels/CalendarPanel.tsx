@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Clock, Users, Video, Search, Filter, RefreshCw, Plus } from 'lucide-react'
+import { Clock, Users, Video, Search, Filter, RefreshCw, Plus, Check } from 'lucide-react'
 import { googleCalendarService } from '../../services/googleCalendarService'
 import EventDetailModal from '../modals/EventDetailModal'
 import ModalWrapper from '../modals/ModalWrapper'
@@ -20,6 +20,7 @@ interface Event {
     displayName?: string
   }>
   hangoutLink?: string
+  isDone?: boolean
 }
 
 const CalendarPanel: React.FC = () => {
@@ -27,6 +28,8 @@ const CalendarPanel: React.FC = () => {
   const [loading, setLoading] = useState(true)
   const [showCreateForm, setShowCreateForm] = useState(false)
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
+  const [hoveredEvent, setHoveredEvent] = useState<string | null>(null)
+  const [showDone, setShowDone] = useState(false)
   const [newEvent, setNewEvent] = useState({
     summary: 'Event',
     start: new Date().toISOString().slice(0, 16),
@@ -51,6 +54,13 @@ const CalendarPanel: React.FC = () => {
     } finally {
       setLoading(false)
     }
+  }
+
+  const toggleDone = (eventId: string, e: React.MouseEvent) => {
+    e.stopPropagation()
+    setEvents(events.map(event => 
+      event.id === eventId ? { ...event, isDone: !event.isDone } : event
+    ))
   }
 
   const createEvent = async (e: React.FormEvent) => {
@@ -135,6 +145,13 @@ const CalendarPanel: React.FC = () => {
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Calendario</h2>
         <div className="flex items-center gap-1">
+          <button
+            onClick={() => setShowDone(!showDone)}
+            className={`p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors ${showDone ? 'bg-gray-100 dark:bg-gray-900' : ''}`}
+            title={showDone ? 'Ocultar completados' : 'Mostrar completados'}
+          >
+            <Check className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+          </button>
           <button
             className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
             title="Buscar"
@@ -268,19 +285,31 @@ const CalendarPanel: React.FC = () => {
         )}
 
         <div className="space-y-3">
-        {events.length === 0 ? (
+        {events.filter(event => !event.isDone || showDone).length === 0 ? (
           <div className="text-center py-8">
             <p className="text-gray-500 dark:text-gray-400">No hay eventos próximos</p>
           </div>
         ) : (
-          events.map((event) => {
+          events.filter(event => !event.isDone || showDone).map((event) => {
             const isTodayEvent = isToday(event.start.dateTime)
             return (
             <div 
               key={event.id} 
+              onMouseEnter={() => setHoveredEvent(event.id)}
+              onMouseLeave={() => setHoveredEvent(null)}
               onClick={() => setSelectedEvent(event)}
-              className={`card-hover bg-white dark:bg-black rounded-lg border border-gray-200 dark:border-gray-700 p-3 cursor-pointer ${!isTodayEvent ? 'opacity-50' : ''}`}
+              className={`card-hover bg-white dark:bg-black rounded-lg border border-gray-200 dark:border-gray-700 p-3 cursor-pointer relative ${!isTodayEvent ? 'opacity-50' : ''}`}
             >
+              {/* Done button on hover */}
+              {hoveredEvent === event.id && (
+                <button
+                  onClick={(e) => toggleDone(event.id, e)}
+                  className="absolute top-2 right-2 p-1.5 bg-white dark:bg-black rounded hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors z-10"
+                  title={event.isDone ? 'Marcar como pendiente' : 'Marcar como completado'}
+                >
+                  <Check className={`w-4 h-4 ${event.isDone ? 'text-gray-900 dark:text-white fill-current' : 'text-gray-500 dark:text-gray-400'}`} />
+                </button>
+              )}
               {/* Fila 1: Título - altura fija */}
               <h3 className="font-semibold text-gray-900 dark:text-white mb-2 truncate h-5 leading-5">{event.summary}</h3>
               

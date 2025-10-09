@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { CheckSquare, Square, Users, Hash, Bold, Italic, List, X, RefreshCw, Plus } from 'lucide-react'
+import { CheckSquare, Square, Users, Hash, Bold, Italic, List, X, RefreshCw, Plus, Check } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { useSocket } from '../../contexts/SocketContext'
 import NoteDetailModal from '../modals/NoteDetailModal'
@@ -14,6 +14,7 @@ interface Todo {
   updatedAt: string
   mentions: string[]
   author: string
+  isDone?: boolean
 }
 
 const TodoPanel: React.FC = () => {
@@ -23,6 +24,8 @@ const TodoPanel: React.FC = () => {
   const [loading, setLoading] = useState(true)
   const [showCreateForm, setShowCreateForm] = useState(false)
   const [selectedNote, setSelectedNote] = useState<Todo | null>(null)
+  const [hoveredTodo, setHoveredTodo] = useState<string | null>(null)
+  const [showDone, setShowDone] = useState(false)
   const [newTodo, setNewTodo] = useState({
     content: '',
     mentions: ''
@@ -119,6 +122,13 @@ const TodoPanel: React.FC = () => {
     }
   }
 
+  const toggleDone = (todoId: string, e: React.MouseEvent) => {
+    e.stopPropagation()
+    setTodos(todos.map(todo => 
+      todo.id === todoId ? { ...todo, isDone: !todo.isDone } : todo
+    ))
+  }
+
   const formatMarkdown = (content: string) => {
     return content
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
@@ -162,6 +172,13 @@ const TodoPanel: React.FC = () => {
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Notas</h2>
           <div className="flex items-center gap-1">
+            <button
+              onClick={() => setShowDone(!showDone)}
+              className={`p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded text-black/60 dark:text-white/60 ${showDone ? 'bg-black/5 dark:bg-white/5' : ''}`}
+              title={showDone ? 'Ocultar completados' : 'Mostrar completados'}
+            >
+              <Check className="w-4 h-4" />
+            </button>
             <button
               onClick={() => setShowCreateForm(!showCreateForm)}
               className="p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded text-black/60 dark:text-white/60"
@@ -263,18 +280,30 @@ const TodoPanel: React.FC = () => {
           )}
 
           {/* Todos List */}
-          {todos.length === 0 ? (
+          {todos.filter(todo => !todo.isDone || showDone).length === 0 ? (
             <div className="text-center py-8">
               <p className="text-gray-500 dark:text-gray-400">No hay notas</p>
             </div>
           ) : (
             <div className="space-y-4">
-              {todos.map((todoItem) => (
+              {todos.filter(todo => !todo.isDone || showDone).map((todoItem) => (
                 <div 
                   key={todoItem.id} 
+                  onMouseEnter={() => setHoveredTodo(todoItem.id)}
+                  onMouseLeave={() => setHoveredTodo(null)}
                   onClick={() => setSelectedNote(todoItem)}
-                  className={`card-hover border border-gray-200 dark:border-gray-700 rounded-lg p-3 bg-white dark:bg-black cursor-pointer ${todoItem.completed ? 'opacity-50' : ''}`}
+                  className={`card-hover border border-gray-200 dark:border-gray-700 rounded-lg p-3 bg-white dark:bg-black cursor-pointer relative ${todoItem.completed ? 'opacity-50' : ''}`}
                 >
+                  {/* Done button on hover */}
+                  {hoveredTodo === todoItem.id && (
+                    <button
+                      onClick={(e) => toggleDone(todoItem.id, e)}
+                      className="absolute top-2 right-2 p-1.5 bg-white dark:bg-black rounded hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors z-10"
+                      title={todoItem.isDone ? 'Marcar como pendiente' : 'Marcar como completado'}
+                    >
+                      <Check className={`w-4 h-4 ${todoItem.isDone ? 'text-gray-900 dark:text-white fill-current' : 'text-gray-500 dark:text-gray-400'}`} />
+                    </button>
+                  )}
                   {/* Fila 1: Checkbox y contenido principal */}
                   <div className="flex items-center gap-2 mb-1 h-5 leading-5">
                     <button
