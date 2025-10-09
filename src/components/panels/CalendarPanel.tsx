@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { Clock, Users, Video, Search, Filter, RefreshCw, Plus } from 'lucide-react'
-import { useAuth } from '../../contexts/AuthContext'
 import { googleCalendarService } from '../../services/googleCalendarService'
 import EventDetailModal from '../modals/EventDetailModal'
 import ModalWrapper from '../modals/ModalWrapper'
@@ -24,7 +23,6 @@ interface Event {
 }
 
 const CalendarPanel: React.FC = () => {
-  const { user } = useAuth()
   const [events, setEvents] = useState<Event[]>([])
   const [loading, setLoading] = useState(true)
   const [showCreateForm, setShowCreateForm] = useState(false)
@@ -86,19 +84,30 @@ const CalendarPanel: React.FC = () => {
     }
   }
 
-  const formatDateTime = (dateTime: string) => {
-    const eventDate = new Date(dateTime)
-    const currentYear = new Date().getFullYear()
-    const eventYear = eventDate.getFullYear()
+  const formatDateTime = (startTime: string, endTime?: string) => {
+    const start = new Date(startTime)
+    const end = endTime ? new Date(endTime) : null
     
-    return eventDate.toLocaleString('es-ES', {
-      weekday: 'short',
-      ...(eventYear !== currentYear && { year: 'numeric' }),
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    // Formato de hora: 10:00-10:30
+    const startHour = start.toLocaleTimeString('es-ES', { 
+      hour: '2-digit', 
+      minute: '2-digit' 
     })
+    const endHour = end ? end.toLocaleTimeString('es-ES', { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    }) : ''
+    
+    const timeRange = endHour ? `${startHour}-${endHour}` : startHour
+    
+    // Formato de fecha: Vie 17 Oct
+    const dateStr = start.toLocaleDateString('es-ES', {
+      weekday: 'short',
+      day: 'numeric',
+      month: 'short'
+    })
+    
+    return `${timeRange} · ${dateStr}`
   }
 
   const isToday = (dateTime: string) => {
@@ -278,7 +287,7 @@ const CalendarPanel: React.FC = () => {
               {/* Fila 2: Hora - altura fija */}
               <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400 mb-1 h-5 leading-5">
                 <Clock className="w-4 h-4 flex-shrink-0" />
-                <span className="truncate">{formatDateTime(event.start.dateTime)}</span>
+                <span className="truncate">{formatDateTime(event.start.dateTime, event.end.dateTime)}</span>
               </div>
               
               {/* Fila 3: Invitados y botón - altura fija */}

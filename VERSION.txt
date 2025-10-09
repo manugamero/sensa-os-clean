@@ -1,6 +1,6 @@
-061
+062
 Build: 2025-01-09
 Changes:
-- Fix: Panels now reload content when user connects (added user dependency to useEffect)
-- Events: Hide year if it's the current year in date formatting
+- Events: New date format "10:00-10:30 · Vie 17 Oct"
+- Fixed TypeScript errors in CalendarPanel
 - All cards maintain consistent 3-line height structure
