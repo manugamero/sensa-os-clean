@@ -330,7 +330,6 @@ const TodoPanel: React.FC = () => {
             ))}
           </div>
         )}
-        </div>
       </div>
 
       {/* Stack Modal dentro de la columna */}
