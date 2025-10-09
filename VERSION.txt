@@ -1,8 +1,8 @@
-059
+060
 Build: 2025-01-09
 Changes:
-- Modal headers simplificados (fecha a la izquierda, toolbar a la derecha)
-- Caja de respuesta en modal de email
-- Botón Connect cambiado a texto simple
-- Modal de notas ya implementado y funcional
-- Ancho completo de modales (sin márgenes laterales)
+- Headers de modales: X a la izquierda, toolbar a la derecha
+- Caja de respuesta con botón de envío como icono dentro del input
+- Eliminados efectos de rotación en carga (spinners)
+- Notas funcionan localmente sin backend
+- Modal de notas completamente funcional

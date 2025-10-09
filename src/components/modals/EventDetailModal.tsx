@@ -56,11 +56,15 @@ const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClose }) =
 
   return (
     <div className="h-full w-full flex flex-col bg-white dark:bg-black rounded-lg shadow-xl overflow-hidden">
-        {/* Header simplificado: fecha a la izquierda, toolbar a la derecha */}
+        {/* Header simplificado: X a la izquierda, toolbar a la derecha */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            {formatDateTime(event.start.dateTime)}
-          </div>
+          <button
+            onClick={onClose}
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+            title="Cerrar"
+          >
+            <X className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+          </button>
           
           <div className="flex items-center gap-1">
             {event.hangoutLink && (
@@ -113,13 +117,6 @@ const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClose }) =
               )}
             </div>
 
-            <button
-              onClick={onClose}
-              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
-              title="Cerrar"
-            >
-              <X className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-            </button>
           </div>
         </div>
 

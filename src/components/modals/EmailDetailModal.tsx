@@ -73,11 +73,15 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
 
   return (
     <div className="h-full w-full flex flex-col bg-white dark:bg-black rounded-lg shadow-xl overflow-hidden">
-        {/* Header simplificado: fecha a la izquierda, toolbar a la derecha */}
+        {/* Header simplificado: X a la izquierda, toolbar a la derecha */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            {formatDate(email.date)}
-          </div>
+          <button
+            onClick={onClose}
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+            title="Cerrar"
+          >
+            <X className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+          </button>
           
           <div className="flex items-center gap-1">
             <button
@@ -159,13 +163,6 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
               )}
             </div>
 
-            <button
-              onClick={onClose}
-              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
-              title="Cerrar"
-            >
-              <X className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-            </button>
           </div>
         </div>
 
@@ -211,17 +208,18 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
 
         {/* Caja de respuesta */}
         <div className="border-t border-gray-200 dark:border-gray-700 p-4">
-          <div className="flex gap-2">
+          <div className="relative">
             <input
               type="text"
               placeholder="Responder a todos..."
-              className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400"
             />
             <button
               onClick={handleReplyAll}
-              className="px-4 py-2 bg-black dark:bg-white text-white dark:text-black rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+              title="Enviar"
             >
-              Enviar
+              <ReplyAll className="w-4 h-4 text-gray-500 dark:text-gray-400" />
             </button>
           </div>
         </div>

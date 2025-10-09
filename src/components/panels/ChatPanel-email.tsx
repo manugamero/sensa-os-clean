@@ -136,7 +136,7 @@ const ChatPanelEmail: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600"></div>
+        <div className="text-gray-500 dark:text-gray-400">Cargando...</div>
       </div>
     )
   }

@@ -59,9 +59,8 @@ const TodoPanel: React.FC = () => {
   const loadTodos = async () => {
     try {
       setLoading(true)
-      const token = await user?.getIdToken()
-      const todosData = await todoService.getTodos(token)
-      setTodos(todosData)
+      // Simular carga sin backend
+      setTodos([])
     } catch (error) {
       console.error('Error loading todos:', error)
       setTodos([])
@@ -75,22 +74,26 @@ const TodoPanel: React.FC = () => {
     if (!newTodo.content.trim()) return
     
     try {
-      const token = await user?.getIdToken()
       const mentions = newTodo.mentions
         .split(',')
         .map(email => email.trim())
         .filter(email => email)
 
-      await todoService.createTodo(token, {
-        title: '', // Sin título
+      // Crear nota localmente sin backend
+      const newNote: Todo = {
+        id: Date.now().toString(),
+        title: '',
         content: newTodo.content,
-        mentions
-      })
+        completed: false,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        mentions,
+        author: user?.email || 'Usuario'
+      }
 
+      setTodos(prev => [newNote, ...prev])
       setNewTodo({ content: '', mentions: '' })
       setShowCreateForm(false)
-      // Recargar todos
-      await loadTodos()
     } catch (error) {
       console.error('Error creating todo:', error)
       alert('Error al crear la nota. Por favor, intenta de nuevo.')
@@ -99,8 +102,10 @@ const TodoPanel: React.FC = () => {
 
   const toggleTodo = async (todoId: string, completed: boolean) => {
     try {
-      const token = await user?.getIdToken()
-      await todoService.updateTodo(token, todoId, { completed })
+      // Actualizar localmente sin backend
+      setTodos(prev => prev.map(todo => 
+        todo.id === todoId ? { ...todo, completed, updatedAt: new Date().toISOString() } : todo
+      ))
     } catch (error) {
       console.error('Error updating todo:', error)
     }
@@ -108,8 +113,8 @@ const TodoPanel: React.FC = () => {
 
   const deleteTodo = async (todoId: string) => {
     try {
-      const token = await user?.getIdToken()
-      await todoService.deleteTodo(token, todoId)
+      // Eliminar localmente sin backend
+      setTodos(prev => prev.filter(todo => todo.id !== todoId))
     } catch (error) {
       console.error('Error deleting todo:', error)
     }
@@ -145,7 +150,7 @@ const TodoPanel: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600"></div>
+        <div className="text-gray-500 dark:text-gray-400">Cargando...</div>
       </div>
     )
   }
