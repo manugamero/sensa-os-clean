@@ -63,7 +63,7 @@ const ChatPanelSimple: React.FC = () => {
           <button
             onClick={() => setShowDone(!showDone)}
             className={`p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors ${showDone ? 'bg-gray-100 dark:bg-gray-900' : ''}`}
-            title={showDone ? 'Ocultar completados' : 'Mostrar completados'}
+            title={showDone ? 'Mostrar pendientes' : 'Mostrar completados'}
           >
             <Check className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </button>
@@ -136,7 +136,7 @@ const ChatPanelSimple: React.FC = () => {
       
       <div className="flex-1 overflow-y-auto">
         <div className="space-y-2">
-          {rooms.filter(room => !room.isDone || showDone).map((room) => (
+          {rooms.filter(room => showDone ? room.isDone : !room.isDone).map((room) => (
             <div
               key={room.id}
               onMouseEnter={() => setHoveredRoom(room.id)}

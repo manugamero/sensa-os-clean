@@ -1,8 +1,7 @@
-064
+066
 Build: 2025-01-09
 Changes:
-- Add done feature to all columns with hover check button
-- Add show/hide done items toggle in headers
-- Standardize card heights to 3 rows with consistent spacing
-- Fix icon sizes to w-3 h-3 for proper alignment
-- Remove modal border colors and debug styles
+- Fix done button behavior: now toggles between showing ONLY pending or ONLY completed items
+- Default state shows only pending items
+- Active state (button highlighted) shows only completed items
+- Updated tooltips to reflect new behavior

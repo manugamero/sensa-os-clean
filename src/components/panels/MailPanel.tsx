@@ -75,7 +75,11 @@ const MailPanel: React.FC = () => {
                            email.from.toLowerCase().includes(searchTerm.toLowerCase())
       if (!matchesSearch) return false
 
-      // Si no se muestran los done, filtrar elementos marcados como done
+      // Si showDone está activo, mostrar SOLO los completados
+      // Si showDone está inactivo, mostrar SOLO los no completados
+      if (showDone && !email.isDone) {
+        return false
+      }
       if (!showDone && email.isDone) {
         return false
       }
@@ -132,7 +136,7 @@ const MailPanel: React.FC = () => {
           <button
             onClick={() => setShowDone(!showDone)}
             className={`p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors ${showDone ? 'bg-gray-100 dark:bg-gray-900' : ''}`}
-            title={showDone ? 'Ocultar completados' : 'Mostrar completados'}
+            title={showDone ? 'Mostrar pendientes' : 'Mostrar completados'}
           >
             <Check className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </button>

@@ -175,7 +175,7 @@ const TodoPanel: React.FC = () => {
             <button
               onClick={() => setShowDone(!showDone)}
               className={`p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded text-black/60 dark:text-white/60 ${showDone ? 'bg-black/5 dark:bg-white/5' : ''}`}
-              title={showDone ? 'Ocultar completados' : 'Mostrar completados'}
+              title={showDone ? 'Mostrar pendientes' : 'Mostrar completados'}
             >
               <Check className="w-4 h-4" />
             </button>
@@ -280,13 +280,13 @@ const TodoPanel: React.FC = () => {
           )}
 
           {/* Todos List */}
-          {todos.filter(todo => !todo.isDone || showDone).length === 0 ? (
+          {todos.filter(todo => showDone ? todo.isDone : !todo.isDone).length === 0 ? (
             <div className="text-center py-8">
               <p className="text-gray-500 dark:text-gray-400">No hay notas</p>
             </div>
           ) : (
             <div className="space-y-4">
-              {todos.filter(todo => !todo.isDone || showDone).map((todoItem) => (
+              {todos.filter(todo => showDone ? todo.isDone : !todo.isDone).map((todoItem) => (
                 <div 
                   key={todoItem.id} 
                   onMouseEnter={() => setHoveredTodo(todoItem.id)}

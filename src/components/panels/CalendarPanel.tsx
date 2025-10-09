@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Clock, Users, Video, Search, Filter, RefreshCw, Plus, Check } from 'lucide-react'
+import { useAuth } from '../../contexts/AuthContext'
 import { googleCalendarService } from '../../services/googleCalendarService'
 import EventDetailModal from '../modals/EventDetailModal'
 import ModalWrapper from '../modals/ModalWrapper'
@@ -24,6 +25,7 @@ interface Event {
 }
 
 const CalendarPanel: React.FC = () => {
+  const { user } = useAuth()
   const [events, setEvents] = useState<Event[]>([])
   const [loading, setLoading] = useState(true)
   const [showCreateForm, setShowCreateForm] = useState(false)
@@ -40,7 +42,7 @@ const CalendarPanel: React.FC = () => {
 
   useEffect(() => {
     loadEvents()
-  }, [])
+  }, [user])
 
   const loadEvents = async () => {
     try {
@@ -148,7 +150,7 @@ const CalendarPanel: React.FC = () => {
           <button
             onClick={() => setShowDone(!showDone)}
             className={`p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors ${showDone ? 'bg-gray-100 dark:bg-gray-900' : ''}`}
-            title={showDone ? 'Ocultar completados' : 'Mostrar completados'}
+            title={showDone ? 'Mostrar pendientes' : 'Mostrar completados'}
           >
             <Check className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </button>
@@ -285,12 +287,12 @@ const CalendarPanel: React.FC = () => {
         )}
 
         <div className="space-y-3">
-        {events.filter(event => !event.isDone || showDone).length === 0 ? (
+        {events.filter(event => showDone ? event.isDone : !event.isDone).length === 0 ? (
           <div className="text-center py-8">
             <p className="text-gray-500 dark:text-gray-400">No hay eventos próximos</p>
           </div>
         ) : (
-          events.filter(event => !event.isDone || showDone).map((event) => {
+          events.filter(event => showDone ? event.isDone : !event.isDone).map((event) => {
             const isTodayEvent = isToday(event.start.dateTime)
             return (
             <div 
