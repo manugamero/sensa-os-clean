@@ -72,9 +72,9 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
   }
 
   return (
-    <div className="h-full w-full flex flex-col bg-white dark:bg-black overflow-hidden">
+    <div className="h-full w-full flex flex-col bg-white dark:bg-black overflow-hidden border-4 border-green-500">
         {/* Header simplificado: X a la izquierda, toolbar a la derecha */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-purple-200">
           <button
             onClick={onClose}
             className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
@@ -167,7 +167,7 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
         </div>
 
         {/* Content */}
-        <div className="p-4 space-y-4 overflow-y-auto flex-1">
+        <div className="p-4 space-y-4 overflow-y-auto flex-1 bg-yellow-200">
           {/* Asunto */}
           <div>
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
@@ -207,7 +207,7 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
         </div>
 
         {/* Caja de respuesta */}
-        <div className="border-t border-gray-200 dark:border-gray-700 p-4">
+        <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-pink-200">
           <div className="relative">
             <input
               type="text"
