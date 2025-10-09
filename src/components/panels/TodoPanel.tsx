@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { CheckSquare, Square, Users, Hash, Bold, Italic, List, X, RefreshCw, Plus, Check } from 'lucide-react'
+import { CheckSquare, Square, Hash, Bold, Italic, List, X, RefreshCw, Plus, Check } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { useSocket } from '../../contexts/SocketContext'
 import NoteDetailModal from '../modals/NoteDetailModal'
@@ -237,10 +237,10 @@ const TodoPanel: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => insertMarkdown('@', '@email.com')}
-                    className="p-1 hover:bg-gray-100 dark:hover:bg-gray-900 rounded"
+                    className="p-1 hover:bg-gray-100 dark:hover:bg-gray-900 rounded text-gray-500 dark:text-gray-400 font-bold"
                     title="Mencionar"
                   >
-                    <Users className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                    @
                   </button>
                   <div className="flex-1"></div>
                   <button
@@ -340,8 +340,7 @@ const TodoPanel: React.FC = () => {
                   <div className="flex items-center justify-between gap-2 h-5 leading-5">
                     {todoItem.mentions.length > 0 ? (
                       <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
-                        <Users className="w-3 h-3 flex-shrink-0" />
-                        <span>{todoItem.mentions.length}</span>
+                        <span>{todoItem.mentions.length} menciones</span>
                       </div>
                     ) : (
                       <div></div>

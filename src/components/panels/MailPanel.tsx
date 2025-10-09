@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Mail, MailOpen, Paperclip, Search, Filter, RefreshCw, Plus, Pin, Check } from 'lucide-react'
+import { Paperclip, Search, Filter, RefreshCw, Plus, Pin, Check } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { gmailService } from '../../services/gmailService'
 import EmailDetailModal from '../modals/EmailDetailModal'
@@ -215,12 +215,7 @@ const MailPanel: React.FC = () => {
               {/* Fila 1: De y Fecha */}
               <div className="flex items-center justify-between mb-1 h-5 leading-5">
                 <div className="flex items-center gap-2 flex-1 min-w-0">
-                  {email.isRead ? (
-                    <MailOpen className="w-3 h-3 text-gray-400 dark:text-gray-500 flex-shrink-0" />
-                  ) : (
-                    <Mail className="w-3 h-3 text-gray-600 dark:text-gray-400 flex-shrink-0" />
-                  )}
-                  <p className="font-semibold text-gray-900 dark:text-white truncate text-sm">
+                  <p className={`font-semibold truncate text-sm ${email.isRead ? 'text-gray-500 dark:text-gray-400' : 'text-gray-900 dark:text-white'}`}>
                     {email.from}
                   </p>
                 </div>

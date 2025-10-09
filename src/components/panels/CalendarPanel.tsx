@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Clock, Users, Video, Search, Filter, RefreshCw, Plus, Check } from 'lucide-react'
+import { Video, Search, Filter, RefreshCw, Plus, Check } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { googleCalendarService } from '../../services/googleCalendarService'
 import EventDetailModal from '../modals/EventDetailModal'

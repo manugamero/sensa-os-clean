@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Search, Filter, RefreshCw, Plus, Users, Check } from 'lucide-react'
+import { Search, Filter, RefreshCw, Plus, Check } from 'lucide-react'
 import ChatDetailModal from '../modals/ChatDetailModal'
 import ModalWrapper from '../modals/ModalWrapper'
 
@@ -162,7 +162,6 @@ const ChatPanelSimple: React.FC = () => {
               
               {/* Fila 2: Participantes */}
               <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400 mb-1 h-5 leading-5">
-                <Users className="w-3 h-3" />
                 <span className="text-xs">{room.participants.length} participantes</span>
               </div>
               
