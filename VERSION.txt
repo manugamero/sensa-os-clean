@@ -1,6 +1,10 @@
-054
+055
 Build: 2025-01-09
 Changes:
+- Updated domain to sos001.vercel.app
+- All documentation and scripts updated with new domain
+
+Previous (054):
 - Removed login screen - app opens directly in Dashboard
 - Added "Connect" button (rounded-full) in header
 - Gelion typography configured as primary font
@@ -8,4 +12,3 @@ Changes:
 - Pure black/white colors (no blue tones)
 - Modal positioning: 32px from top, full width
 - No overlay shadow on modals
-
