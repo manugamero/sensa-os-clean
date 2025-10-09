@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Mail, MailOpen, Paperclip, Search, Filter, RefreshCw, Plus, Pin } from 'lucide-react'
+import { useAuth } from '../../contexts/AuthContext'
 import { gmailService } from '../../services/gmailService'
 import EmailDetailModal from '../modals/EmailDetailModal'
 import ModalWrapper from '../modals/ModalWrapper'
@@ -16,6 +17,7 @@ interface Email {
 }
 
 const MailPanel: React.FC = () => {
+  const { user } = useAuth()
   const [emails, setEmails] = useState<Email[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm] = useState('')
@@ -25,7 +27,7 @@ const MailPanel: React.FC = () => {
 
   useEffect(() => {
     loadEmails()
-  }, [])
+  }, [user])
 
   const loadEmails = async () => {
     try {

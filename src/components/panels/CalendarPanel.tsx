@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Clock, Users, Video, Search, Filter, RefreshCw, Plus } from 'lucide-react'
+import { useAuth } from '../../contexts/AuthContext'
 import { googleCalendarService } from '../../services/googleCalendarService'
 import EventDetailModal from '../modals/EventDetailModal'
 import ModalWrapper from '../modals/ModalWrapper'
@@ -23,6 +24,7 @@ interface Event {
 }
 
 const CalendarPanel: React.FC = () => {
+  const { user } = useAuth()
   const [events, setEvents] = useState<Event[]>([])
   const [loading, setLoading] = useState(true)
   const [showCreateForm, setShowCreateForm] = useState(false)
@@ -85,9 +87,13 @@ const CalendarPanel: React.FC = () => {
   }
 
   const formatDateTime = (dateTime: string) => {
-    return new Date(dateTime).toLocaleString('es-ES', {
+    const eventDate = new Date(dateTime)
+    const currentYear = new Date().getFullYear()
+    const eventYear = eventDate.getFullYear()
+    
+    return eventDate.toLocaleString('es-ES', {
       weekday: 'short',
-      year: 'numeric',
+      ...(eventYear !== currentYear && { year: 'numeric' }),
       month: 'short',
       day: 'numeric',
       hour: '2-digit',

@@ -1,8 +1,6 @@
-060
+061
 Build: 2025-01-09
 Changes:
-- Headers de modales: X a la izquierda, toolbar a la derecha
-- Caja de respuesta con botón de envío como icono dentro del input
-- Eliminados efectos de rotación en carga (spinners)
-- Notas funcionan localmente sin backend
-- Modal de notas completamente funcional
+- Fix: Panels now reload content when user connects (added user dependency to useEffect)
+- Events: Hide year if it's the current year in date formatting
+- All cards maintain consistent 3-line height structure
