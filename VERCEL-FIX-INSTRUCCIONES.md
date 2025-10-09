@@ -10,7 +10,7 @@ Los cambios se están subiendo a `sensa-os-clean` (repositorio nuevo).
 https://vercel.com/dashboard
 
 ### Paso 2: Entra al proyecto `sos01`
-- Busca el proyecto que tiene el dominio `sos01.vercel.app`
+- Busca el proyecto que tiene el dominio `sos001.vercel.app`
 - Click en el proyecto
 
 ### Paso 3: Ve a Settings

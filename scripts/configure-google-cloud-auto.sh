@@ -4,7 +4,7 @@ echo "🔧 Configurando Google Cloud Console automáticamente..."
 echo ""
 
 # URL de la aplicación
-VERCEL_URL="https://sos01.vercel.app"
+VERCEL_URL="https://sos001.vercel.app"
 
 echo "🌐 URL de la aplicación: $VERCEL_URL"
 echo ""

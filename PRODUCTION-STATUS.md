@@ -3,7 +3,7 @@
 ## ✅ COMPLETED AUTOMATICALLY
 
 ### 🌐 URLs de Producción
-- **URL Principal:** https://sos01.vercel.app
+- **URL Principal:** https://sos001.vercel.app
 - **URL Alternativa:** https://sensa-acaxo2mhn-manugameros-projects.vercel.app
 - **Repositorio GitHub:** https://github.com/manugamero/sensa-os-clean
 
@@ -20,7 +20,7 @@
 ### 🛠️ Configuración Técnica
 - ✅ **Build exitoso** - Todos los errores de TypeScript corregidos
 - ✅ **Deploy automático** - Configurado con GitHub
-- ✅ **URL corta** - sos01.vercel.app configurada
+- ✅ **URL corta** - sos001.vercel.app configurada
 - ✅ **Repositorio sincronizado** - GitHub actualizado
 - ✅ **Scripts de configuración** - Creados y funcionales
 
@@ -33,9 +33,9 @@
 1. Selecciona tu OAuth 2.0 Client ID
 2. Haz clic en 'Edit' (lápiz)
 3. En 'Authorized JavaScript origins' agrega:
-   - `https://sos01.vercel.app`
+   - `https://sos001.vercel.app`
 4. En 'Authorized redirect URIs' agrega:
-   - `https://sos01.vercel.app`
+   - `https://sos001.vercel.app`
 5. Haz clic en 'Save'
 
 ### 2. 🔍 Verificar APIs Habilitadas
@@ -55,7 +55,7 @@
 ## 🧪 PRUEBA DE LA APLICACIÓN
 
 ### URL de Prueba
-https://sos01.vercel.app
+https://sos001.vercel.app
 
 ### Funcionalidades a Probar
 - [ ] Login con Google

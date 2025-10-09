@@ -6,7 +6,7 @@ Firebase: Error (auth/unauthorized-domain)
 ```
 
 ## 🔍 Causa:
-El dominio `sos01.vercel.app` no está autorizado en Firebase Authentication.
+El dominio `sos001.vercel.app` no está autorizado en Firebase Authentication.
 
 ## ✅ Solución:
 
@@ -15,7 +15,7 @@ El dominio `sos01.vercel.app` no está autorizado en Firebase Authentication.
 
 ### 2. 📝 Agrega Dominios Autorizados
 En la sección **"Authorized domains"** agrega:
-- `sos01.vercel.app`
+- `sos001.vercel.app`
 - `sensa-1iuiwnwgt-manugameros-projects.vercel.app`
 - `vercel.app` (opcional, para todos los subdominios de Vercel)
 
@@ -23,11 +23,11 @@ En la sección **"Authorized domains"** agrega:
 Haz clic en **"Save"**
 
 ### 4. 🧪 Prueba la Aplicación
-**URL:** https://sos01.vercel.app
+**URL:** https://sos001.vercel.app
 
 ## 📋 Dominios que Deben Estar Autorizados:
 - ✅ `localhost` (para desarrollo)
-- ✅ `sos01.vercel.app` (producción)
+- ✅ `sos001.vercel.app` (producción)
 - ✅ `sensa-1iuiwnwgt-manugameros-projects.vercel.app` (deploy actual)
 - ✅ `vercel.app` (todos los subdominios de Vercel)
 

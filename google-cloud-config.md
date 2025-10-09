@@ -1,8 +1,8 @@
 # Configuración de Google Cloud Console
 
 ## 🔗 URLs autorizadas para OAuth 2.0
-- **JavaScript origins:** https://sos01.vercel.app
-- **Redirect URIs:** https://sos01.vercel.app
+- **JavaScript origins:** https://sos001.vercel.app
+- **Redirect URIs:** https://sos001.vercel.app
 
 ## 📋 Pasos para configurar:
 1. Ve a https://console.cloud.google.com/apis/credentials

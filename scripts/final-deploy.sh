@@ -4,7 +4,7 @@ echo "🚀 Deploy final de Sensa OS a producción"
 echo ""
 
 # URL corta configurada
-VERCEL_URL="https://sos01.vercel.app"
+VERCEL_URL="https://sos001.vercel.app"
 
 echo "🌐 URL de la aplicación: $VERCEL_URL"
 echo ""
