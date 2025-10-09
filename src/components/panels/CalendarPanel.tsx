@@ -264,7 +264,7 @@ const CalendarPanel: React.FC = () => {
             <div 
               key={event.id} 
               onClick={() => setSelectedEvent(event)}
-              className={`bg-white dark:bg-black rounded-lg border border-gray-200 dark:border-gray-700 p-3 hover:shadow-md transition-shadow cursor-pointer ${!isTodayEvent ? 'opacity-50' : ''}`}
+              className={`card-hover bg-white dark:bg-black rounded-lg border border-gray-200 dark:border-gray-700 p-3 cursor-pointer ${!isTodayEvent ? 'opacity-50' : ''}`}
             >
               {/* Fila 1: Título - altura fija */}
               <h3 className="font-semibold text-gray-900 dark:text-white mb-2 truncate h-5 leading-5">{event.summary}</h3>

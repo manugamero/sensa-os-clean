@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Mail, MailOpen, Paperclip, Search, Filter, RefreshCw, Plus } from 'lucide-react'
+import { Mail, MailOpen, Paperclip, Search, Filter, RefreshCw, Plus, Pin } from 'lucide-react'
 import { gmailService } from '../../services/gmailService'
 import EmailDetailModal from '../modals/EmailDetailModal'
 import ModalWrapper from '../modals/ModalWrapper'
@@ -12,6 +12,7 @@ interface Email {
   date: string
   isRead: boolean
   hasAttachments: boolean
+  isPinned?: boolean
 }
 
 const MailPanel: React.FC = () => {
@@ -20,6 +21,7 @@ const MailPanel: React.FC = () => {
   const [searchTerm] = useState('')
   const [filterType] = useState<'all' | 'unread' | 'starred' | 'important'>('all')
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null)
+  const [hoveredEmail, setHoveredEmail] = useState<string | null>(null)
 
   useEffect(() => {
     loadEmails()
@@ -49,23 +51,37 @@ const MailPanel: React.FC = () => {
     }
   }
 
-  const filteredEmails = emails.filter(email => {
-    const matchesSearch = email.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         email.from.toLowerCase().includes(searchTerm.toLowerCase())
-    if (!matchesSearch) return false
+  const togglePin = (emailId: string, e: React.MouseEvent) => {
+    e.stopPropagation()
+    setEmails(emails.map(email => 
+      email.id === emailId ? { ...email, isPinned: !email.isPinned } : email
+    ))
+  }
 
-    switch (filterType) {
-      case 'unread':
-        return !email.isRead
-      case 'starred':
-        return email.subject.includes('★') || email.subject.includes('⭐')
-      case 'important':
-        return email.subject.toLowerCase().includes('important') || 
-               email.subject.toLowerCase().includes('urgent')
-      default:
-        return true
-    }
-  })
+  const filteredEmails = emails
+    .filter(email => {
+      const matchesSearch = email.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           email.from.toLowerCase().includes(searchTerm.toLowerCase())
+      if (!matchesSearch) return false
+
+      switch (filterType) {
+        case 'unread':
+          return !email.isRead
+        case 'starred':
+          return email.subject.includes('★') || email.subject.includes('⭐')
+        case 'important':
+          return email.subject.toLowerCase().includes('important') || 
+                 email.subject.toLowerCase().includes('urgent')
+        default:
+          return true
+      }
+    })
+    .sort((a, b) => {
+      // Pinned emails first
+      if (a.isPinned && !b.isPinned) return -1
+      if (!a.isPinned && b.isPinned) return 1
+      return 0
+    })
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
@@ -137,16 +153,29 @@ const MailPanel: React.FC = () => {
           filteredEmails.map((email) => (
             <div
               key={email.id}
+              onMouseEnter={() => setHoveredEmail(email.id)}
+              onMouseLeave={() => setHoveredEmail(null)}
               onClick={() => {
                 setSelectedEmail(email)
                 if (!email.isRead) {
                   markAsRead(email.id)
                 }
               }}
-              className={`p-3 rounded-lg border cursor-pointer transition-colors bg-white dark:bg-black border-gray-200 dark:border-gray-700 hover:shadow-md ${
+              className={`card-hover p-3 rounded-lg border cursor-pointer bg-white dark:bg-black border-gray-200 dark:border-gray-700 relative ${
                 email.isRead ? 'opacity-50' : ''
               }`}
             >
+              {/* Pin button on hover */}
+              {hoveredEmail === email.id && (
+                <button
+                  onClick={(e) => togglePin(email.id, e)}
+                  className="absolute top-2 right-2 p-1.5 bg-white dark:bg-black rounded hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors z-10"
+                  title={email.isPinned ? 'Desanclar' : 'Anclar'}
+                >
+                  <Pin className={`w-4 h-4 ${email.isPinned ? 'text-gray-900 dark:text-white fill-current' : 'text-gray-500 dark:text-gray-400'}`} />
+                </button>
+              )}
+              
               {/* Fila 1: De y Fecha */}
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2 flex-1 min-w-0">
@@ -155,11 +184,14 @@ const MailPanel: React.FC = () => {
                   ) : (
                     <Mail className="w-4 h-4 text-gray-600 dark:text-gray-400 flex-shrink-0" />
                   )}
-                  <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
+                  <p className="font-semibold text-gray-900 dark:text-white truncate">
                     {email.from}
                   </p>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
+                  {email.isPinned && (
+                    <Pin className="w-3 h-3 text-gray-600 dark:text-gray-400 fill-current" />
+                  )}
                   {email.hasAttachments && (
                     <Paperclip className="w-3 h-3 text-gray-400 dark:text-gray-500" />
                   )}

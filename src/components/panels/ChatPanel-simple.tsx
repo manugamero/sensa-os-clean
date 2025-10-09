@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Search, Filter, RefreshCw, Plus } from 'lucide-react'
+import { Search, Filter, RefreshCw, Plus, X, Send, Users } from 'lucide-react'
 import ChatDetailModal from '../modals/ChatDetailModal'
 import ModalWrapper from '../modals/ModalWrapper'
 
@@ -11,12 +11,36 @@ interface ChatRoom {
 }
 
 const ChatPanelSimple: React.FC = () => {
-  const [rooms] = useState<ChatRoom[]>([
+  const [rooms, setRooms] = useState<ChatRoom[]>([
     { id: '1', name: 'General', participants: ['user1@example.com', 'user2@example.com'], isActive: true },
     { id: '2', name: 'Proyecto Alpha', participants: ['user1@example.com', 'user3@example.com'], isActive: false },
     { id: '3', name: 'Soporte', participants: ['user1@example.com', 'soporte@example.com'], isActive: false }
   ])
   const [selectedRoom, setSelectedRoom] = useState<ChatRoom | null>(null)
+  const [showCreateForm, setShowCreateForm] = useState(false)
+  const [newConversation, setNewConversation] = useState({
+    name: '',
+    email: ''
+  })
+
+  const createConversation = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!newConversation.email.trim()) return
+
+    const newRoom: ChatRoom = {
+      id: Date.now().toString(),
+      name: newConversation.name || newConversation.email,
+      participants: [newConversation.email],
+      isActive: true
+    }
+
+    setRooms([newRoom, ...rooms])
+    setNewConversation({ name: '', email: '' })
+    setShowCreateForm(false)
+
+    // Aquí se enviaría el email de invitación
+    console.log('Invitación enviada a:', newConversation.email)
+  }
 
   return (
     <div className="h-full flex flex-col relative">
@@ -45,6 +69,7 @@ const ChatPanelSimple: React.FC = () => {
             <RefreshCw className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </button>
           <button
+            onClick={() => setShowCreateForm(!showCreateForm)}
             className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
             title="Nueva conversación"
           >
@@ -53,13 +78,52 @@ const ChatPanelSimple: React.FC = () => {
         </div>
       </div>
       
+      {/* Create Form */}
+      {showCreateForm && (
+        <div className="mb-4 p-4 border border-gray-200 dark:border-gray-800 rounded-lg bg-gray-50 dark:bg-black">
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Nueva Conversación</h3>
+          <form onSubmit={createConversation} className="space-y-3">
+            <input
+              type="email"
+              placeholder="Email del participante"
+              value={newConversation.email}
+              onChange={(e) => setNewConversation({ ...newConversation, email: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400"
+              required
+            />
+            <input
+              type="text"
+              placeholder="Título de conversación (opcional)"
+              value={newConversation.name}
+              onChange={(e) => setNewConversation({ ...newConversation, name: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400"
+            />
+            <div className="flex gap-2">
+              <button
+                type="submit"
+                className="flex-1 px-3 py-2 bg-black dark:bg-white text-white dark:text-black rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
+              >
+                Crear e invitar
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowCreateForm(false)}
+                className="flex-1 px-3 py-2 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+      
       <div className="flex-1 overflow-y-auto">
         <div className="space-y-2">
           {rooms.map((room) => (
             <div
               key={room.id}
               onClick={() => setSelectedRoom(room)}
-              className={`p-3 rounded-lg border cursor-pointer transition-colors bg-white dark:bg-black border-gray-200 dark:border-gray-700 hover:shadow-md ${!room.isActive ? 'opacity-50' : ''}`}
+              className={`card-hover p-3 rounded-lg border cursor-pointer bg-white dark:bg-black border-gray-200 dark:border-gray-700 ${!room.isActive ? 'opacity-50' : ''}`}
             >
               {/* Fila 1: Título y estado */}
               <div className="flex items-center justify-between mb-2">
@@ -68,12 +132,13 @@ const ChatPanelSimple: React.FC = () => {
               </div>
               
               {/* Fila 2: Participantes */}
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                {room.participants.length} participantes
-              </p>
+              <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
+                <Users className="w-4 h-4" />
+                <span>{room.participants.length} participantes</span>
+              </div>
               
               {/* Fila 3: Último mensaje (placeholder) */}
-              <p className="text-xs text-gray-400 dark:text-gray-500 truncate mt-1">
+              <p className="text-gray-400 dark:text-gray-500 truncate mt-1">
                 {room.isActive ? 'Conversación activa' : 'Sin actividad reciente'}
               </p>
             </div>

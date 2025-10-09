@@ -221,7 +221,7 @@ const ChatPanelEmail: React.FC = () => {
             <div
               key={thread.id}
               onClick={() => openThread(thread)}
-              className="p-3 rounded-lg border cursor-pointer transition-colors bg-white dark:bg-black border-gray-200 dark:border-gray-700 hover:shadow-md"
+              className="card-hover p-3 rounded-lg border cursor-pointer bg-white dark:bg-black border-gray-200 dark:border-gray-700"
             >
               {/* Fila 1: Título y badge */}
               <div className="flex items-center gap-2 mb-2">
