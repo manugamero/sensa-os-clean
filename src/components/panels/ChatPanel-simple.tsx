@@ -154,21 +154,23 @@ const ChatPanelSimple: React.FC = () => {
                   <Check className={`w-4 h-4 ${room.isDone ? 'text-gray-900 dark:text-white fill-current' : 'text-gray-500 dark:text-gray-400'}`} />
                 </button>
               )}
-              {/* Fila 1: Título y estado */}
-              <div className="flex items-center justify-between mb-1 h-5 leading-5">
-                <h3 className="font-semibold text-gray-900 dark:text-white truncate flex-1 text-sm">{room.name}</h3>
-                <div className={`w-2 h-2 rounded-full flex-shrink-0 ${room.isActive ? 'bg-gray-600 dark:bg-gray-400' : 'bg-gray-300 dark:bg-gray-700'}`}></div>
+              <div className="h-[60px] flex flex-col justify-between">
+                {/* Fila 1: Título y estado */}
+                <div className="flex items-center justify-between h-5">
+                  <h3 className="font-semibold text-gray-900 dark:text-white truncate flex-1 text-sm">{room.name}</h3>
+                  <div className={`w-2 h-2 rounded-full flex-shrink-0 ${room.isActive ? 'bg-gray-600 dark:bg-gray-400' : 'bg-gray-300 dark:bg-gray-700'}`}></div>
+                </div>
+                
+                {/* Fila 2: Participantes */}
+                <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400 h-5">
+                  <span className="text-xs">{room.participants.length} participantes</span>
+                </div>
+                
+                {/* Fila 3: Último mensaje (placeholder) */}
+                <p className="text-gray-400 dark:text-gray-500 truncate h-5 text-xs">
+                  {room.isActive ? 'Conversación activa' : 'Sin actividad reciente'}
+                </p>
               </div>
-              
-              {/* Fila 2: Participantes */}
-              <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400 mb-1 h-5 leading-5">
-                <span className="text-xs">{room.participants.length} participantes</span>
-              </div>
-              
-              {/* Fila 3: Último mensaje (placeholder) */}
-              <p className="text-gray-400 dark:text-gray-500 truncate h-5 leading-5 text-xs">
-                {room.isActive ? 'Conversación activa' : 'Sin actividad reciente'}
-              </p>
             </div>
           ))}
         </div>

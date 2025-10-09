@@ -312,34 +312,36 @@ const CalendarPanel: React.FC = () => {
                   <Check className={`w-4 h-4 ${event.isDone ? 'text-gray-900 dark:text-white fill-current' : 'text-gray-500 dark:text-gray-400'}`} />
                 </button>
               )}
-              {/* Fila 1: Título - altura fija */}
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-2 truncate h-5 leading-5">{event.summary}</h3>
-              
-              {/* Fila 2: Hora - altura fija */}
-              <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400 mb-1 h-5 leading-5">
-                <span className="truncate">{formatDateTime(event.start.dateTime, event.end.dateTime)}</span>
-              </div>
-              
-              {/* Fila 3: Invitados y botón - altura fija */}
-              <div className="flex items-center justify-between gap-2 h-5 leading-5">
-                {event.attendees && event.attendees.length > 0 ? (
-                  <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
-                    <span>{event.attendees.length} asistentes</span>
-                  </div>
-                ) : (
-                  <div></div>
-                )}
-                {event.hangoutLink && (
-                  <a
-                    href={event.hangoutLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="flex items-center gap-1 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-xs"
-                  >
-                    <Video className="w-4 h-4" />
-                  </a>
-                )}
+              <div className="h-[60px] flex flex-col justify-between">
+                {/* Fila 1: Título - altura fija */}
+                <h3 className="font-semibold text-gray-900 dark:text-white truncate h-5">{event.summary}</h3>
+                
+                {/* Fila 2: Hora - altura fija */}
+                <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400 h-5">
+                  <span className="truncate">{formatDateTime(event.start.dateTime, event.end.dateTime)}</span>
+                </div>
+                
+                {/* Fila 3: Invitados y botón - altura fija */}
+                <div className="flex items-center justify-between gap-2 h-5">
+                  {event.attendees && event.attendees.length > 0 ? (
+                    <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
+                      <span>{event.attendees.length} asistentes</span>
+                    </div>
+                  ) : (
+                    <div></div>
+                  )}
+                  {event.hangoutLink && (
+                    <a
+                      href={event.hangoutLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="flex items-center gap-1 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-xs"
+                    >
+                      <Video className="w-4 h-4" />
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
             )

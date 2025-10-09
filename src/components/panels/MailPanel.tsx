@@ -212,35 +212,37 @@ const MailPanel: React.FC = () => {
                 </div>
               )}
               
-              {/* Fila 1: De y Fecha */}
-              <div className="flex items-center justify-between mb-1 h-5 leading-5">
-                <div className="flex items-center gap-2 flex-1 min-w-0">
-                  <p className={`font-semibold truncate text-sm ${email.isRead ? 'text-gray-500 dark:text-gray-400' : 'text-gray-900 dark:text-white'}`}>
-                    {email.from}
-                  </p>
+              <div className="h-[60px] flex flex-col justify-between">
+                {/* Fila 1: De y Fecha */}
+                <div className="flex items-center justify-between h-5">
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                    <p className={`font-semibold truncate text-sm ${email.isRead ? 'text-gray-500 dark:text-gray-400' : 'text-gray-900 dark:text-white'}`}>
+                      {email.from}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    {email.isPinned && (
+                      <Pin className="w-3 h-3 text-gray-600 dark:text-gray-400 fill-current" />
+                    )}
+                    {email.hasAttachments && (
+                      <Paperclip className="w-3 h-3 text-gray-400 dark:text-gray-500" />
+                    )}
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                      {formatDate(email.date)}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 flex-shrink-0">
-                  {email.isPinned && (
-                    <Pin className="w-3 h-3 text-gray-600 dark:text-gray-400 fill-current" />
-                  )}
-                  {email.hasAttachments && (
-                    <Paperclip className="w-3 h-3 text-gray-400 dark:text-gray-500" />
-                  )}
-                  <span className="text-xs text-gray-500 dark:text-gray-400">
-                    {formatDate(email.date)}
-                  </span>
-                </div>
+                
+                {/* Fila 2: Asunto */}
+                <p className="font-semibold text-gray-900 dark:text-white truncate h-5 text-sm">
+                  {email.subject}
+                </p>
+                
+                {/* Fila 3: Preview */}
+                <p className="text-xs text-gray-500 dark:text-gray-400 truncate h-5">
+                  {email.snippet}
+                </p>
               </div>
-              
-              {/* Fila 2: Asunto */}
-              <p className="font-semibold text-gray-900 dark:text-white truncate mb-1 h-5 leading-5 text-sm">
-                {email.subject}
-              </p>
-              
-              {/* Fila 3: Preview */}
-              <p className="text-xs text-gray-500 dark:text-gray-400 truncate h-5 leading-5">
-                {email.snippet}
-              </p>
             </div>
           ))
         )}

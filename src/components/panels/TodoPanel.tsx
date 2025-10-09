@@ -304,57 +304,59 @@ const TodoPanel: React.FC = () => {
                       <Check className={`w-4 h-4 ${todoItem.isDone ? 'text-gray-900 dark:text-white fill-current' : 'text-gray-500 dark:text-gray-400'}`} />
                     </button>
                   )}
-                  {/* Fila 1: Checkbox y contenido principal */}
-                  <div className="flex items-center gap-2 mb-1 h-5 leading-5">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        toggleTodo(todoItem.id, !todoItem.completed)
-                      }}
-                      className="flex-shrink-0"
-                    >
-                      {todoItem.completed ? (
-                        <CheckSquare className="w-3 h-3 text-gray-600 dark:text-gray-400" />
+                  <div className="h-[60px] flex flex-col justify-between">
+                    {/* Fila 1: Checkbox y contenido principal */}
+                    <div className="flex items-center gap-2 h-5">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          toggleTodo(todoItem.id, !todoItem.completed)
+                        }}
+                        className="flex-shrink-0"
+                      >
+                        {todoItem.completed ? (
+                          <CheckSquare className="w-3 h-3 text-gray-600 dark:text-gray-400" />
+                        ) : (
+                          <Square className="w-3 h-3 text-gray-400 dark:text-gray-500" />
+                        )}
+                      </button>
+                      <div 
+                        className={`flex-1 text-sm font-semibold text-gray-900 dark:text-white truncate ${
+                          todoItem.completed ? 'line-through opacity-70' : ''
+                        }`}
+                        dangerouslySetInnerHTML={{ 
+                          __html: formatMarkdown(todoItem.content || 'Nota vacía') 
+                        }}
+                      />
+                    </div>
+                    
+                    {/* Fila 2: Fecha - altura fija */}
+                    <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400 h-5">
+                      <span className="truncate">
+                        {new Date(todoItem.createdAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
+                      </span>
+                    </div>
+                    
+                    {/* Fila 3: Menciones - altura fija */}
+                    <div className="flex items-center justify-between gap-2 h-5">
+                      {todoItem.mentions.length > 0 ? (
+                        <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
+                          <span>{todoItem.mentions.length} menciones</span>
+                        </div>
                       ) : (
-                        <Square className="w-3 h-3 text-gray-400 dark:text-gray-500" />
+                        <div></div>
                       )}
-                    </button>
-                    <div 
-                      className={`flex-1 text-sm font-semibold text-gray-900 dark:text-white truncate ${
-                        todoItem.completed ? 'line-through opacity-70' : ''
-                      }`}
-                      dangerouslySetInnerHTML={{ 
-                        __html: formatMarkdown(todoItem.content || 'Nota vacía') 
-                      }}
-                    />
-                  </div>
-                  
-                  {/* Fila 2: Fecha - altura fija */}
-                  <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400 mb-1 h-5 leading-5">
-                    <span className="truncate">
-                      {new Date(todoItem.createdAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
-                    </span>
-                  </div>
-                  
-                  {/* Fila 3: Menciones - altura fija */}
-                  <div className="flex items-center justify-between gap-2 h-5 leading-5">
-                    {todoItem.mentions.length > 0 ? (
-                      <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
-                        <span>{todoItem.mentions.length} menciones</span>
-                      </div>
-                    ) : (
-                      <div></div>
-                    )}
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        deleteTodo(todoItem.id)
-                      }}
-                      className="p-1 hover:bg-gray-100 dark:hover:bg-gray-900 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 flex-shrink-0"
-                      title="Eliminar"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          deleteTodo(todoItem.id)
+                        }}
+                        className="p-1 hover:bg-gray-100 dark:hover:bg-gray-900 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 flex-shrink-0"
+                        title="Eliminar"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}

@@ -1,7 +1,6 @@
-066
+067
 Build: 2025-01-09
 Changes:
-- Fix done button behavior: now toggles between showing ONLY pending or ONLY completed items
-- Default state shows only pending items
-- Active state (button highlighted) shows only completed items
-- Updated tooltips to reflect new behavior
+- Unified all card heights to exactly 60px (3 rows of 20px each)
+- All cards now use h-[60px] container with flexbox justify-between
+- Fixed inconsistent heights across Email, Calendar, Chat, and Notes panels
