@@ -150,27 +150,27 @@ const ChatPanelEmail: React.FC = () => {
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Chat (Email)</h2>
         <div className="flex items-center gap-1">
           <button
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
             title="Buscar"
           >
             <Search className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </button>
           <button
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
             title="Filtrar"
           >
             <Filter className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </button>
           <button
             onClick={loadThreads}
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
             title="Actualizar"
           >
             <RefreshCw className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </button>
           <button
             onClick={() => setShowNewChat(true)}
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
             title="Nueva conversación"
           >
             <Plus className="w-4 h-4 text-gray-500 dark:text-gray-400" />
@@ -180,7 +180,7 @@ const ChatPanelEmail: React.FC = () => {
 
       {/* New Chat Form */}
       {showNewChat && (
-        <div className="mb-4 p-4 border border-gray-200 dark:border-gray-800 rounded-lg bg-gray-50 dark:bg-gray-800">
+        <div className="mb-4 p-4 border border-gray-200 dark:border-gray-800 rounded-lg bg-gray-50 dark:bg-black">
           <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Nueva Conversación</h3>
           <div className="space-y-3">
             <input
@@ -188,19 +188,19 @@ const ChatPanelEmail: React.FC = () => {
               placeholder="Email del destinatario"
               value={newChatEmail}
               onChange={(e) => setNewChatEmail(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
             />
             <input
               type="text"
               placeholder="Asunto de la conversación"
               value={newChatSubject}
               onChange={(e) => setNewChatSubject(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
             />
             <div className="flex gap-2">
               <button
                 onClick={createNewChat}
-                className="flex-1 px-3 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg text-sm font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
+                className="flex-1 px-3 py-2 bg-black dark:bg-white text-white dark:text-black rounded-lg text-sm font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
               >
                 Crear
               </button>
@@ -221,7 +221,7 @@ const ChatPanelEmail: React.FC = () => {
             <div
               key={thread.id}
               onClick={() => openThread(thread)}
-              className="p-3 rounded-lg border cursor-pointer transition-colors bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 hover:shadow-md"
+              className="p-3 rounded-lg border cursor-pointer transition-colors bg-white dark:bg-black border-gray-200 dark:border-gray-700 hover:shadow-md"
             >
               {/* Fila 1: Título y badge */}
               <div className="flex items-center gap-2 mb-2">
@@ -258,7 +258,7 @@ const ChatPanelEmail: React.FC = () => {
       {/* Thread Detail Modal */}
       {selectedThread && (
         <ModalWrapper>
-          <div className="h-full w-full flex flex-col bg-white dark:bg-gray-900 rounded-lg shadow-xl overflow-hidden">
+          <div className="h-full w-full flex flex-col bg-white dark:bg-black rounded-lg shadow-xl overflow-hidden">
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
               <div>
@@ -269,7 +269,7 @@ const ChatPanelEmail: React.FC = () => {
               </div>
               <button
                 onClick={() => setSelectedThread(null)}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
               >
                 <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -292,8 +292,8 @@ const ChatPanelEmail: React.FC = () => {
                     <div
                       className={`max-w-[70%] rounded-lg p-3 ${
                         msg.from === 'me'
-                          ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900'
-                          : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white'
+                          ? 'bg-black dark:bg-white text-white dark:text-black'
+                          : 'bg-gray-100 dark:bg-gray-950 text-gray-900 dark:text-white'
                       }`}
                     >
                       {msg.from !== 'me' && (
@@ -310,7 +310,7 @@ const ChatPanelEmail: React.FC = () => {
             </div>
 
             {/* Message Input */}
-            <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-black">
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -323,7 +323,7 @@ const ChatPanelEmail: React.FC = () => {
                 <button
                   onClick={sendMessage}
                   disabled={!newMessage.trim()}
-                  className="px-4 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-4 py-2 bg-black dark:bg-white text-white dark:text-black rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Send className="w-4 h-4" />
                 </button>

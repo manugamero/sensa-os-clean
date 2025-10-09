@@ -98,26 +98,26 @@ const MailPanel: React.FC = () => {
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Email</h2>
         <div className="flex items-center gap-1">
           <button
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
             title="Buscar"
           >
             <Search className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </button>
           <button
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
             title="Filtrar"
           >
             <Filter className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </button>
           <button
             onClick={loadEmails}
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
             title="Actualizar"
           >
             <RefreshCw className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </button>
           <button
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
             title="Redactar email"
           >
             <Plus className="w-4 h-4 text-gray-500 dark:text-gray-400" />
@@ -143,7 +143,7 @@ const MailPanel: React.FC = () => {
                   markAsRead(email.id)
                 }
               }}
-              className={`p-3 rounded-lg border cursor-pointer transition-colors bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 hover:shadow-md ${
+              className={`p-3 rounded-lg border cursor-pointer transition-colors bg-white dark:bg-black border-gray-200 dark:border-gray-700 hover:shadow-md ${
                 email.isRead ? 'opacity-50' : ''
               }`}
             >

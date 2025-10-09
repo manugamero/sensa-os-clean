@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { X, Mail, MailOpen, Paperclip, Clock, User, Archive, Reply, ReplyAll, Forward, Trash2, MoreVertical, AlertOctagon, Star } from 'lucide-react'
+import { X, Mail, MailOpen, Paperclip, Clock, User, Archive, Reply, ReplyAll, Forward, Trash2, AlertOctagon, Star, MoreVertical } from 'lucide-react'
 
 interface Email {
   id: string
@@ -72,143 +72,136 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
   }
 
   return (
-    <div className="h-full w-full flex flex-col bg-white dark:bg-gray-900 rounded-lg shadow-xl overflow-hidden">
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
+    <div className="h-full w-full flex flex-col bg-white dark:bg-black rounded-lg shadow-xl overflow-hidden">
+        {/* Header unificado con toolbar de iconos */}
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 bg-gray-100 dark:bg-gray-950 rounded">
               {email.isRead ? (
-                <MailOpen className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                <MailOpen className="w-4 h-4 text-gray-600 dark:text-gray-400" />
               ) : (
-                <Mail className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                <Mail className="w-4 h-4 text-gray-600 dark:text-gray-400" />
               )}
             </div>
-            <div>
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Detalle del Email</h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Información completa</p>
-            </div>
+            <h2 className="text-sm font-semibold text-gray-900 dark:text-white">Email</h2>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-          >
-            <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-          </button>
-        </div>
-
-        {/* Action Bar */}
-        <div className="flex items-center justify-between px-6 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
-          <div className="flex items-center gap-2">
-            {/* Archive */}
-            <button
-              onClick={handleArchive}
-              className="flex items-center gap-2 px-3 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-              title="Archivar"
-            >
-              <Archive className="w-4 h-4 text-gray-600 dark:text-gray-400" />
-              <span className="text-gray-700 dark:text-gray-300">Archivar</span>
-            </button>
-
-            {/* Reply */}
+          
+          <div className="flex items-center gap-1">
             <button
               onClick={handleReply}
-              className="p-2 hover:bg-white dark:hover:bg-gray-900 rounded-lg transition-colors"
+              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
               title="Responder"
             >
-              <Reply className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+              <Reply className="w-4 h-4 text-gray-500 dark:text-gray-400" />
             </button>
-
-            {/* Star */}
             <button
               onClick={handleStar}
-              className="p-2 hover:bg-white dark:hover:bg-gray-900 rounded-lg transition-colors"
+              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
               title="Destacar"
             >
-              <Star className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+              <Star className="w-4 h-4 text-gray-500 dark:text-gray-400" />
             </button>
-          </div>
-
-          {/* More Menu */}
-          <div className="relative">
             <button
-              onClick={() => setShowMoreMenu(!showMoreMenu)}
-              className="p-2 hover:bg-white dark:hover:bg-gray-900 rounded-lg transition-colors"
-              title="Más opciones"
+              onClick={handleArchive}
+              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+              title="Archivar"
             >
-              <MoreVertical className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+              <Archive className="w-4 h-4 text-gray-500 dark:text-gray-400" />
             </button>
+            
+            {/* More Menu */}
+            <div className="relative">
+              <button
+                onClick={() => setShowMoreMenu(!showMoreMenu)}
+                className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+                title="Más opciones"
+              >
+                <MoreVertical className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+              </button>
 
-            {showMoreMenu && (
-              <div className="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
-                <button
-                  onClick={handleReplyAll}
-                  className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                >
-                  <ReplyAll className="w-4 h-4" />
-                  Responder a todos
-                </button>
-                <button
-                  onClick={handleForward}
-                  className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                >
-                  <Forward className="w-4 h-4" />
-                  Reenviar
-                </button>
-                <div className="border-t border-gray-200 dark:border-gray-700 my-1" />
-                <button
-                  onClick={handleSpam}
-                  className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                >
-                  <AlertOctagon className="w-4 h-4" />
-                  Marcar como spam
-                </button>
-                <button
-                  onClick={handleDelete}
-                  className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-b-lg"
-                >
-                  <Trash2 className="w-4 h-4" />
-                  Eliminar
-                </button>
-              </div>
-            )}
+              {showMoreMenu && (
+                <div className="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-black border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
+                  <button
+                    onClick={handleReplyAll}
+                    className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-t-lg"
+                  >
+                    <ReplyAll className="w-4 h-4" />
+                    Responder a todos
+                  </button>
+                  <button
+                    onClick={handleForward}
+                    className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    <Forward className="w-4 h-4" />
+                    Reenviar
+                  </button>
+                  {!email.isRead && onMarkAsRead && (
+                    <button
+                      onClick={() => {
+                        handleMarkAsRead()
+                        setShowMoreMenu(false)
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    >
+                      <MailOpen className="w-4 h-4" />
+                      Marcar como leído
+                    </button>
+                  )}
+                  <div className="border-t border-gray-200 dark:border-gray-700 my-1" />
+                  <button
+                    onClick={handleSpam}
+                    className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    <AlertOctagon className="w-4 h-4" />
+                    Marcar como spam
+                  </button>
+                  <button
+                    onClick={handleDelete}
+                    className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-b-lg"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    Eliminar
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <button
+              onClick={onClose}
+              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+              title="Cerrar"
+            >
+              <X className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+            </button>
           </div>
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-6 overflow-y-auto flex-1">
+        <div className="p-4 space-y-4 overflow-y-auto flex-1">
           {/* Asunto */}
           <div>
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
               {email.subject}
             </h3>
           </div>
 
           {/* Información del remitente */}
-          <div className="flex items-start gap-3">
-            <User className="w-5 h-5 text-gray-500 dark:text-gray-400 mt-1" />
-            <div>
-              <p className="font-medium text-gray-900 dark:text-white">De</p>
-              <p className="text-gray-600 dark:text-gray-400">{email.from}</p>
-            </div>
+          <div className="flex items-center gap-2">
+            <User className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+            <p className="text-sm text-gray-600 dark:text-gray-400">{email.from}</p>
           </div>
 
           {/* Fecha */}
-          <div className="flex items-start gap-3">
-            <Clock className="w-5 h-5 text-gray-500 dark:text-gray-400 mt-1" />
-            <div>
-              <p className="font-medium text-gray-900 dark:text-white">Fecha</p>
-              <p className="text-gray-600 dark:text-gray-400">{formatDate(email.date)}</p>
-            </div>
+          <div className="flex items-center gap-2">
+            <Clock className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+            <p className="text-sm text-gray-600 dark:text-gray-400">{formatDate(email.date)}</p>
           </div>
 
           {/* Adjuntos */}
           {email.hasAttachments && (
-            <div className="flex items-start gap-3">
-              <Paperclip className="w-5 h-5 text-gray-500 dark:text-gray-400 mt-1" />
-              <div>
-                <p className="font-medium text-gray-900 dark:text-white">Adjuntos</p>
-                <p className="text-gray-600 dark:text-gray-400">Este email contiene archivos adjuntos</p>
-              </div>
+            <div className="flex items-center gap-2">
+              <Paperclip className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+              <p className="text-sm text-gray-600 dark:text-gray-400">Archivos adjuntos</p>
             </div>
           )}
 
@@ -221,39 +214,11 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
           </div>
 
           {/* Contenido del email */}
-          <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-            <p className="font-medium text-gray-900 dark:text-white mb-3">Contenido</p>
+          <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
             <div className="prose dark:prose-invert max-w-none">
-              <p className="text-gray-600 dark:text-gray-400 whitespace-pre-wrap">
+              <p className="text-sm text-gray-600 dark:text-gray-400 whitespace-pre-wrap">
                 {email.body || email.snippet}
               </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              {!email.isRead && (
-                <button
-                  onClick={handleMarkAsRead}
-                  className="px-3 py-1 text-sm bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-                >
-                  Marcar como leído
-                </button>
-              )}
-            </div>
-            <div className="flex gap-3">
-              <button
-                onClick={onClose}
-                className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
-              >
-                Cerrar
-              </button>
-              <button className="px-4 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors">
-                Responder
-              </button>
             </div>
           </div>
         </div>

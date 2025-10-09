@@ -10,7 +10,7 @@ import ChatPanelSimple from './panels/ChatPanel-simple'
 import ChatPanelEmail from './panels/ChatPanel-email'
 
 const Dashboard: React.FC = () => {
-  const { user, signOut } = useAuth()
+  const { user, signOut, signInWithGoogle } = useAuth()
   const { isDark, toggleTheme } = useTheme()
   const { modalStyle, setModalStyle, chatType, setChatType } = useSettings()
   const [activeTab, setActiveTab] = useState(0)
@@ -64,39 +64,59 @@ const Dashboard: React.FC = () => {
         <div className="flex items-center space-x-4">
           <h1 className="text-xl font-semibold text-black dark:text-white">sensa os</h1>
           <span className="text-black/40 dark:text-white/40">/</span>
-          <span className="text-xl font-semibold text-black dark:text-white">
-            {user?.displayName || user?.email}
-          </span>
-          <button
-            onClick={toggleTheme}
-            className="p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded text-black/60 dark:text-white/60"
-            title={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
-          >
-            {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-          </button>
-          <button
-            onClick={() => setShowSettings(!showSettings)}
-            className="p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded text-black/60 dark:text-white/60"
-            title="Ajustes"
-          >
-            <Settings className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => window.location.reload()}
-            className="p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded text-black/60 dark:text-white/60"
-            title="Actualizar todo"
-          >
-            <RefreshCw className="w-4 h-4" />
-          </button>
-          <button
-            onClick={signOut}
-            className="p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded text-black/60 dark:text-white/60"
-            title="Cerrar sesión"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
-          </button>
+          {user ? (
+            <>
+              <span className="text-xl font-semibold text-black dark:text-white">
+                {user.displayName || user.email}
+              </span>
+              <button
+                onClick={toggleTheme}
+                className="p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded text-black/60 dark:text-white/60"
+                title={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+              >
+                {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              </button>
+              <button
+                onClick={() => setShowSettings(!showSettings)}
+                className="p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded text-black/60 dark:text-white/60"
+                title="Ajustes"
+              >
+                <Settings className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => window.location.reload()}
+                className="p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded text-black/60 dark:text-white/60"
+                title="Actualizar todo"
+              >
+                <RefreshCw className="w-4 h-4" />
+              </button>
+              <button
+                onClick={signOut}
+                className="p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded text-black/60 dark:text-white/60"
+                title="Cerrar sesión"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={signInWithGoogle}
+                className="px-6 py-2 bg-black dark:bg-white text-white dark:text-black rounded-full font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
+              >
+                Connect
+              </button>
+              <button
+                onClick={toggleTheme}
+                className="p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded text-black/60 dark:text-white/60"
+                title={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+              >
+                {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              </button>
+            </>
+          )}
         </div>
       </div>
 

@@ -9,8 +9,9 @@ const ModalWrapper: React.FC<ModalWrapperProps> = ({ children }) => {
   const { modalStyle } = useSettings()
 
   const getModalStyles = () => {
-    // Modal siempre ocupa el espacio completo de la columna
-    return 'absolute inset-0 z-10 pointer-events-auto'
+    // Modal ocupa el ancho completo, baja 32pt desde arriba, sin overlay
+    // Usamos inset-x-0 para ancho completo, top-8 (32px) para bajar desde arriba, bottom-0 para que llegue hasta abajo
+    return 'absolute inset-x-0 top-8 bottom-0 z-10 pointer-events-auto'
   }
 
   const getContentStyles = () => {

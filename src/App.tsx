@@ -5,7 +5,6 @@ import { AuthContext } from './contexts/AuthContext'
 import { SocketProvider } from './contexts/SocketContext'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { SettingsProvider } from './contexts/SettingsContext'
-import LoginPage from './components/LoginPage'
 import Dashboard from './components/Dashboard'
 import LoadingSpinner from './components/LoadingSpinner'
 
@@ -67,26 +66,12 @@ function App() {
     return <LoadingSpinner />
   }
 
-  if (!user) {
-    return <LoginPage onSignIn={signInWithGoogle} />
-  }
-
   return (
-    <AuthContext.Provider value={{ user, signOut: handleSignOut }}>
+    <AuthContext.Provider value={{ user, signOut: handleSignOut, signInWithGoogle }}>
       <SocketProvider>
         <ThemeProvider>
           <SettingsProvider>
-            <div className="min-h-screen bg-gray-50 dark:bg-black">
-              {loading ? (
-                <div className="flex items-center justify-center h-screen">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600"></div>
-                </div>
-              ) : user ? (
-                <Dashboard />
-              ) : (
-                <LoginPage onSignIn={signInWithGoogle} />
-              )}
-            </div>
+            <Dashboard />
           </SettingsProvider>
         </ThemeProvider>
       </SocketProvider>

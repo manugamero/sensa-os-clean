@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { X, Send, Paperclip, Smile, Mic, MicOff, Phone, Video } from 'lucide-react'
+import { X, Send, Paperclip, Smile, Mic, MicOff, Phone, Video, MoreVertical, UserPlus, Settings } from 'lucide-react'
 
 interface Message {
   id: string
@@ -40,6 +40,7 @@ const ChatDetailModal: React.FC<ChatDetailModalProps> = ({ room, onClose }) => {
   ])
   const [newMessage, setNewMessage] = useState('')
   const [isRecording, setIsRecording] = useState(false)
+  const [showMoreMenu, setShowMoreMenu] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
@@ -79,38 +80,83 @@ const ChatDetailModal: React.FC<ChatDetailModalProps> = ({ room, onClose }) => {
   }
 
   return (
-    <div className="h-full w-full flex flex-col bg-white dark:bg-gray-900 rounded-lg shadow-xl overflow-hidden">
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
-              <div className="w-5 h-5 bg-gray-600 dark:bg-gray-400 rounded-full" />
+    <div className="h-full w-full flex flex-col bg-white dark:bg-black rounded-lg shadow-xl overflow-hidden">
+        {/* Header unificado con toolbar de iconos */}
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 bg-gray-100 dark:bg-gray-950 rounded">
+              <div className="w-4 h-4 bg-gray-600 dark:bg-gray-400 rounded-full" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{room.name}</h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <h2 className="text-sm font-semibold text-gray-900 dark:text-white">{room.name}</h2>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
                 {room.participants.length} participantes
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
-              <Phone className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+          
+          <div className="flex items-center gap-1">
+            <button 
+              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+              title="Llamada de voz"
+            >
+              <Phone className="w-4 h-4 text-gray-500 dark:text-gray-400" />
             </button>
-            <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
-              <Video className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+            <button 
+              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+              title="Videollamada"
+            >
+              <Video className="w-4 h-4 text-gray-500 dark:text-gray-400" />
             </button>
+            
+            {/* More Menu */}
+            <div className="relative">
+              <button
+                onClick={() => setShowMoreMenu(!showMoreMenu)}
+                className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+                title="Más opciones"
+              >
+                <MoreVertical className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+              </button>
+
+              {showMoreMenu && (
+                <div className="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-black border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
+                  <button
+                    onClick={() => {
+                      console.log('Añadir participante')
+                      setShowMoreMenu(false)
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-t-lg"
+                  >
+                    <UserPlus className="w-4 h-4" />
+                    Añadir participante
+                  </button>
+                  <button
+                    onClick={() => {
+                      console.log('Configuración del chat')
+                      setShowMoreMenu(false)
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-b-lg"
+                  >
+                    <Settings className="w-4 h-4" />
+                    Configuración
+                  </button>
+                </div>
+              )}
+            </div>
+
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+              title="Cerrar"
             >
-              <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+              <X className="w-4 h-4 text-gray-500 dark:text-gray-400" />
             </button>
           </div>
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-4">
+        <div className="flex-1 overflow-y-auto p-4 space-y-3">
           {messages.map((message) => (
             <div
               key={message.id}
@@ -119,8 +165,8 @@ const ChatDetailModal: React.FC<ChatDetailModalProps> = ({ room, onClose }) => {
               <div
                 className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
                   message.sender === 'Tú'
-                    ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900'
-                    : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white'
+                    ? 'bg-black dark:bg-white text-white dark:text-black'
+                    : 'bg-gray-100 dark:bg-gray-950 text-gray-900 dark:text-white'
                 }`}
               >
                 <p className="text-sm">{message.content}</p>
@@ -134,7 +180,7 @@ const ChatDetailModal: React.FC<ChatDetailModalProps> = ({ room, onClose }) => {
         </div>
 
         {/* Input */}
-        <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+        <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
           <div className="flex items-center gap-3">
             <button className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors">
               <Paperclip className="w-5 h-5 text-gray-500 dark:text-gray-400" />
@@ -146,7 +192,7 @@ const ChatDetailModal: React.FC<ChatDetailModalProps> = ({ room, onClose }) => {
                 onChange={(e) => setNewMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Escribe un mensaje..."
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-500"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full bg-white dark:bg-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-500"
               />
             </div>
             <button className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors">
@@ -169,7 +215,7 @@ const ChatDetailModal: React.FC<ChatDetailModalProps> = ({ room, onClose }) => {
             <button
               onClick={sendMessage}
               disabled={!newMessage.trim()}
-              className="p-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-2 bg-black dark:bg-white text-white dark:text-black rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Send className="w-5 h-5" />
             </button>

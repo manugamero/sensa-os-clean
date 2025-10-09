@@ -159,27 +159,27 @@ const TodoPanel: React.FC = () => {
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Notas</h2>
         <div className="flex items-center gap-1">
           <button
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
             title="Buscar"
           >
             <Search className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </button>
           <button
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
             title="Filtrar"
           >
             <Filter className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </button>
           <button
             onClick={loadTodos}
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
             title="Actualizar"
           >
             <RefreshCw className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </button>
           <button
             onClick={() => setShowCreateForm(!showCreateForm)}
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
             title="Nueva nota"
           >
             <Plus className="w-4 h-4 text-gray-500 dark:text-gray-400" />
@@ -265,7 +265,7 @@ const TodoPanel: React.FC = () => {
               <div 
                 key={todoItem.id} 
                 onClick={() => setSelectedNote(todoItem)}
-                className={`border border-gray-200 dark:border-gray-800 rounded-lg p-3 hover:shadow-md transition-shadow bg-white dark:bg-gray-900 cursor-pointer ${todoItem.completed ? 'opacity-50' : ''}`}
+                className={`border border-gray-200 dark:border-gray-700 rounded-lg p-3 hover:shadow-md transition-shadow bg-white dark:bg-black cursor-pointer ${todoItem.completed ? 'opacity-50' : ''}`}
               >
                 <div className="flex items-start gap-2">
                   <button
@@ -314,7 +314,7 @@ const TodoPanel: React.FC = () => {
                       e.stopPropagation()
                       deleteTodo(todoItem.id)
                     }}
-                    className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 flex-shrink-0"
+                    className="p-1 hover:bg-gray-100 dark:hover:bg-gray-900 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 flex-shrink-0"
                     title="Eliminar"
                   >
                     <X className="w-4 h-4" />
