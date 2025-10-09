@@ -123,11 +123,10 @@ const TodoPanel: React.FC = () => {
     return content
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
       .replace(/\*(.*?)\*/g, '<em>$1</em>')
-      .replace(/`(.*?)`/g, '<code class="bg-gray-100 px-1 rounded">$1</code>')
+      .replace(/`(.*?)`/g, '<code class="bg-gray-100 dark:bg-gray-700 px-1 rounded">$1</code>')
       .replace(/@(\w+@[\w.-]+)/g, '<span class="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-1 rounded text-sm">@$1</span>')
       .replace(/\n/g, '<br>')
   }
-
 
   const insertMarkdown = (before: string, after: string) => {
     if (textareaRef.current) {
@@ -135,10 +134,11 @@ const TodoPanel: React.FC = () => {
       const start = textarea.selectionStart
       const end = textarea.selectionEnd
       const selectedText = textarea.value.substring(start, end)
-      const newText = textarea.value.substring(0, start) + before + selectedText + after + textarea.value.substring(end)
       
+      const newText = textarea.value.substring(0, start) + before + selectedText + after + textarea.value.substring(end)
       setNewTodo({ ...newTodo, content: newText })
       
+      // Restaurar posición del cursor
       setTimeout(() => {
         textarea.focus()
         textarea.setSelectionRange(start + before.length, end + before.length)
@@ -158,178 +158,181 @@ const TodoPanel: React.FC = () => {
     <div className="h-full flex flex-col relative">
       {/* Contenido de la lista - se reduce cuando hay modal */}
       <div className={`h-full flex flex-col transition-all duration-300 origin-top ${selectedNote ? 'scale-[0.98] opacity-30 pointer-events-none' : 'scale-100 opacity-100'}`}>
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Notas</h2>
-        <div className="flex items-center gap-1">
-          <button
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
-            title="Buscar"
-          >
-            <Search className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-          </button>
-          <button
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
-            title="Filtrar"
-          >
-            <Filter className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-          </button>
-          <button
-            onClick={loadTodos}
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
-            title="Actualizar"
-          >
-            <RefreshCw className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-          </button>
-          <button
-            onClick={() => setShowCreateForm(!showCreateForm)}
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
-            title="Nueva nota"
-          >
-            <Plus className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-          </button>
-        </div>
-      </div>
-
-      <div className="flex-1 overflow-y-auto">
-
-      {showCreateForm && (
-        <div className="mb-4 p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-black">
-          <form onSubmit={createTodo} className="space-y-3">
-            <div className="flex items-center gap-2 p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-black">
-              <button
-                type="button"
-                onClick={() => insertMarkdown('**', '**')}
-                className="p-1 hover:bg-gray-200 rounded"
-                title="Negrita"
-              >
-                <Bold className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => insertMarkdown('*', '*')}
-                className="p-1 hover:bg-gray-200 rounded"
-                title="Cursiva"
-              >
-                <Italic className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => insertMarkdown('`', '`')}
-                className="p-1 hover:bg-gray-200 rounded"
-                title="Código"
-              >
-                <Hash className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => insertMarkdown('- ', '')}
-                className="p-1 hover:bg-gray-200 rounded"
-                title="Lista"
-              >
-                <List className="w-4 h-4" />
-              </button>
-              <div className="flex-1"></div>
-              <button
-                type="submit"
-                className="p-1 hover:bg-gray-200 rounded text-gray-600"
-                title="Guardar"
-              >
-                <CheckSquare className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => setShowCreateForm(false)}
-                className="p-1 hover:bg-gray-200 rounded text-gray-600"
-                title="Cerrar"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-            <textarea
-              ref={textareaRef}
-              value={newTodo.content}
-              onChange={(e) => setNewTodo({ ...newTodo, content: e.target.value })}
-              className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-0 resize-none bg-white dark:bg-black text-gray-900 dark:text-white"
-              placeholder="Escribe tu nota aquí..."
-              rows={3}
-            />
-          </form>
-        </div>
-        )}
-
-        <div className="space-y-4">
-        {todos.length === 0 ? (
-          <div className="text-center py-8">
-            <p className="text-gray-500 dark:text-gray-400">No hay notas</p>
+        {/* Header */}
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Notas</h2>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setShowCreateForm(!showCreateForm)}
+              className="p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded text-black/60 dark:text-white/60"
+              title="Nueva nota"
+            >
+              <Plus className="w-4 h-4" />
+            </button>
+            <button
+              onClick={loadTodos}
+              className="p-2 hover:bg-black/5 dark:hover:bg-white/5 rounded text-black/60 dark:text-white/60"
+              title="Actualizar"
+            >
+              <RefreshCw className="w-4 h-4" />
+            </button>
           </div>
-        ) : (
-          <div className="space-y-4">
-            {todos.map((todoItem) => (
-              <div 
-                key={todoItem.id} 
-                onClick={() => setSelectedNote(todoItem)}
-                className={`card-hover border border-gray-200 dark:border-gray-700 rounded-lg p-3 bg-white dark:bg-black cursor-pointer ${todoItem.completed ? 'opacity-50' : ''}`}
-              >
-                {/* Fila 1: Checkbox y contenido principal */}
-                <div className="flex items-center gap-2 mb-1 h-5 leading-5">
+        </div>
+
+        <div className="flex-1 overflow-y-auto">
+          {/* Create Form */}
+          {showCreateForm && (
+            <div className="mb-4 p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-black">
+              <form onSubmit={createTodo} className="space-y-3">
+                <div className="flex items-center gap-2 p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-black">
                   <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      toggleTodo(todoItem.id, !todoItem.completed)
-                    }}
-                    className="flex-shrink-0"
+                    type="button"
+                    onClick={() => insertMarkdown('**', '**')}
+                    className="p-1 hover:bg-gray-100 dark:hover:bg-gray-900 rounded"
+                    title="Negrita"
                   >
-                    {todoItem.completed ? (
-                      <CheckSquare className="w-3 h-3 text-gray-600 dark:text-gray-400" />
-                    ) : (
-                      <Square className="w-3 h-3 text-gray-400 dark:text-gray-500" />
-                    )}
+                    <Bold className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                   </button>
-                  <div 
-                    className={`flex-1 text-sm font-semibold text-gray-900 dark:text-white truncate ${
-                      todoItem.completed ? 'line-through opacity-70' : ''
-                    }`}
-                    dangerouslySetInnerHTML={{ 
-                      __html: formatMarkdown(todoItem.content || 'Nota vacía') 
-                    }}
-                  />
-                </div>
-                
-                {/* Fila 2: Fecha - altura fija */}
-                <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400 mb-1 h-5 leading-5">
-                  <span className="truncate">
-                    {new Date(todoItem.createdAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
-                  </span>
-                </div>
-                
-                {/* Fila 3: Menciones - altura fija */}
-                <div className="flex items-center justify-between gap-2 h-5 leading-5">
-                  {todoItem.mentions.length > 0 ? (
-                    <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
-                      <Users className="w-3 h-3 flex-shrink-0" />
-                      <span>{todoItem.mentions.length}</span>
-                    </div>
-                  ) : (
-                    <div></div>
-                  )}
-                </div>
-                  
                   <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      deleteTodo(todoItem.id)
-                    }}
-                    className="p-1 hover:bg-gray-100 dark:hover:bg-gray-900 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 flex-shrink-0"
-                    title="Eliminar"
+                    type="button"
+                    onClick={() => insertMarkdown('*', '*')}
+                    className="p-1 hover:bg-gray-100 dark:hover:bg-gray-900 rounded"
+                    title="Cursiva"
+                  >
+                    <Italic className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => insertMarkdown('`', '`')}
+                    className="p-1 hover:bg-gray-100 dark:hover:bg-gray-900 rounded"
+                    title="Código"
+                  >
+                    <Hash className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => insertMarkdown('- ', '')}
+                    className="p-1 hover:bg-gray-100 dark:hover:bg-gray-900 rounded"
+                    title="Lista"
+                  >
+                    <List className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => insertMarkdown('@', '@email.com')}
+                    className="p-1 hover:bg-gray-100 dark:hover:bg-gray-900 rounded"
+                    title="Mencionar"
+                  >
+                    <Users className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                  </button>
+                  <div className="flex-1"></div>
+                  <button
+                    type="button"
+                    onClick={() => setShowCreateForm(false)}
+                    className="p-1 hover:bg-gray-100 dark:hover:bg-gray-900 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                    title="Cerrar"
                   >
                     <X className="w-4 h-4" />
                   </button>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
+                <textarea
+                  ref={textareaRef}
+                  value={newTodo.content}
+                  onChange={(e) => setNewTodo({ ...newTodo, content: e.target.value })}
+                  className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-0 resize-none bg-white dark:bg-black text-gray-900 dark:text-white"
+                  placeholder="Escribe tu nota aquí..."
+                  rows={3}
+                />
+                <div className="flex gap-2">
+                  <button
+                    type="submit"
+                    className="flex-1 px-4 py-2 bg-black dark:bg-white text-white dark:text-black rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
+                  >
+                    Crear nota
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowCreateForm(false)}
+                    className="flex-1 px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
+
+          {/* Todos List */}
+          {todos.length === 0 ? (
+            <div className="text-center py-8">
+              <p className="text-gray-500 dark:text-gray-400">No hay notas</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {todos.map((todoItem) => (
+                <div 
+                  key={todoItem.id} 
+                  onClick={() => setSelectedNote(todoItem)}
+                  className={`card-hover border border-gray-200 dark:border-gray-700 rounded-lg p-3 bg-white dark:bg-black cursor-pointer ${todoItem.completed ? 'opacity-50' : ''}`}
+                >
+                  {/* Fila 1: Checkbox y contenido principal */}
+                  <div className="flex items-center gap-2 mb-1 h-5 leading-5">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        toggleTodo(todoItem.id, !todoItem.completed)
+                      }}
+                      className="flex-shrink-0"
+                    >
+                      {todoItem.completed ? (
+                        <CheckSquare className="w-3 h-3 text-gray-600 dark:text-gray-400" />
+                      ) : (
+                        <Square className="w-3 h-3 text-gray-400 dark:text-gray-500" />
+                      )}
+                    </button>
+                    <div 
+                      className={`flex-1 text-sm font-semibold text-gray-900 dark:text-white truncate ${
+                        todoItem.completed ? 'line-through opacity-70' : ''
+                      }`}
+                      dangerouslySetInnerHTML={{ 
+                        __html: formatMarkdown(todoItem.content || 'Nota vacía') 
+                      }}
+                    />
+                  </div>
+                  
+                  {/* Fila 2: Fecha - altura fija */}
+                  <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400 mb-1 h-5 leading-5">
+                    <span className="truncate">
+                      {new Date(todoItem.createdAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
+                    </span>
+                  </div>
+                  
+                  {/* Fila 3: Menciones - altura fija */}
+                  <div className="flex items-center justify-between gap-2 h-5 leading-5">
+                    {todoItem.mentions.length > 0 ? (
+                      <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
+                        <Users className="w-3 h-3 flex-shrink-0" />
+                        <span>{todoItem.mentions.length}</span>
+                      </div>
+                    ) : (
+                      <div></div>
+                    )}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        deleteTodo(todoItem.id)
+                      }}
+                      className="p-1 hover:bg-gray-100 dark:hover:bg-gray-900 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 flex-shrink-0"
+                      title="Eliminar"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Stack Modal dentro de la columna */}
