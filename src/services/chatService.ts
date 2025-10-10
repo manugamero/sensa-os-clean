@@ -5,9 +5,10 @@ export interface ChatRoom {
   id: string
   name: string
   participants: string[] // emails de los participantes
-  createdBy: string // email del creador
+  createdBy?: string // email del creador
   createdAt: string
   isActive: boolean
+  isPinned?: boolean
   isDone?: boolean
 }
 

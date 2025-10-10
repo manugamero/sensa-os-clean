@@ -76,6 +76,8 @@ export const gmailService = {
           
           // Limpiar contenido HTML y extraer solo el texto nuevo (sin citas)
           const cleanEmailContent = (content: string): string => {
+            if (!content) return ''
+            
             // Si es HTML, intentar extraer solo el texto nuevo
             if (content.includes('<') && content.includes('>')) {
               // Crear un elemento temporal para parsear HTML
@@ -87,53 +89,46 @@ export const gmailService = {
               quotesToRemove.forEach(quote => quote.remove())
               
               // Obtener texto limpio
-              let text = div.textContent || div.innerText || ''
-              
-              // Limpiar espacios extra
-              text = text.replace(/\n{3,}/g, '\n\n').trim()
-              
-              return text
+              content = div.textContent || div.innerText || ''
             }
             
-            // Si es texto plano, remover líneas de citas
+            // Procesar como texto plano (tanto si era HTML como si no)
             const lines = content.split('\n')
             const cleanLines: string[] = []
-            let inQuote = false
             
             for (let i = 0; i < lines.length; i++) {
               const line = lines[i]
+              const trimmedLine = line.trim()
               
-              // Detectar inicio de cita
+              // Detectar inicio de cita - cuando detectamos, cortamos completamente
               if (
                 line.startsWith('>') ||
-                line.startsWith('On ') && line.includes(' wrote:') ||
-                line.match(/^From:.*$/i) ||
-                line.match(/^Sent:.*$/i) ||
-                line.match(/^To:.*$/i) ||
-                line.match(/^Subject:.*$/i) ||
-                line.match(/^Date:.*$/i) ||
-                line.match(/^Cc:.*$/i) ||
-                line.includes('________________________________')
+                line.startsWith('> ') ||
+                (trimmedLine.startsWith('On ') && trimmedLine.includes(' wrote:')) ||
+                trimmedLine.match(/^From:\s*.+$/i) ||
+                trimmedLine.match(/^Sent:\s*.+$/i) ||
+                trimmedLine.match(/^To:\s*.+$/i) ||
+                trimmedLine.match(/^Subject:\s*.+$/i) ||
+                trimmedLine.match(/^Date:\s*.+$/i) ||
+                trimmedLine.match(/^Cc:\s*.+$/i) ||
+                line.includes('________________________________') ||
+                line.includes('-----Original Message-----') ||
+                trimmedLine.match(/^El .+ escribió:$/i) ||
+                trimmedLine.match(/^Le .+ a écrit :$/i)
               ) {
-                inQuote = true
-                continue
+                // Cortar aquí, no seguir procesando
+                break
               }
               
-              // Si no estamos en cita, agregar línea
-              if (!inQuote) {
-                cleanLines.push(line)
-              }
-              
-              // Detectar posible fin de cita (línea vacía después de cita)
-              if (inQuote && line.trim() === '' && i < lines.length - 1) {
-                const nextLine = lines[i + 1]
-                if (nextLine && !nextLine.startsWith('>') && nextLine.trim() !== '') {
-                  inQuote = false
-                }
-              }
+              // Agregar línea si no está vacía o si es necesaria para el formato
+              cleanLines.push(line)
             }
             
-            return cleanLines.join('\n').replace(/\n{3,}/g, '\n\n').trim()
+            // Limpiar espacios extra al final
+            let result = cleanLines.join('\n').trim()
+            result = result.replace(/\n{3,}/g, '\n\n')
+            
+            return result
           }
           
           // Extraer cuerpo del email
@@ -289,6 +284,8 @@ export const gmailService = {
 
       // Limpiar contenido HTML y extraer solo el texto nuevo (sin citas)
       const cleanEmailContent = (content: string): string => {
+        if (!content) return ''
+        
         // Si es HTML, intentar extraer solo el texto nuevo
         if (content.includes('<') && content.includes('>')) {
           const div = document.createElement('div')
@@ -298,48 +295,45 @@ export const gmailService = {
           const quotesToRemove = div.querySelectorAll('blockquote, .gmail_quote, .gmail_quote_container')
           quotesToRemove.forEach(quote => quote.remove())
           
-          let text = div.textContent || div.innerText || ''
-          text = text.replace(/\n{3,}/g, '\n\n').trim()
-          
-          return text
+          content = div.textContent || div.innerText || ''
         }
         
-        // Si es texto plano, remover líneas de citas
+        // Procesar como texto plano (tanto si era HTML como si no)
         const lines = content.split('\n')
         const cleanLines: string[] = []
-        let inQuote = false
         
         for (let i = 0; i < lines.length; i++) {
           const line = lines[i]
+          const trimmedLine = line.trim()
           
+          // Detectar inicio de cita - cuando detectamos, cortamos completamente
           if (
             line.startsWith('>') ||
-            line.startsWith('On ') && line.includes(' wrote:') ||
-            line.match(/^From:.*$/i) ||
-            line.match(/^Sent:.*$/i) ||
-            line.match(/^To:.*$/i) ||
-            line.match(/^Subject:.*$/i) ||
-            line.match(/^Date:.*$/i) ||
-            line.match(/^Cc:.*$/i) ||
-            line.includes('________________________________')
+            line.startsWith('> ') ||
+            (trimmedLine.startsWith('On ') && trimmedLine.includes(' wrote:')) ||
+            trimmedLine.match(/^From:\s*.+$/i) ||
+            trimmedLine.match(/^Sent:\s*.+$/i) ||
+            trimmedLine.match(/^To:\s*.+$/i) ||
+            trimmedLine.match(/^Subject:\s*.+$/i) ||
+            trimmedLine.match(/^Date:\s*.+$/i) ||
+            trimmedLine.match(/^Cc:\s*.+$/i) ||
+            line.includes('________________________________') ||
+            line.includes('-----Original Message-----') ||
+            trimmedLine.match(/^El .+ escribió:$/i) ||
+            trimmedLine.match(/^Le .+ a écrit :$/i)
           ) {
-            inQuote = true
-            continue
+            // Cortar aquí, no seguir procesando
+            break
           }
           
-          if (!inQuote) {
-            cleanLines.push(line)
-          }
-          
-          if (inQuote && line.trim() === '' && i < lines.length - 1) {
-            const nextLine = lines[i + 1]
-            if (nextLine && !nextLine.startsWith('>') && nextLine.trim() !== '') {
-              inQuote = false
-            }
-          }
+          cleanLines.push(line)
         }
         
-        return cleanLines.join('\n').replace(/\n{3,}/g, '\n\n').trim()
+        // Limpiar espacios extra al final
+        let result = cleanLines.join('\n').trim()
+        result = result.replace(/\n{3,}/g, '\n\n')
+        
+        return result
       }
 
       const getBody = (payload: any): string => {

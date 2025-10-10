@@ -30,10 +30,38 @@ const ChatPanelSimple: React.FC = () => {
     try {
       setLoading(true)
       const conversations = await chatService.getUserConversations(user.email)
+      
+      // Asegurar que siempre existe el chat "public" por defecto
+      const publicChat = conversations.find(c => c.id === 'public')
+      if (!publicChat) {
+        const defaultPublicChat: ChatRoom = {
+          id: 'public',
+          name: 'public',
+          participants: [user.email],
+          isActive: true,
+          isPinned: true,
+          isDone: false,
+          createdAt: new Date().toISOString()
+        }
+        conversations.unshift(defaultPublicChat)
+        // Guardar en localStorage
+        localStorage.setItem(`chat_room_public`, JSON.stringify(defaultPublicChat))
+      }
+      
       setRooms(conversations)
     } catch (error) {
       console.error('Error loading conversations:', error)
-      setRooms([])
+      // Si hay error, al menos crear el chat public
+      const defaultPublicChat: ChatRoom = {
+        id: 'public',
+        name: 'public',
+        participants: [user?.email || ''],
+        isActive: true,
+        isPinned: true,
+        isDone: false,
+        createdAt: new Date().toISOString()
+      }
+      setRooms([defaultPublicChat])
     } finally {
       setLoading(false)
     }
