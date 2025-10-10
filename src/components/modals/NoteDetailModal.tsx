@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { X, CheckSquare, Square, Users, Edit, Trash2, MoreVertical, Save } from 'lucide-react'
+import { todoService } from '../../services/todoService'
+import { useAuth } from '../../contexts/AuthContext'
 
 interface Note {
   id: string
@@ -10,6 +12,7 @@ interface Note {
   updatedAt: string
   mentions: string[]
   author: string
+  sharedWith?: string[]
 }
 
 interface NoteDetailModalProps {
@@ -20,9 +23,15 @@ interface NoteDetailModalProps {
 }
 
 const NoteDetailModal: React.FC<NoteDetailModalProps> = ({ note, onClose, onUpdate, onDelete }) => {
+  const { user } = useAuth()
   const [isEditing, setIsEditing] = useState(false)
   const [editContent, setEditContent] = useState(note.content)
   const [showMoreMenu, setShowMoreMenu] = useState(false)
+  
+  // Actualizar contenido cuando cambia externamente (live sync)
+  useEffect(() => {
+    setEditContent(note.content)
+  }, [note.content])
 
   const formatMarkdown = (content: string) => {
     return content
@@ -33,7 +42,10 @@ const NoteDetailModal: React.FC<NoteDetailModalProps> = ({ note, onClose, onUpda
       .replace(/\n/g, '<br>')
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    if (user?.email) {
+      await todoService.updateNote(note.id, editContent, user.email)
+    }
     if (onUpdate) {
       onUpdate(note.id, { content: editContent })
     }
@@ -167,19 +179,25 @@ const NoteDetailModal: React.FC<NoteDetailModalProps> = ({ note, onClose, onUpda
             )}
           </div>
 
-          {/* Menciones */}
-          {note.mentions && note.mentions.length > 0 && !isEditing && (
+          {/* Usuarios con acceso (nota compartida) */}
+          {note.sharedWith && note.sharedWith.length > 0 && !isEditing && (
             <div className="flex items-start gap-2 pt-2 border-t border-white/[0.08]">
               <Users className="w-4 h-4 text-gray-500 dark:text-gray-400 mt-0.5" />
-              <div className="flex flex-wrap gap-2">
-                {note.mentions.map((mention, index) => (
-                  <span
-                    key={index}
-                    className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded text-xs"
-                  >
-                    @{mention}
-                  </span>
-                ))}
+              <div>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Compartida con:</p>
+                <div className="flex flex-wrap gap-2">
+                  {note.sharedWith.map((email, index) => (
+                    <span
+                      key={index}
+                      className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded text-xs"
+                    >
+                      {email === note.author ? `${email} (tu)` : email}
+                    </span>
+                  ))}
+                </div>
+                <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">
+                  🔄 Sincronizacion en tiempo real activa
+                </p>
               </div>
             </div>
           )}

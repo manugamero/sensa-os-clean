@@ -1,7 +1,10 @@
-073
+074
 Build: 2025-01-09
 Changes:
-- Simplified email encoding to avoid double-encoding issues
-- Removed accents from email text to ensure compatibility
-- Single base64 encoding with proper MIME headers
-- Email subject and body now display correctly without garbled characters
+- Shared notes system with email invitations like chat
+- Notes now support multiple collaborators via email mentions
+- Real-time synchronization using localStorage events
+- Email notifications sent to mentioned users with join link
+- Note detail modal shows all users with access
+- Live sync indicator in shared notes
+- Users see "Sincronizacion en tiempo real activa" message

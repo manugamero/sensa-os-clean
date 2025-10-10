@@ -2,20 +2,11 @@ import React, { useState, useEffect, useRef } from 'react'
 import { CheckSquare, Square, Hash, Bold, Italic, List, X, RefreshCw, Plus, Check } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { useSocket } from '../../contexts/SocketContext'
+import { todoService, SharedNote } from '../../services/todoService'
 import NoteDetailModal from '../modals/NoteDetailModal'
 import ModalWrapper from '../modals/ModalWrapper'
 
-interface Todo {
-  id: string
-  title: string
-  content: string
-  completed: boolean
-  createdAt: string
-  updatedAt: string
-  mentions: string[]
-  author: string
-  isDone?: boolean
-}
+interface Todo extends SharedNote {}
 
 const TodoPanel: React.FC = () => {
   const { user } = useAuth()
@@ -35,6 +26,31 @@ const TodoPanel: React.FC = () => {
   useEffect(() => {
     loadTodos()
     
+    // Listener para sincronización en tiempo real
+    const handleNoteUpdate = (event: any) => {
+      const { noteId, content, completed } = event.detail
+      setTodos(prev => prev.map(todo => {
+        if (todo.id === noteId) {
+          return {
+            ...todo,
+            ...(content !== undefined && { content }),
+            ...(completed !== undefined && { completed }),
+            updatedAt: new Date().toISOString()
+          }
+        }
+        return todo
+      }))
+    }
+    
+    const handleNoteDeleted = (event: any) => {
+      const { noteId } = event.detail
+      setTodos(prev => prev.filter(todo => todo.id !== noteId))
+    }
+    
+    window.addEventListener('note:updated', handleNoteUpdate)
+    window.addEventListener('note:deleted', handleNoteDeleted)
+    
+    // Socket listeners (mantener compatibilidad)
     if (socket) {
       socket.on('todo:created', (todo: Todo) => {
         setTodos(prev => [todo, ...prev])
@@ -50,19 +66,28 @@ const TodoPanel: React.FC = () => {
     }
 
     return () => {
+      window.removeEventListener('note:updated', handleNoteUpdate)
+      window.removeEventListener('note:deleted', handleNoteDeleted)
+      
       if (socket) {
         socket.off('todo:created')
         socket.off('todo:updated')
         socket.off('todo:deleted')
       }
     }
-  }, [socket])
+  }, [socket, user])
 
   const loadTodos = async () => {
+    if (!user?.email) {
+      setTodos([])
+      setLoading(false)
+      return
+    }
+    
     try {
       setLoading(true)
-      // Simular carga sin backend
-      setTodos([])
+      const notes = await todoService.getUserNotes(user.email)
+      setTodos(notes)
     } catch (error) {
       console.error('Error loading todos:', error)
       setTodos([])
@@ -73,29 +98,27 @@ const TodoPanel: React.FC = () => {
 
   const createTodo = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!newTodo.content.trim()) return
+    if (!newTodo.content.trim() || !user?.email) return
     
     try {
-      const mentions = newTodo.mentions
+      const mentionsArray = newTodo.mentions
         .split(',')
         .map(email => email.trim())
-        .filter(email => email)
+        .filter(email => email.includes('@'))
 
-      // Crear nota localmente sin backend
-      const newNote: Todo = {
-        id: Date.now().toString(),
-        title: '',
-        content: newTodo.content,
-        completed: false,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        mentions,
-        author: user?.email || 'Usuario'
-      }
+      const note = await todoService.createSharedNote(
+        newTodo.content,
+        mentionsArray,
+        user.email
+      )
 
-      setTodos(prev => [newNote, ...prev])
+      setTodos(prev => [note, ...prev])
       setNewTodo({ content: '', mentions: '' })
       setShowCreateForm(false)
+      
+      if (mentionsArray.length > 0) {
+        console.log(`✉️ Invitaciones enviadas a: ${mentionsArray.join(', ')}`)
+      }
     } catch (error) {
       console.error('Error creating todo:', error)
       alert('Error al crear la nota. Por favor, intenta de nuevo.')
@@ -104,7 +127,7 @@ const TodoPanel: React.FC = () => {
 
   const toggleTodo = async (todoId: string, completed: boolean) => {
     try {
-      // Actualizar localmente sin backend
+      await todoService.toggleNote(todoId, completed)
       setTodos(prev => prev.map(todo => 
         todo.id === todoId ? { ...todo, completed, updatedAt: new Date().toISOString() } : todo
       ))
@@ -115,7 +138,7 @@ const TodoPanel: React.FC = () => {
 
   const deleteTodo = async (todoId: string) => {
     try {
-      // Eliminar localmente sin backend
+      await todoService.deleteNote(todoId)
       setTodos(prev => prev.filter(todo => todo.id !== todoId))
     } catch (error) {
       console.error('Error deleting todo:', error)
