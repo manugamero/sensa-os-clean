@@ -225,10 +225,31 @@ const MailPanel: React.FC = () => {
               <div className="flex flex-col gap-0.5">
                 {/* Fila 1: De y Fecha */}
                 <div className="flex items-center justify-between h-5">
-                  <div className="flex items-center gap-2 flex-1 min-w-0">
-                    <p className={`font-semibold truncate text-sm ${email.isRead ? 'text-gray-500 dark:text-gray-400' : 'text-gray-900 dark:text-white'}`}>
-                      {email.from}
-                    </p>
+                  <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                    {(() => {
+                      // Parsear nombre y email del formato "Nombre <email@example.com>"
+                      const match = email.from.match(/^(.+?)\s*<(.+?)>$/)
+                      if (match) {
+                        const [, name, emailAddr] = match
+                        return (
+                          <>
+                            <span className={`truncate text-sm ${email.isRead ? 'text-gray-500 dark:text-gray-400' : 'text-gray-900 dark:text-white'}`}>
+                              {name.trim()}
+                            </span>
+                            <span className="text-gray-400 dark:text-gray-500 text-xs">·</span>
+                            <span className="text-gray-400 dark:text-gray-500 text-xs truncate">
+                              {emailAddr}
+                            </span>
+                          </>
+                        )
+                      }
+                      // Si no tiene el formato esperado, mostrar tal cual
+                      return (
+                        <span className={`truncate text-sm ${email.isRead ? 'text-gray-500 dark:text-gray-400' : 'text-gray-900 dark:text-white'}`}>
+                          {email.from}
+                        </span>
+                      )
+                    })()}
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
                     {email.isPinned && (
