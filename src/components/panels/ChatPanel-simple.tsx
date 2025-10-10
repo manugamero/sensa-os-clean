@@ -204,12 +204,6 @@ const ChatPanelSimple: React.FC = () => {
         </div>
         )}
       </div>
-      
-      {rooms.length === 0 && (
-        <div className="flex-1 flex items-center justify-center">
-          <p className="text-gray-500 dark:text-gray-400">No hay conversaciones</p>
-        </div>
-      )}
       </div>
 
       {/* Stack Modal dentro de la columna */}

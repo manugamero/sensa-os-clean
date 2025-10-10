@@ -1,11 +1,8 @@
-071
+072
 Build: 2025-01-09
 Changes:
-- Fully functional chat system with email invitations
-- Backend sends HTML invitation emails via Gmail API
-- Invitations include join link: https://sos001.vercel.app/?join=ROOM_ID
-- Chat panel loads user conversations from backend
-- New chatService handles conversation creation and persistence
-- Invited users receive formatted email with join button
-- Conversations sync between users when they login
-- Fixed Gmail integration to show full email body and attachments
+- Fixed UTF-8 encoding in invitation emails (proper charset handling)
+- Subject line now uses RFC 2047 encoded-word syntax for UTF-8
+- Body uses base64 encoding with proper Content-Transfer-Encoding
+- Removed duplicate empty state message in chat panel
+- Chat invitations now display correctly with accents and special characters

@@ -63,16 +63,21 @@ export const chatService = {
           </html>
         `
         
+        // Crear el email raw en base64 con encoding UTF-8 correcto
+        const utf8Subject = `=?UTF-8?B?${btoa(unescape(encodeURIComponent(subject)))}?=`
+        
         const emailLines = [
           `To: ${invitedEmail}`,
-          `Subject: ${subject}`,
-          'Content-Type: text/html; charset=utf-8',
+          `Subject: ${utf8Subject}`,
+          'MIME-Version: 1.0',
+          'Content-Type: text/html; charset=UTF-8',
+          'Content-Transfer-Encoding: base64',
           '',
-          body
+          btoa(unescape(encodeURIComponent(body)))
         ]
         
         const email = emailLines.join('\r\n')
-        const encodedEmail = btoa(unescape(encodeURIComponent(email)))
+        const encodedEmail = btoa(email)
           .replace(/\+/g, '-')
           .replace(/\//g, '_')
           .replace(/=+$/, '')
