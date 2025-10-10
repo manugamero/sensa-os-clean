@@ -120,6 +120,7 @@ export const gmailService = {
           
           return {
             id: detail.id,
+            threadId: detail.threadId,
             subject: getHeader('Subject') || '(Sin asunto)',
             from: getHeader('From') || 'Desconocido',
             to: getHeader('To') || '',
@@ -171,6 +172,152 @@ export const gmailService = {
       return response.json()
     } catch (error) {
       console.error('Error marking email as read:', error)
+      throw error
+    }
+  },
+
+  async getThread(threadId: string): Promise<any[]> {
+    try {
+      const validToken = await tokenService.getValidToken()
+      if (!validToken) {
+        throw new Error('No valid authentication token available')
+      }
+
+      const response = await fetch(
+        `https://gmail.googleapis.com/gmail/v1/users/me/threads/${threadId}?format=full`,
+        {
+          headers: {
+            'Authorization': `Bearer ${validToken}`
+          }
+        }
+      )
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch thread')
+      }
+
+      const threadData = await response.json()
+      const messages = threadData.messages || []
+
+      // Decodificar base64 con UTF-8 correcto
+      const decodeBase64 = (data: string): string => {
+        try {
+          const base64 = data.replace(/-/g, '+').replace(/_/g, '/')
+          const binaryString = atob(base64)
+          const bytes = new Uint8Array(binaryString.length)
+          for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i)
+          }
+          return new TextDecoder('utf-8').decode(bytes)
+        } catch (error) {
+          console.error('Error decoding base64:', error)
+          try {
+            return atob(data.replace(/-/g, '+').replace(/_/g, '/'))
+          } catch {
+            return ''
+          }
+        }
+      }
+
+      const getBody = (payload: any): string => {
+        if (payload.body?.data) {
+          return decodeBase64(payload.body.data)
+        }
+        if (payload.parts) {
+          for (const part of payload.parts) {
+            if (part.mimeType === 'text/plain' || part.mimeType === 'text/html') {
+              if (part.body?.data) {
+                return decodeBase64(part.body.data)
+              }
+            }
+            if (part.parts) {
+              const body = getBody(part)
+              if (body) return body
+            }
+          }
+        }
+        return ''
+      }
+
+      const getAttachments = (payload: any): any[] => {
+        const attachments: any[] = []
+        const extractAttachments = (parts: any[]) => {
+          if (!parts) return
+          for (const part of parts) {
+            if (part.filename && part.body?.attachmentId) {
+              attachments.push({
+                filename: part.filename,
+                mimeType: part.mimeType,
+                size: part.body.size,
+                attachmentId: part.body.attachmentId
+              })
+            }
+            if (part.parts) {
+              extractAttachments(part.parts)
+            }
+          }
+        }
+        extractAttachments(payload.parts || [])
+        return attachments
+      }
+
+      // Procesar cada mensaje del thread
+      return messages.map((msg: any) => {
+        const headers = msg.payload?.headers || []
+        const getHeader = (name: string) => headers.find((h: any) => h.name === name)?.value || ''
+        
+        return {
+          id: msg.id,
+          subject: getHeader('Subject') || '(Sin asunto)',
+          from: getHeader('From') || 'Desconocido',
+          to: getHeader('To') || '',
+          snippet: msg.snippet || '',
+          body: getBody(msg.payload),
+          date: getHeader('Date') || new Date().toISOString(),
+          isRead: !msg.labelIds?.includes('UNREAD'),
+          hasAttachments: getAttachments(msg.payload).length > 0,
+          attachments: getAttachments(msg.payload)
+        }
+      })
+    } catch (error) {
+      console.error('Error fetching thread:', error)
+      throw error
+    }
+  },
+
+  async downloadAttachment(messageId: string, attachmentId: string): Promise<Blob> {
+    try {
+      const validToken = await tokenService.getValidToken()
+      if (!validToken) {
+        throw new Error('No valid authentication token available')
+      }
+
+      const response = await fetch(
+        `https://gmail.googleapis.com/gmail/v1/users/me/messages/${messageId}/attachments/${attachmentId}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${validToken}`
+          }
+        }
+      )
+
+      if (!response.ok) {
+        throw new Error('Failed to download attachment')
+      }
+
+      const data = await response.json()
+      
+      // Convertir base64 a blob
+      const base64 = data.data.replace(/-/g, '+').replace(/_/g, '/')
+      const binaryString = atob(base64)
+      const bytes = new Uint8Array(binaryString.length)
+      for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i)
+      }
+      
+      return new Blob([bytes])
+    } catch (error) {
+      console.error('Error downloading attachment:', error)
       throw error
     }
   }

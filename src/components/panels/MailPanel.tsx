@@ -7,6 +7,7 @@ import ModalWrapper from '../modals/ModalWrapper'
 
 interface Email {
   id: string
+  threadId?: string
   subject: string
   from: string
   to?: string

@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
-import { X, MailOpen, Paperclip, Clock, User, Archive, Reply, ReplyAll, Forward, Trash2, AlertOctagon, Star, MoreVertical } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+import { X, MailOpen, Paperclip, Clock, User, Archive, Reply, ReplyAll, Forward, Trash2, AlertOctagon, Star, MoreVertical, Download } from 'lucide-react'
+import { gmailService } from '../../services/gmailService'
 
 interface Email {
   id: string
+  threadId?: string
   subject: string
   from: string
   to?: string
@@ -27,13 +29,34 @@ interface EmailDetailModalProps {
 
 const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onMarkAsRead }) => {
   const [showMoreMenu, setShowMoreMenu] = useState(false)
+  const [threadMessages, setThreadMessages] = useState<Email[]>([email])
+  const [loadingThread, setLoadingThread] = useState(false)
+
+  // Cargar thread completo al abrir
+  useEffect(() => {
+    const loadThread = async () => {
+      if (email.threadId) {
+        setLoadingThread(true)
+        try {
+          const messages = await gmailService.getThread(email.threadId)
+          if (messages.length > 1) {
+            setThreadMessages(messages)
+          }
+        } catch (error) {
+          console.error('Error loading thread:', error)
+        } finally {
+          setLoadingThread(false)
+        }
+      }
+    }
+    loadThread()
+  }, [email.threadId])
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
     return date.toLocaleString('es-ES', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
+      weekday: 'short',
+      month: 'short',
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
@@ -43,6 +66,23 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
   const handleMarkAsRead = () => {
     if (!email.isRead && onMarkAsRead) {
       onMarkAsRead(email.id)
+    }
+  }
+
+  const handleDownloadAttachment = async (messageId: string, attachment: any) => {
+    try {
+      const blob = await gmailService.downloadAttachment(messageId, attachment.attachmentId)
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = attachment.filename
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
+    } catch (error) {
+      console.error('Error downloading attachment:', error)
+      alert('Error al descargar el archivo')
     }
   }
 
@@ -177,61 +217,90 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
         <div className="p-4 space-y-4 overflow-y-auto flex-1">
           {/* Asunto */}
           <div>
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
               {email.subject}
             </h3>
+            {threadMessages.length > 1 && (
+              <p className="text-xs text-gray-500 dark:text-gray-500">
+                {threadMessages.length} mensajes
+              </p>
+            )}
           </div>
 
-          {/* Información del remitente */}
-          <div className="flex items-center gap-2">
-            <User className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-            <p className="text-sm text-gray-600 dark:text-gray-400">{email.from}</p>
-          </div>
-
-          {/* Fecha */}
-          <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-            <p className="text-sm text-gray-600 dark:text-gray-400">{formatDate(email.date)}</p>
-          </div>
-
-          {/* Adjuntos */}
-          {email.hasAttachments && email.attachments && email.attachments.length > 0 && (
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Paperclip className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                  {email.attachments.length} {email.attachments.length === 1 ? 'Adjunto' : 'Adjuntos'}
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {email.attachments.map((attachment: any, index: number) => (
-                  <div
-                    key={index}
-                    className="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg border border-white/[0.08]"
-                  >
-                    <Paperclip className="w-3 h-3 text-gray-500 dark:text-gray-400" />
-                    <span className="text-xs text-gray-600 dark:text-gray-400 truncate max-w-[200px]">
-                      {attachment.filename}
-                    </span>
-                    {attachment.size && (
-                      <span className="text-xs text-gray-400 dark:text-gray-500">
-                        ({Math.round(attachment.size / 1024)}KB)
-                      </span>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
+          {loadingThread && (
+            <p className="text-sm text-gray-500 dark:text-gray-500">Cargando conversación...</p>
           )}
 
+          {/* Thread de mensajes */}
+          <div className="space-y-4">
+            {threadMessages.map((message, index) => (
+              <div key={message.id}>
+                {/* Separador entre mensajes */}
+                {index > 0 && (
+                  <div className="border-t border-white/[0.08] my-4" />
+                )}
 
-          {/* Contenido del email */}
-          <div className="border-t border-white/[0.08] pt-4">
-            <div className="prose dark:prose-invert max-w-none">
-              <p className="text-sm text-gray-600 dark:text-gray-400 whitespace-pre-wrap">
-                {email.body || email.snippet}
-              </p>
-            </div>
+                {/* Información del mensaje */}
+                <div className="space-y-3">
+                  {/* Remitente y fecha */}
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      <User className="w-4 h-4 text-gray-500 dark:text-gray-400 flex-shrink-0" />
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
+                        {message.from}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <Clock className="w-3 h-3 text-gray-500 dark:text-gray-400" />
+                      <p className="text-xs text-gray-500 dark:text-gray-500 whitespace-nowrap">
+                        {formatDate(message.date)}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Adjuntos del mensaje */}
+                  {message.hasAttachments && message.attachments && message.attachments.length > 0 && (
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Paperclip className="w-3 h-3 text-gray-500 dark:text-gray-400" />
+                        <p className="text-xs font-semibold text-gray-900 dark:text-white">
+                          {message.attachments.length} {message.attachments.length === 1 ? 'Adjunto' : 'Adjuntos'}
+                        </p>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {message.attachments.map((attachment: any, attIndex: number) => (
+                          <button
+                            key={attIndex}
+                            onClick={() => handleDownloadAttachment(message.id, attachment)}
+                            className="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg border border-white/[0.08] hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                          >
+                            <Paperclip className="w-3 h-3 text-gray-500 dark:text-gray-400" />
+                            <span className="text-xs text-gray-600 dark:text-gray-400 truncate max-w-[150px]">
+                              {attachment.filename}
+                            </span>
+                            {attachment.size && (
+                              <span className="text-xs text-gray-400 dark:text-gray-500">
+                                ({Math.round(attachment.size / 1024)}KB)
+                              </span>
+                            )}
+                            <Download className="w-3 h-3 text-gray-500 dark:text-gray-400" />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Contenido del mensaje */}
+                  <div className="pl-6">
+                    <div className="prose dark:prose-invert max-w-none">
+                      <p className="text-sm text-gray-600 dark:text-gray-400 whitespace-pre-wrap leading-relaxed">
+                        {message.body || message.snippet}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
