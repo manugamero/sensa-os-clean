@@ -1,22 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Search, Filter, RefreshCw, Plus, Check } from 'lucide-react'
+import { useAuth } from '../../contexts/AuthContext'
+import { chatService, ChatRoom } from '../../services/chatService'
 import ChatDetailModal from '../modals/ChatDetailModal'
 import ModalWrapper from '../modals/ModalWrapper'
 
-interface ChatRoom {
-  id: string
-  name: string
-  participants: string[]
-  isActive: boolean
-  isDone?: boolean
-}
-
 const ChatPanelSimple: React.FC = () => {
-  const [rooms, setRooms] = useState<ChatRoom[]>([
-    { id: '1', name: 'General', participants: ['user1@example.com', 'user2@example.com'], isActive: true },
-    { id: '2', name: 'Proyecto Alpha', participants: ['user1@example.com', 'user3@example.com'], isActive: false },
-    { id: '3', name: 'Soporte', participants: ['user1@example.com', 'soporte@example.com'], isActive: false }
-  ])
+  const { user } = useAuth()
+  const [rooms, setRooms] = useState<ChatRoom[]>([])
+  const [loading, setLoading] = useState(true)
   const [selectedRoom, setSelectedRoom] = useState<ChatRoom | null>(null)
   const [hoveredRoom, setHoveredRoom] = useState<string | null>(null)
   const [showDone, setShowDone] = useState(false)
@@ -26,23 +18,47 @@ const ChatPanelSimple: React.FC = () => {
     email: ''
   })
 
-  const createConversation = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!newConversation.email.trim()) return
-
-    const newRoom: ChatRoom = {
-      id: Date.now().toString(),
-      name: newConversation.name || newConversation.email,
-      participants: [newConversation.email],
-      isActive: true
+  useEffect(() => {
+    if (user?.email) {
+      loadConversations()
     }
+  }, [user])
 
-    setRooms([newRoom, ...rooms])
-    setNewConversation({ name: '', email: '' })
-    setShowCreateForm(false)
+  const loadConversations = async () => {
+    if (!user?.email) return
+    
+    try {
+      setLoading(true)
+      const conversations = await chatService.getUserConversations(user.email)
+      setRooms(conversations)
+    } catch (error) {
+      console.error('Error loading conversations:', error)
+      setRooms([])
+    } finally {
+      setLoading(false)
+    }
+  }
 
-    // Aquí se enviaría el email de invitación
-    console.log('Invitación enviada a:', newConversation.email)
+  const createConversation = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!newConversation.email.trim() || !user?.email) return
+
+    try {
+      const room = await chatService.createConversation(
+        newConversation.name,
+        newConversation.email,
+        user.email
+      )
+
+      setRooms([room, ...rooms])
+      setNewConversation({ name: '', email: '' })
+      setShowCreateForm(false)
+      
+      console.log(`✉️ Invitación enviada a ${newConversation.email}`)
+    } catch (error) {
+      console.error('Error creating conversation:', error)
+      alert('Error al crear la conversación. Por favor, intenta de nuevo.')
+    }
   }
 
   const toggleDone = (roomId: string, e: React.MouseEvent) => {
@@ -80,6 +96,7 @@ const ChatPanelSimple: React.FC = () => {
             <Filter className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </button>
           <button
+            onClick={loadConversations}
             className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
             title="Actualizar"
           >
@@ -97,7 +114,7 @@ const ChatPanelSimple: React.FC = () => {
       
       {/* Create Form */}
       {showCreateForm && (
-        <div className="mb-4 p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-black">
+        <div className="mb-4 p-4 border border-white/[0.08] rounded-lg bg-gray-50 dark:bg-black">
           <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Nueva Conversación</h3>
           <form onSubmit={createConversation} className="space-y-3">
             <input
@@ -105,7 +122,7 @@ const ChatPanelSimple: React.FC = () => {
               placeholder="Email del participante"
               value={newConversation.email}
               onChange={(e) => setNewConversation({ ...newConversation, email: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="w-full px-3 py-2 border border-white/[0.08] rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400"
               required
             />
             <input
@@ -113,7 +130,7 @@ const ChatPanelSimple: React.FC = () => {
               placeholder="Título de conversación (opcional)"
               value={newConversation.name}
               onChange={(e) => setNewConversation({ ...newConversation, name: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="w-full px-3 py-2 border border-white/[0.08] rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400"
             />
             <div className="flex gap-2">
               <button
@@ -135,6 +152,17 @@ const ChatPanelSimple: React.FC = () => {
       )}
       
       <div className="flex-1 overflow-y-auto">
+        {loading ? (
+          <div className="flex items-center justify-center h-full">
+            <p className="text-gray-500 dark:text-gray-400">Cargando conversaciones...</p>
+          </div>
+        ) : rooms.filter(room => showDone ? room.isDone : !room.isDone).length === 0 ? (
+          <div className="flex items-center justify-center h-full">
+            <p className="text-gray-500 dark:text-gray-400">
+              {showDone ? 'No hay conversaciones completadas' : 'No hay conversaciones. Crea una nueva para empezar.'}
+            </p>
+          </div>
+        ) : (
         <div className="space-y-3">
           {rooms.filter(room => showDone ? room.isDone : !room.isDone).map((room) => (
             <div
@@ -142,7 +170,7 @@ const ChatPanelSimple: React.FC = () => {
               onMouseEnter={() => setHoveredRoom(room.id)}
               onMouseLeave={() => setHoveredRoom(null)}
               onClick={() => setSelectedRoom(room)}
-              className={`card-hover p-3 rounded-lg border cursor-pointer bg-white dark:bg-black border-gray-200 dark:border-gray-700 relative ${!room.isActive ? 'opacity-50' : ''}`}
+              className={`card-hover p-3 rounded-lg border cursor-pointer bg-white dark:bg-black border-white/[0.08] relative ${!room.isActive ? 'opacity-50' : ''}`}
             >
               {/* Done button on hover */}
               {hoveredRoom === room.id && (
@@ -174,6 +202,7 @@ const ChatPanelSimple: React.FC = () => {
             </div>
           ))}
         </div>
+        )}
       </div>
       
       {rooms.length === 0 && (

@@ -299,10 +299,74 @@ app.delete('/api/todos/:id', authenticateToken, (req, res) => {
 
 // Chat API
 app.get('/api/chat/rooms', authenticateToken, (req, res) => {
-  const userRooms = Array.from(rooms.values()).filter(room => 
-    room.participants.includes(req.user.email)
+  const email = req.query.email || req.user.email
+  const userRooms = Array.from(rooms.values()).filter(room =>
+    room.participants.includes(email)
   )
-  res.json(userRooms)
+  res.json({ rooms: userRooms })
+})
+
+// Crear conversación con invitación por email
+app.post('/api/chat/create', authenticateToken, async (req, res) => {
+  try {
+    const { name, invitedEmail, currentUserEmail } = req.body
+    
+    const room = {
+      id: uuidv4(),
+      name: name || `Chat with ${invitedEmail}`,
+      participants: [currentUserEmail, invitedEmail],
+      createdBy: currentUserEmail,
+      createdAt: new Date().toISOString(),
+      isActive: true
+    }
+
+    rooms.set(room.id, room)
+    
+    // Enviar email de invitación usando Gmail API
+    try {
+      const oauth2Client = new google.auth.OAuth2()
+      oauth2Client.setCredentials({ access_token: req.headers.authorization?.split(' ')[1] })
+      
+      const gmail = google.gmail({ version: 'v1', auth: oauth2Client })
+      
+      const inviteLink = `https://sos001.vercel.app/?join=${room.id}`
+      const emailContent = [
+        'Content-Type: text/html; charset=utf-8',
+        'MIME-Version: 1.0',
+        `To: ${invitedEmail}`,
+        `From: ${currentUserEmail}`,
+        `Subject: Invitación a chat en Sensa OS`,
+        '',
+        `<html><body>`,
+        `<h2>Has sido invitado a un chat</h2>`,
+        `<p>${currentUserEmail} te ha invitado a una conversación en Sensa OS.</p>`,
+        `<p><strong>Nombre de la conversación:</strong> ${room.name}</p>`,
+        `<p><a href="${inviteLink}" style="background-color: #000; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">Unirse a la conversación</a></p>`,
+        `<p>O copia este enlace: ${inviteLink}</p>`,
+        `</body></html>`
+      ].join('\n')
+
+      const encodedEmail = Buffer.from(emailContent).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+
+      await gmail.users.messages.send({
+        userId: 'me',
+        requestBody: {
+          raw: encodedEmail
+        }
+      })
+
+      console.log(`✉️  Email de invitación enviado a ${invitedEmail}`)
+    } catch (emailError) {
+      console.error('Error enviando email de invitación:', emailError)
+      // No fallar si el email no se puede enviar, la conversación ya está creada
+    }
+
+    io.emit('room:created', room)
+    res.json({ room })
+  } catch (error) {
+    console.error('Error creating conversation:', error)
+    res.status(500).json({ error: 'Failed to create conversation' })
+  }
 })
 
 app.post('/api/chat/rooms', authenticateToken, (req, res) => {

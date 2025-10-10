@@ -30,10 +30,10 @@ export const gmailService = {
       const listData = await listResponse.json()
       const messages = listData.messages || []
 
-      // Obtener detalles de cada mensaje
+      // Obtener detalles de cada mensaje con formato completo
       const emailPromises = messages.slice(0, 10).map(async (msg: any) => {
         const detailResponse = await fetch(
-          `https://gmail.googleapis.com/gmail/v1/users/me/messages/${msg.id}?format=metadata&metadataHeaders=From&metadataHeaders=Subject&metadataHeaders=Date`,
+          `https://gmail.googleapis.com/gmail/v1/users/me/messages/${msg.id}?format=full`,
           {
             headers: {
               'Authorization': `Bearer ${validToken}`
@@ -46,14 +46,61 @@ export const gmailService = {
           const headers = detail.payload?.headers || []
           const getHeader = (name: string) => headers.find((h: any) => h.name === name)?.value || ''
           
+          // Extraer cuerpo del email
+          const getBody = (payload: any): string => {
+            if (payload.body?.data) {
+              return atob(payload.body.data.replace(/-/g, '+').replace(/_/g, '/'))
+            }
+            if (payload.parts) {
+              for (const part of payload.parts) {
+                if (part.mimeType === 'text/plain' || part.mimeType === 'text/html') {
+                  if (part.body?.data) {
+                    return atob(part.body.data.replace(/-/g, '+').replace(/_/g, '/'))
+                  }
+                }
+                if (part.parts) {
+                  const body = getBody(part)
+                  if (body) return body
+                }
+              }
+            }
+            return ''
+          }
+          
+          // Extraer attachments
+          const getAttachments = (payload: any): any[] => {
+            const attachments: any[] = []
+            const extractAttachments = (parts: any[]) => {
+              if (!parts) return
+              for (const part of parts) {
+                if (part.filename && part.body?.attachmentId) {
+                  attachments.push({
+                    filename: part.filename,
+                    mimeType: part.mimeType,
+                    size: part.body.size,
+                    attachmentId: part.body.attachmentId
+                  })
+                }
+                if (part.parts) {
+                  extractAttachments(part.parts)
+                }
+              }
+            }
+            extractAttachments(payload.parts || [])
+            return attachments
+          }
+          
           return {
             id: detail.id,
             subject: getHeader('Subject') || '(Sin asunto)',
             from: getHeader('From') || 'Desconocido',
+            to: getHeader('To') || '',
             snippet: detail.snippet || '',
+            body: getBody(detail.payload),
             date: getHeader('Date') || new Date().toISOString(),
             isRead: !detail.labelIds?.includes('UNREAD'),
-            hasAttachments: detail.payload?.parts?.some((p: any) => p.filename) || false
+            hasAttachments: getAttachments(detail.payload).length > 0,
+            attachments: getAttachments(detail.payload)
           }
         }
         return null

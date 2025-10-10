@@ -300,7 +300,7 @@ const CalendarPanel: React.FC = () => {
               onMouseEnter={() => setHoveredEvent(event.id)}
               onMouseLeave={() => setHoveredEvent(null)}
               onClick={() => setSelectedEvent(event)}
-              className={`card-hover bg-white dark:bg-black rounded-lg border border-gray-200 dark:border-gray-700 p-3 cursor-pointer relative ${!isTodayEvent ? 'opacity-50' : ''}`}
+              className={`card-hover bg-white dark:bg-black rounded-lg border border-white/[0.08] p-3 cursor-pointer relative ${!isTodayEvent ? 'opacity-50' : ''}`}
             >
               {/* Done button on hover */}
               {hoveredEvent === event.id && (

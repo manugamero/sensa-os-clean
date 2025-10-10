@@ -74,7 +74,7 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
   return (
     <div className="h-full w-full flex flex-col bg-white dark:bg-black overflow-hidden">
         {/* Header simplificado: X a la izquierda, toolbar a la derecha */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center justify-between p-4 border-b border-white/[0.08]">
           <button
             onClick={onClose}
             className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
@@ -117,7 +117,7 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
               </button>
 
               {showMoreMenu && (
-                <div className="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-black border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
+                <div className="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-black border border-white/[0.08] rounded-lg shadow-lg z-50">
                   <button
                     onClick={handleReplyAll}
                     className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-t-lg"
@@ -144,7 +144,7 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
                       Marcar como leído
                     </button>
                   )}
-                  <div className="border-t border-gray-200 dark:border-gray-700 my-1" />
+                  <div className="border-t border-white/[0.08] my-1" />
                   <button
                     onClick={handleSpam}
                     className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
@@ -188,16 +188,38 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
           </div>
 
           {/* Adjuntos */}
-          {email.hasAttachments && (
-            <div className="flex items-center gap-2">
-              <Paperclip className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-              <p className="text-sm text-gray-600 dark:text-gray-400">Archivos adjuntos</p>
+          {email.hasAttachments && email.attachments && email.attachments.length > 0 && (
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <Paperclip className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                  {email.attachments.length} {email.attachments.length === 1 ? 'Adjunto' : 'Adjuntos'}
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {email.attachments.map((attachment: any, index: number) => (
+                  <div
+                    key={index}
+                    className="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg border border-white/[0.08]"
+                  >
+                    <Paperclip className="w-3 h-3 text-gray-500 dark:text-gray-400" />
+                    <span className="text-xs text-gray-600 dark:text-gray-400 truncate max-w-[200px]">
+                      {attachment.filename}
+                    </span>
+                    {attachment.size && (
+                      <span className="text-xs text-gray-400 dark:text-gray-500">
+                        ({Math.round(attachment.size / 1024)}KB)
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
 
           {/* Contenido del email */}
-          <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+          <div className="border-t border-white/[0.08] pt-4">
             <div className="prose dark:prose-invert max-w-none">
               <p className="text-sm text-gray-600 dark:text-gray-400 whitespace-pre-wrap">
                 {email.body || email.snippet}
@@ -207,12 +229,12 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
         </div>
 
         {/* Caja de respuesta */}
-        <div className="border-t border-gray-200 dark:border-gray-700 p-4">
+        <div className="border-t border-white/[0.08] p-4">
           <div className="relative">
             <input
               type="text"
               placeholder="Responder a todos..."
-              className="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="w-full px-3 py-2 pr-10 border border-white/[0.08] rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400"
             />
             <button
               onClick={handleReplyAll}

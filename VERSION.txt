@@ -1,7 +1,8 @@
-069
+070
 Build: 2025-01-09
 Changes:
-- Added rounded-lg border radius to modals (matching column style)
-- Unified modal border color to border-black/[0.08] and border-white/[0.08]
-- Standardized spacing between items to space-y-3 across all panels
-- Modal now has same border radius and color as columns
+- Fixed Gmail integration to load full email content and attachments
+- Changed Gmail API format from 'metadata' to 'full' for complete data
+- Added proper attachment extraction and display in EmailDetailModal
+- Unified ALL borders across the entire app to border-white/[0.08] (1px white, 8% opacity)
+- Replaced all border-gray variants with unified border style

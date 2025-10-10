@@ -94,7 +94,7 @@ const CalendarPanelSafe: React.FC = () => {
           </div>
         ) : (
           events.map((event) => (
-            <div key={event.id} className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-3 hover:shadow-md transition-shadow mb-2">
+            <div key={event.id} className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-white/[0.08] p-3 hover:shadow-md transition-shadow mb-2">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{event.summary}</h3>

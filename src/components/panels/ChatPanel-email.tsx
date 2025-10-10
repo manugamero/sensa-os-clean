@@ -180,7 +180,7 @@ const ChatPanelEmail: React.FC = () => {
 
       {/* New Chat Form */}
       {showNewChat && (
-        <div className="mb-4 p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-black">
+        <div className="mb-4 p-4 border border-white/[0.08] rounded-lg bg-gray-50 dark:bg-black">
           <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Nueva Conversación</h3>
           <div className="space-y-3">
             <input
@@ -188,14 +188,14 @@ const ChatPanelEmail: React.FC = () => {
               placeholder="Email del destinatario"
               value={newChatEmail}
               onChange={(e) => setNewChatEmail(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="w-full px-3 py-2 border border-white/[0.08] rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
             />
             <input
               type="text"
               placeholder="Asunto de la conversación"
               value={newChatSubject}
               onChange={(e) => setNewChatSubject(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="w-full px-3 py-2 border border-white/[0.08] rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
             />
             <div className="flex gap-2">
               <button
@@ -221,7 +221,7 @@ const ChatPanelEmail: React.FC = () => {
             <div
               key={thread.id}
               onClick={() => openThread(thread)}
-              className="card-hover p-3 rounded-lg border cursor-pointer bg-white dark:bg-black border-gray-200 dark:border-gray-700"
+              className="card-hover p-3 rounded-lg border cursor-pointer bg-white dark:bg-black border-white/[0.08]"
             >
               {/* Fila 1: Título y badge */}
               <div className="flex items-center gap-2 mb-2">
@@ -260,7 +260,7 @@ const ChatPanelEmail: React.FC = () => {
         <ModalWrapper>
           <div className="h-full w-full flex flex-col bg-white dark:bg-black rounded-lg shadow-xl overflow-hidden">
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between p-4 border-b border-white/[0.08]">
               <div>
                 <h3 className="font-semibold text-gray-900 dark:text-white">{selectedThread.subject}</h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -310,7 +310,7 @@ const ChatPanelEmail: React.FC = () => {
             </div>
 
             {/* Message Input */}
-            <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-black">
+            <div className="p-4 border-t border-white/[0.08] bg-gray-50 dark:bg-black">
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -318,7 +318,7 @@ const ChatPanelEmail: React.FC = () => {
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                   placeholder="Escribe un mensaje..."
-                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  className="flex-1 px-3 py-2 border border-white/[0.08] rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
                 />
                 <button
                   onClick={sendMessage}

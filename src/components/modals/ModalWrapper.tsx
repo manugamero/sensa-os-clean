@@ -18,15 +18,15 @@ const ModalWrapper: React.FC<ModalWrapperProps> = ({ children }) => {
     switch (modalStyle) {
       case 1:
         // Default: Modal con border-radius igual a la columna
-        return 'h-full w-full rounded-lg border border-black/[0.08] dark:border-white/[0.08] overflow-hidden bg-white dark:bg-black'
+        return 'h-full w-full rounded-lg border border-white/[0.08] dark:border-white/[0.08] overflow-hidden bg-white dark:bg-black'
       case 2:
         // Slide from right
-        return 'h-full w-full rounded-lg overflow-hidden border border-black/[0.08] dark:border-white/[0.08] animate-slide-in-right bg-white dark:bg-black'
+        return 'h-full w-full rounded-lg overflow-hidden border border-white/[0.08] dark:border-white/[0.08] animate-slide-in-right bg-white dark:bg-black'
       case 3:
         // Slide from bottom
-        return 'h-full w-full rounded-lg overflow-hidden border border-black/[0.08] dark:border-white/[0.08] animate-slide-in-bottom bg-white dark:bg-black'
+        return 'h-full w-full rounded-lg overflow-hidden border border-white/[0.08] dark:border-white/[0.08] animate-slide-in-bottom bg-white dark:bg-black'
       default:
-        return 'h-full w-full rounded-lg border border-black/[0.08] dark:border-white/[0.08] overflow-hidden bg-white dark:bg-black'
+        return 'h-full w-full rounded-lg border border-white/[0.08] dark:border-white/[0.08] overflow-hidden bg-white dark:bg-black'
     }
   }
 

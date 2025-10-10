@@ -47,7 +47,7 @@ const DashboardSimple: React.FC = () => {
       <div className="h-[calc(100vh-80px)] p-4">
         <div className="grid grid-cols-4 gap-4 h-full">
           {/* Calendario */}
-          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4">
+          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-white/[0.08] p-4">
             <div className="mb-4">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Calendario</h2>
             </div>
@@ -59,7 +59,7 @@ const DashboardSimple: React.FC = () => {
           </div>
 
           {/* Email */}
-          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4">
+          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-white/[0.08] p-4">
             <div className="mb-4">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Email</h2>
             </div>
@@ -71,7 +71,7 @@ const DashboardSimple: React.FC = () => {
           </div>
 
           {/* Chat */}
-          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4">
+          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-white/[0.08] p-4">
             <div className="mb-4">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Chat</h2>
             </div>
@@ -83,7 +83,7 @@ const DashboardSimple: React.FC = () => {
           </div>
 
           {/* Notas */}
-          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4">
+          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-white/[0.08] p-4">
             <div className="mb-4">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Notas</h2>
             </div>

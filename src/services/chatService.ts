@@ -1,91 +1,142 @@
-interface CreateRoomData {
+import { tokenService } from './tokenService'
+
+export interface ChatRoom {
+  id: string
   name: string
-  participants: string[]
+  participants: string[] // emails de los participantes
+  createdBy: string // email del creador
+  createdAt: string
+  isActive: boolean
+  isDone?: boolean
 }
 
-interface SendMessageData {
+export interface ChatMessage {
+  id: string
+  roomId: string
+  sender: string // email del remitente
   content: string
-  type: 'text' | 'image' | 'audio' | 'file'
+  timestamp: string
 }
 
 export const chatService = {
-  async getRooms(token: string) {
-    const response = await fetch('/api/chat/rooms', {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
+  // Crear una nueva conversación y enviar invitación
+  async createConversation(
+    name: string,
+    invitedEmail: string,
+    currentUserEmail: string
+  ): Promise<ChatRoom> {
+    try {
+      const validToken = await tokenService.getValidToken()
+      if (!validToken) {
+        throw new Error('No valid authentication token available')
       }
-    })
-    
-    if (!response.ok) {
-      throw new Error('Failed to fetch rooms')
-    }
-    
-    return response.json()
-  },
 
-  async createRoom(token: string, roomData: CreateRoomData) {
-    const response = await fetch('/api/chat/rooms', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(roomData)
-    })
-    
-    if (!response.ok) {
-      throw new Error('Failed to create room')
-    }
-    
-    return response.json()
-  },
+      const response = await fetch('/api/chat/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${validToken}`
+        },
+        body: JSON.stringify({
+          name,
+          invitedEmail,
+          currentUserEmail
+        })
+      })
 
-  async getMessages(token: string, roomId: string) {
-    const response = await fetch(`/api/chat/rooms/${roomId}/messages`, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
+      if (!response.ok) {
+        throw new Error('Failed to create conversation')
       }
-    })
-    
-    if (!response.ok) {
-      throw new Error('Failed to fetch messages')
+
+      const data = await response.json()
+      return data.room
+    } catch (error) {
+      console.error('Error creating conversation:', error)
+      throw error
     }
-    
-    return response.json()
   },
 
-  async sendMessage(token: string, roomId: string, messageData: SendMessageData) {
-    const response = await fetch(`/api/chat/rooms/${roomId}/messages`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(messageData)
-    })
-    
-    if (!response.ok) {
-      throw new Error('Failed to send message')
+  // Obtener conversaciones del usuario actual
+  async getUserConversations(userEmail: string): Promise<ChatRoom[]> {
+    try {
+      const validToken = await tokenService.getValidToken()
+      if (!validToken) {
+        throw new Error('No valid authentication token available')
+      }
+
+      const response = await fetch(`/api/chat/rooms?email=${encodeURIComponent(userEmail)}`, {
+        headers: {
+          'Authorization': `Bearer ${validToken}`
+        }
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch conversations')
+      }
+
+      const data = await response.json()
+      return data.rooms || []
+    } catch (error) {
+      console.error('Error fetching conversations:', error)
+      return []
     }
-    
-    return response.json()
   },
 
-  async uploadFile(token: string, formData: FormData) {
-    const response = await fetch('/api/chat/upload', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
-      body: formData
-    })
-    
-    if (!response.ok) {
-      throw new Error('Failed to upload file')
+  // Obtener mensajes de una conversación
+  async getRoomMessages(roomId: string): Promise<ChatMessage[]> {
+    try {
+      const validToken = await tokenService.getValidToken()
+      if (!validToken) {
+        throw new Error('No valid authentication token available')
+      }
+
+      const response = await fetch(`/api/chat/rooms/${roomId}/messages`, {
+        headers: {
+          'Authorization': `Bearer ${validToken}`
+        }
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch messages')
+      }
+
+      const data = await response.json()
+      return data.messages || []
+    } catch (error) {
+      console.error('Error fetching messages:', error)
+      return []
     }
-    
-    return response.json()
+  },
+
+  // Enviar un mensaje
+  async sendMessage(roomId: string, content: string, senderEmail: string): Promise<ChatMessage> {
+    try {
+      const validToken = await tokenService.getValidToken()
+      if (!validToken) {
+        throw new Error('No valid authentication token available')
+      }
+
+      const response = await fetch(`/api/chat/rooms/${roomId}/messages`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${validToken}`
+        },
+        body: JSON.stringify({
+          content,
+          senderEmail
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to send message')
+      }
+
+      const data = await response.json()
+      return data.message
+    } catch (error) {
+      console.error('Error sending message:', error)
+      throw error
+    }
   }
 }
