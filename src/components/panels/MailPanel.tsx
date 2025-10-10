@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Paperclip, Search, Filter, RefreshCw, Plus, Pin, Check, Archive } from 'lucide-react'
+import { Paperclip, Search, Filter, RefreshCw, Plus, Pin, Check } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { gmailService } from '../../services/gmailService'
 import EmailDetailModal from '../modals/EmailDetailModal'
@@ -36,7 +36,6 @@ const MailPanel: React.FC = () => {
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null)
   const [hoveredEmail, setHoveredEmail] = useState<string | null>(null)
   const [showDone, setShowDone] = useState(false)
-  const [showArchived, setShowArchived] = useState(false)
 
   useEffect(() => {
     loadEmails()
