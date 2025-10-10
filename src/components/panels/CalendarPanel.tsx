@@ -9,12 +9,14 @@ interface Event {
   id: string
   summary: string
   start: {
-    dateTime: string
-    timeZone: string
+    dateTime?: string
+    date?: string
+    timeZone?: string
   }
   end: {
-    dateTime: string
-    timeZone: string
+    dateTime?: string
+    date?: string
+    timeZone?: string
   }
   attendees?: Array<{
     email: string
@@ -96,34 +98,50 @@ const CalendarPanel: React.FC = () => {
     }
   }
 
-  const formatDateTime = (startTime: string, endTime?: string) => {
-    const start = new Date(startTime)
-    const end = endTime ? new Date(endTime) : null
+  const formatDateTime = (start: { dateTime?: string; date?: string }, end?: { dateTime?: string; date?: string }) => {
+    const startStr = start.dateTime || start.date
+    if (!startStr) return 'Fecha no disponible'
     
-    // Formato de hora: 10:00-10:30
-    const startHour = start.toLocaleTimeString('es-ES', { 
-      hour: '2-digit', 
-      minute: '2-digit' 
-    })
-    const endHour = end ? end.toLocaleTimeString('es-ES', { 
-      hour: '2-digit', 
-      minute: '2-digit' 
-    }) : ''
-    
-    const timeRange = endHour ? `${startHour}-${endHour}` : startHour
+    const startDate = new Date(startStr)
+    const isAllDay = !start.dateTime // Si no tiene dateTime, es evento de día completo
     
     // Formato de fecha: Vie 17 Oct
-    const dateStr = start.toLocaleDateString('es-ES', {
+    const dateStr = startDate.toLocaleDateString('es-ES', {
       weekday: 'short',
       day: 'numeric',
       month: 'short'
     })
     
+    // Si es evento de día completo
+    if (isAllDay) {
+      return `Todo el día · ${dateStr}`
+    }
+    
+    // Si tiene hora específica
+    const startHour = startDate.toLocaleTimeString('es-ES', { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    })
+    
+    let timeRange = startHour
+    
+    if (end && end.dateTime) {
+      const endDate = new Date(end.dateTime)
+      const endHour = endDate.toLocaleTimeString('es-ES', { 
+        hour: '2-digit', 
+        minute: '2-digit' 
+      })
+      timeRange = `${startHour}-${endHour}`
+    }
+    
     return `${timeRange} · ${dateStr}`
   }
 
-  const isToday = (dateTime: string) => {
-    const eventDate = new Date(dateTime)
+  const isToday = (start: { dateTime?: string; date?: string }) => {
+    const dateStr = start.dateTime || start.date
+    if (!dateStr) return false
+    
+    const eventDate = new Date(dateStr)
     const today = new Date()
     return eventDate.getDate() === today.getDate() &&
            eventDate.getMonth() === today.getMonth() &&
@@ -293,7 +311,7 @@ const CalendarPanel: React.FC = () => {
           </div>
         ) : (
           events.filter(event => showDone ? event.isDone : !event.isDone).map((event) => {
-            const isTodayEvent = isToday(event.start.dateTime)
+            const isTodayEvent = isToday(event.start)
             return (
             <div 
               key={event.id} 
@@ -314,18 +332,18 @@ const CalendarPanel: React.FC = () => {
               )}
               <div className="h-[60px] flex flex-col justify-between">
                 {/* Fila 1: Título - altura fija */}
-                <h3 className="font-semibold text-gray-900 dark:text-white truncate h-5">{event.summary}</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white truncate h-5">{event.summary || 'Sin título'}</h3>
                 
                 {/* Fila 2: Hora - altura fija */}
-                <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400 h-5">
-                  <span className="truncate">{formatDateTime(event.start.dateTime, event.end.dateTime)}</span>
+                <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 h-5">
+                  <span className="truncate">{formatDateTime(event.start, event.end)}</span>
                 </div>
                 
                 {/* Fila 3: Invitados y botón - altura fija */}
                 <div className="flex items-center justify-between gap-2 h-5">
                   {event.attendees && event.attendees.length > 0 ? (
-                    <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
-                      <span>{event.attendees.length} asistentes</span>
+                    <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+                      <span>{event.attendees.length} asistente{event.attendees.length > 1 ? 's' : ''}</span>
                     </div>
                   ) : (
                     <div></div>
@@ -338,7 +356,7 @@ const CalendarPanel: React.FC = () => {
                       onClick={(e) => e.stopPropagation()}
                       className="flex items-center gap-1 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-xs"
                     >
-                      <Video className="w-4 h-4" />
+                      <Video className="w-3 h-3" />
                     </a>
                   )}
                 </div>

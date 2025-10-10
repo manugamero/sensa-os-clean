@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { X, MailOpen, Paperclip, Clock, User, Archive, Reply, ReplyAll, Forward, Trash2, AlertOctagon, Star, MoreVertical, Download } from 'lucide-react'
+import { X, MailOpen, Paperclip, Clock, User, Archive, Reply, ReplyAll, Forward, Trash2, AlertOctagon, Star, MoreVertical } from 'lucide-react'
 import { gmailService } from '../../services/gmailService'
+import FilePreview from '../FilePreview'
 
 interface Email {
   id: string
@@ -31,6 +32,14 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
   const [showMoreMenu, setShowMoreMenu] = useState(false)
   const [threadMessages, setThreadMessages] = useState<Email[]>([email])
   const [loadingThread, setLoadingThread] = useState(false)
+  const [previewFile, setPreviewFile] = useState<{
+    url: string
+    filename: string
+    mimeType: string
+    size: number
+    messageId: string
+    attachmentId: string
+  } | null>(null)
 
   // Cargar thread completo al abrir
   useEffect(() => {
@@ -69,20 +78,44 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
     }
   }
 
-  const handleDownloadAttachment = async (messageId: string, attachment: any) => {
+  const handlePreviewAttachment = async (messageId: string, attachment: any) => {
     try {
       const blob = await gmailService.downloadAttachment(messageId, attachment.attachmentId)
       const url = window.URL.createObjectURL(blob)
+      setPreviewFile({
+        url,
+        filename: attachment.filename,
+        mimeType: attachment.mimeType,
+        size: attachment.size,
+        messageId,
+        attachmentId: attachment.attachmentId
+      })
+    } catch (error) {
+      console.error('Error loading attachment:', error)
+      alert('Error al cargar el archivo')
+    }
+  }
+
+  const handleDownloadAttachment = async () => {
+    if (!previewFile) return
+    
+    try {
       const a = document.createElement('a')
-      a.href = url
-      a.download = attachment.filename
+      a.href = previewFile.url
+      a.download = previewFile.filename
       document.body.appendChild(a)
       a.click()
-      window.URL.revokeObjectURL(url)
       document.body.removeChild(a)
     } catch (error) {
       console.error('Error downloading attachment:', error)
       alert('Error al descargar el archivo')
+    }
+  }
+
+  const handleClosePreview = () => {
+    if (previewFile) {
+      window.URL.revokeObjectURL(previewFile.url)
+      setPreviewFile(null)
     }
   }
 
@@ -271,7 +304,7 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
                         {message.attachments.map((attachment: any, attIndex: number) => (
                           <button
                             key={attIndex}
-                            onClick={() => handleDownloadAttachment(message.id, attachment)}
+                            onClick={() => handlePreviewAttachment(message.id, attachment)}
                             className="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg border border-white/[0.08] hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                           >
                             <Paperclip className="w-3 h-3 text-gray-500 dark:text-gray-400" />
@@ -283,7 +316,6 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
                                 ({Math.round(attachment.size / 1024)}KB)
                               </span>
                             )}
-                            <Download className="w-3 h-3 text-gray-500 dark:text-gray-400" />
                           </button>
                         ))}
                       </div>
@@ -321,6 +353,15 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
             </button>
           </div>
         </div>
+
+      {/* File Preview */}
+      {previewFile && (
+        <FilePreview
+          file={previewFile}
+          onClose={handleClosePreview}
+          onDownload={handleDownloadAttachment}
+        />
+      )}
     </div>
   )
 }

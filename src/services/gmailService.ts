@@ -74,25 +74,93 @@ export const gmailService = {
             }
           }
           
+          // Limpiar contenido HTML y extraer solo el texto nuevo (sin citas)
+          const cleanEmailContent = (content: string): string => {
+            // Si es HTML, intentar extraer solo el texto nuevo
+            if (content.includes('<') && content.includes('>')) {
+              // Crear un elemento temporal para parsear HTML
+              const div = document.createElement('div')
+              div.innerHTML = content
+              
+              // Remover elementos de citas comunes
+              const quotesToRemove = div.querySelectorAll('blockquote, .gmail_quote, .gmail_quote_container')
+              quotesToRemove.forEach(quote => quote.remove())
+              
+              // Obtener texto limpio
+              let text = div.textContent || div.innerText || ''
+              
+              // Limpiar espacios extra
+              text = text.replace(/\n{3,}/g, '\n\n').trim()
+              
+              return text
+            }
+            
+            // Si es texto plano, remover líneas de citas
+            const lines = content.split('\n')
+            const cleanLines: string[] = []
+            let inQuote = false
+            
+            for (let i = 0; i < lines.length; i++) {
+              const line = lines[i]
+              
+              // Detectar inicio de cita
+              if (
+                line.startsWith('>') ||
+                line.startsWith('On ') && line.includes(' wrote:') ||
+                line.match(/^From:.*$/i) ||
+                line.match(/^Sent:.*$/i) ||
+                line.match(/^To:.*$/i) ||
+                line.match(/^Subject:.*$/i) ||
+                line.match(/^Date:.*$/i) ||
+                line.match(/^Cc:.*$/i) ||
+                line.includes('________________________________')
+              ) {
+                inQuote = true
+                continue
+              }
+              
+              // Si no estamos en cita, agregar línea
+              if (!inQuote) {
+                cleanLines.push(line)
+              }
+              
+              // Detectar posible fin de cita (línea vacía después de cita)
+              if (inQuote && line.trim() === '' && i < lines.length - 1) {
+                const nextLine = lines[i + 1]
+                if (nextLine && !nextLine.startsWith('>') && nextLine.trim() !== '') {
+                  inQuote = false
+                }
+              }
+            }
+            
+            return cleanLines.join('\n').replace(/\n{3,}/g, '\n\n').trim()
+          }
+          
           // Extraer cuerpo del email
           const getBody = (payload: any): string => {
+            let rawContent = ''
+            
             if (payload.body?.data) {
-              return decodeBase64(payload.body.data)
-            }
-            if (payload.parts) {
+              rawContent = decodeBase64(payload.body.data)
+            } else if (payload.parts) {
               for (const part of payload.parts) {
                 if (part.mimeType === 'text/plain' || part.mimeType === 'text/html') {
                   if (part.body?.data) {
-                    return decodeBase64(part.body.data)
+                    rawContent = decodeBase64(part.body.data)
+                    break
                   }
                 }
                 if (part.parts) {
                   const body = getBody(part)
-                  if (body) return body
+                  if (body) {
+                    rawContent = body
+                    break
+                  }
                 }
               }
             }
-            return ''
+            
+            return cleanEmailContent(rawContent)
           }
           
           // Extraer attachments
@@ -219,24 +287,85 @@ export const gmailService = {
         }
       }
 
-      const getBody = (payload: any): string => {
-        if (payload.body?.data) {
-          return decodeBase64(payload.body.data)
+      // Limpiar contenido HTML y extraer solo el texto nuevo (sin citas)
+      const cleanEmailContent = (content: string): string => {
+        // Si es HTML, intentar extraer solo el texto nuevo
+        if (content.includes('<') && content.includes('>')) {
+          const div = document.createElement('div')
+          div.innerHTML = content
+          
+          // Remover elementos de citas comunes
+          const quotesToRemove = div.querySelectorAll('blockquote, .gmail_quote, .gmail_quote_container')
+          quotesToRemove.forEach(quote => quote.remove())
+          
+          let text = div.textContent || div.innerText || ''
+          text = text.replace(/\n{3,}/g, '\n\n').trim()
+          
+          return text
         }
-        if (payload.parts) {
+        
+        // Si es texto plano, remover líneas de citas
+        const lines = content.split('\n')
+        const cleanLines: string[] = []
+        let inQuote = false
+        
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i]
+          
+          if (
+            line.startsWith('>') ||
+            line.startsWith('On ') && line.includes(' wrote:') ||
+            line.match(/^From:.*$/i) ||
+            line.match(/^Sent:.*$/i) ||
+            line.match(/^To:.*$/i) ||
+            line.match(/^Subject:.*$/i) ||
+            line.match(/^Date:.*$/i) ||
+            line.match(/^Cc:.*$/i) ||
+            line.includes('________________________________')
+          ) {
+            inQuote = true
+            continue
+          }
+          
+          if (!inQuote) {
+            cleanLines.push(line)
+          }
+          
+          if (inQuote && line.trim() === '' && i < lines.length - 1) {
+            const nextLine = lines[i + 1]
+            if (nextLine && !nextLine.startsWith('>') && nextLine.trim() !== '') {
+              inQuote = false
+            }
+          }
+        }
+        
+        return cleanLines.join('\n').replace(/\n{3,}/g, '\n\n').trim()
+      }
+
+      const getBody = (payload: any): string => {
+        let rawContent = ''
+        
+        if (payload.body?.data) {
+          rawContent = decodeBase64(payload.body.data)
+        } else if (payload.parts) {
           for (const part of payload.parts) {
             if (part.mimeType === 'text/plain' || part.mimeType === 'text/html') {
               if (part.body?.data) {
-                return decodeBase64(part.body.data)
+                rawContent = decodeBase64(part.body.data)
+                break
               }
             }
             if (part.parts) {
               const body = getBody(part)
-              if (body) return body
+              if (body) {
+                rawContent = body
+                break
+              }
             }
           }
         }
-        return ''
+        
+        return cleanEmailContent(rawContent)
       }
 
       const getAttachments = (payload: any): any[] => {
