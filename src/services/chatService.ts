@@ -45,39 +45,36 @@ export const chatService = {
       try {
         const inviteLink = `https://sos001.vercel.app/?join=${room.id}`
         
-        // Crear el email en formato MIME
-        const subject = 'Invitación a chat en Sensa OS'
-        const body = `
-          <html>
-            <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-              <h2 style="color: #000;">Has sido invitado a un chat</h2>
-              <p>${currentUserEmail} te ha invitado a una conversación en Sensa OS.</p>
-              <p><strong>Nombre de la conversación:</strong> ${room.name}</p>
-              <div style="margin: 30px 0;">
-                <a href="${inviteLink}" style="background-color: #000; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
-                  Unirse a la conversación
-                </a>
-              </div>
-              <p style="color: #666; font-size: 14px;">O copia este enlace: ${inviteLink}</p>
-            </body>
-          </html>
-        `
+        // Crear el email en formato MIME correcto
+        const subject = 'Invitacion a chat en Sensa OS'
+        const htmlBody = `<html>
+<body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <h2 style="color: #000;">Has sido invitado a un chat</h2>
+  <p>${currentUserEmail} te ha invitado a una conversacion en Sensa OS.</p>
+  <p><strong>Nombre de la conversacion:</strong> ${room.name}</p>
+  <div style="margin: 30px 0;">
+    <a href="${inviteLink}" style="background-color: #000; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
+      Unirse a la conversacion
+    </a>
+  </div>
+  <p style="color: #666; font-size: 14px;">O copia este enlace: ${inviteLink}</p>
+</body>
+</html>`
         
-        // Crear el email raw en base64 con encoding UTF-8 correcto
-        const utf8Subject = `=?UTF-8?B?${btoa(unescape(encodeURIComponent(subject)))}?=`
-        
-        const emailLines = [
+        // Construir el mensaje MIME sin doble encoding
+        const messageParts = [
           `To: ${invitedEmail}`,
-          `Subject: ${utf8Subject}`,
+          `Subject: ${subject}`,
           'MIME-Version: 1.0',
           'Content-Type: text/html; charset=UTF-8',
-          'Content-Transfer-Encoding: base64',
           '',
-          btoa(unescape(encodeURIComponent(body)))
+          htmlBody
         ]
         
-        const email = emailLines.join('\r\n')
-        const encodedEmail = btoa(email)
+        const message = messageParts.join('\r\n')
+        
+        // Solo un encoding a base64 URL-safe
+        const encodedEmail = btoa(message)
           .replace(/\+/g, '-')
           .replace(/\//g, '_')
           .replace(/=+$/, '')

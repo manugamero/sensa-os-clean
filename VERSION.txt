@@ -1,8 +1,7 @@
-072
+073
 Build: 2025-01-09
 Changes:
-- Fixed UTF-8 encoding in invitation emails (proper charset handling)
-- Subject line now uses RFC 2047 encoded-word syntax for UTF-8
-- Body uses base64 encoding with proper Content-Transfer-Encoding
-- Removed duplicate empty state message in chat panel
-- Chat invitations now display correctly with accents and special characters
+- Simplified email encoding to avoid double-encoding issues
+- Removed accents from email text to ensure compatibility
+- Single base64 encoding with proper MIME headers
+- Email subject and body now display correctly without garbled characters
