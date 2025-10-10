@@ -141,18 +141,37 @@ const Dashboard: React.FC = () => {
             </div>
 
             {/* Chat Type */}
-            <div>
+            <div className="mb-4">
               <label className="text-xs text-black/60 dark:text-white/60 mb-2 block">Tipo de Chat</label>
               <select
                 value={chatType}
                 onChange={(e) => setChatType(e.target.value as any)}
                 className="w-full px-3 py-2 bg-white dark:bg-black border border-white/[0.08] dark:border-white/[0.24] rounded-lg text-sm text-black dark:text-white"
               >
-                <option value="email">Email Threads (real) ⭐</option>
                 <option value="simple">Simple (demo)</option>
+                <option value="email">Email Threads (real)</option>
               </select>
-              <p className="mt-2 text-xs text-black/50 dark:text-white/50">
-                Email Threads: Conversaciones reales vía Gmail. También aparecen en la columna Email.
+            </div>
+
+            {/* Email Encoder */}
+            <div>
+              <label className="text-xs text-black/60 dark:text-white/60 mb-2 block">Email Encoding</label>
+              <select
+                defaultValue={localStorage.getItem('emailEncoder') || 'chunkedEncoder'}
+                onChange={(e) => {
+                  localStorage.setItem('emailEncoder', e.target.value)
+                  alert('Encoder updated. Try sending invitation.')
+                }}
+                className="w-full px-3 py-2 bg-white dark:bg-black border border-white/[0.08] dark:border-white/[0.24] rounded-lg text-sm text-black dark:text-white"
+              >
+                <option value="chunkedEncoder">Chunked (Default)</option>
+                <option value="asciiOnly">ASCII Only</option>
+                <option value="textEncoder">TextEncoder</option>
+                <option value="unicodeEscape">Unicode Escape</option>
+                <option value="safeReplace">Safe Replace</option>
+              </select>
+              <p className="mt-1 text-xs text-black/50 dark:text-white/50">
+                Test different methods if garbled text
               </p>
             </div>
           </div>

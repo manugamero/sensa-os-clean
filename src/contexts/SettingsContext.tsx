@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, ReactNode } from 'react'
 type ColorScheme = 'gray' | 'blue' | 'green' | 'purple' | 'red' | 'orange'
 type ModalStyle = 1 | 2 | 3
 type ChatType = 'email' | 'simple'
+type EmailEncoder = 'asciiOnly' | 'textEncoder' | 'unicodeEscape' | 'chunkedEncoder' | 'safeReplace'
 
 interface SettingsContextType {
   colorScheme: ColorScheme
@@ -11,6 +12,8 @@ interface SettingsContextType {
   setModalStyle: (style: ModalStyle) => void
   chatType: ChatType
   setChatType: (type: ChatType) => void
+  emailEncoder: EmailEncoder
+  setEmailEncoder: (encoder: EmailEncoder) => void
 }
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined)
@@ -31,6 +34,7 @@ export const SettingsProvider: React.FC<SettingsProviderProps> = ({ children }) 
   const [colorScheme, setColorScheme] = useState<ColorScheme>('gray')
   const [modalStyle, setModalStyle] = useState<ModalStyle>(3) // Default: Slide from bottom
   const [chatType, setChatType] = useState<ChatType>('simple')
+  const [emailEncoder, setEmailEncoder] = useState<EmailEncoder>('chunkedEncoder')
 
   return (
     <SettingsContext.Provider
@@ -41,6 +45,8 @@ export const SettingsProvider: React.FC<SettingsProviderProps> = ({ children }) 
         setModalStyle,
         chatType,
         setChatType,
+        emailEncoder,
+        setEmailEncoder,
       }}
     >
       {children}

@@ -1,4 +1,5 @@
 import { tokenService } from './tokenService'
+import { emailEncoders } from '../utils/emailEncoder'
 
 export interface ChatRoom {
   id: string
@@ -73,15 +74,9 @@ export const chatService = {
         
         const message = messageParts.join('\r\n')
         
-        // Encoding UTF-8 usando solo ASCII (evitar problemas de encoding)
-        // Convertir a base64 usando solo caracteres seguros
-        const bytes = new TextEncoder().encode(message)
-        let binary = ''
-        bytes.forEach(byte => binary += String.fromCharCode(byte))
-        const encodedEmail = btoa(binary)
-          .replace(/\+/g, '-')
-          .replace(/\//g, '_')
-          .replace(/=+$/, '')
+        // Usar el encoder configurado (default: chunkedEncoder)
+        const encoderType = localStorage.getItem('emailEncoder') || 'chunkedEncoder'
+        const encodedEmail = emailEncoders[encoderType as keyof typeof emailEncoders](message)
 
         const response = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/send', {
           method: 'POST',

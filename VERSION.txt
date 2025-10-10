@@ -1,7 +1,8 @@
-075
+076
 Build: 2025-01-09
 Changes:
-- Improved UTF-8 encoding using TextEncoder with byte iteration
-- Email text in English to ensure compatibility
-- Fixed base64 conversion using byte-by-byte approach
-- Should resolve garbled character issues in email invitations
+- Added 5 different email encoding methods to test
+- New settings panel option: Email Encoding selector
+- Methods: ASCII Only, TextEncoder, Unicode Escape, Chunked, Safe Replace
+- Users can test different encoders if emails show garbled text
+- Created emailEncoder utility with multiple strategies
