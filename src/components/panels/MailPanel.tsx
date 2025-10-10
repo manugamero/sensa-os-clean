@@ -9,10 +9,18 @@ interface Email {
   id: string
   subject: string
   from: string
+  to?: string
   snippet: string
+  body?: string
   date: string
   isRead: boolean
   hasAttachments: boolean
+  attachments?: Array<{
+    filename: string
+    mimeType: string
+    size: number
+    attachmentId: string
+  }>
   isPinned?: boolean
   isDone?: boolean
 }
