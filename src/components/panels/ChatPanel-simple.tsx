@@ -142,7 +142,7 @@ const ChatPanelSimple: React.FC = () => {
       
       {/* Create Form */}
       {showCreateForm && (
-        <div className="mb-4 p-4 border border-white/[0.08] rounded-lg bg-gray-50 dark:bg-black">
+        <div className="mb-4 p-4 border border-gray-200 dark:border-white/[0.08] rounded-lg bg-gray-50 dark:bg-black">
           <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Nueva Conversación</h3>
           <form onSubmit={createConversation} className="space-y-3">
             <input
@@ -150,7 +150,7 @@ const ChatPanelSimple: React.FC = () => {
               placeholder="Email del participante"
               value={newConversation.email}
               onChange={(e) => setNewConversation({ ...newConversation, email: e.target.value })}
-              className="w-full px-3 py-2 border border-white/[0.08] rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="w-full px-3 py-2 border border-gray-200 dark:border-white/[0.08] rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400"
               required
             />
             <input
@@ -158,7 +158,7 @@ const ChatPanelSimple: React.FC = () => {
               placeholder="Título de conversación (opcional)"
               value={newConversation.name}
               onChange={(e) => setNewConversation({ ...newConversation, name: e.target.value })}
-              className="w-full px-3 py-2 border border-white/[0.08] rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="w-full px-3 py-2 border border-gray-200 dark:border-white/[0.08] rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400"
             />
             <div className="flex gap-2">
               <button
@@ -198,7 +198,7 @@ const ChatPanelSimple: React.FC = () => {
               onMouseEnter={() => setHoveredRoom(room.id)}
               onMouseLeave={() => setHoveredRoom(null)}
               onClick={() => setSelectedRoom(room)}
-              className={`card-hover p-3 rounded-lg border cursor-pointer bg-white dark:bg-black border-white/[0.08] relative ${!room.isActive ? 'opacity-50' : ''}`}
+              className={`card-hover p-3 rounded-lg border cursor-pointer bg-white dark:bg-black border-gray-200 dark:border-white/[0.08] relative ${!room.isActive ? 'opacity-50' : ''}`}
             >
               {/* Done button on hover */}
               {hoveredRoom === room.id && (

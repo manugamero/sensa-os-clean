@@ -123,7 +123,7 @@ const Dashboard: React.FC = () => {
       {/* Settings Panel */}
       {showSettings && (
         <div className="px-4 pb-2">
-          <div className="bg-white dark:bg-black rounded-lg border border-white/[0.08] dark:border-white/[0.08] p-4">
+          <div className="bg-white dark:bg-black rounded-lg border border-gray-200 dark:border-white/[0.08] dark:border-gray-200 dark:border-white/[0.08] p-4">
             <h3 className="text-sm font-semibold text-black dark:text-white mb-3">Ajustes</h3>
             
             {/* Modal Style */}
@@ -132,7 +132,7 @@ const Dashboard: React.FC = () => {
               <select
                 value={modalStyle}
                 onChange={(e) => setModalStyle(Number(e.target.value) as any)}
-                className="w-full px-3 py-2 bg-white dark:bg-black border border-white/[0.08] dark:border-white/[0.24] rounded-lg text-sm text-black dark:text-white"
+                className="w-full px-3 py-2 bg-white dark:bg-black border border-gray-200 dark:border-white/[0.08] dark:border-white/[0.24] rounded-lg text-sm text-black dark:text-white"
               >
                 <option value={1}>1. Sin animación</option>
                 <option value={2}>2. Slide from right →</option>
@@ -146,7 +146,7 @@ const Dashboard: React.FC = () => {
               <select
                 value={chatType}
                 onChange={(e) => setChatType(e.target.value as any)}
-                className="w-full px-3 py-2 bg-white dark:bg-black border border-white/[0.08] dark:border-white/[0.24] rounded-lg text-sm text-black dark:text-white"
+                className="w-full px-3 py-2 bg-white dark:bg-black border border-gray-200 dark:border-white/[0.08] dark:border-white/[0.24] rounded-lg text-sm text-black dark:text-white"
               >
                 <option value="simple">Simple (demo)</option>
                 <option value="email">Email Threads (real)</option>
@@ -162,7 +162,7 @@ const Dashboard: React.FC = () => {
                   localStorage.setItem('emailEncoder', e.target.value)
                   alert('Encoder updated. Try sending invitation.')
                 }}
-                className="w-full px-3 py-2 bg-white dark:bg-black border border-white/[0.08] dark:border-white/[0.24] rounded-lg text-sm text-black dark:text-white"
+                className="w-full px-3 py-2 bg-white dark:bg-black border border-gray-200 dark:border-white/[0.08] dark:border-white/[0.24] rounded-lg text-sm text-black dark:text-white"
               >
                 <option value="chunkedEncoder">Chunked (Default)</option>
                 <option value="asciiOnly">ASCII Only</option>
@@ -205,29 +205,29 @@ const Dashboard: React.FC = () => {
         {/* Desktop: Grid Layout */}
         <div className="hidden lg:grid grid-cols-4 gap-4 h-full">
           {/* Calendario */}
-          <div className="rounded-lg border border-white/[0.08] dark:border-white/[0.08] p-4 h-full overflow-hidden">
+          <div className="rounded-lg border border-gray-200 dark:border-white/[0.08] dark:border-gray-200 dark:border-white/[0.08] p-4 h-full overflow-hidden">
             <CalendarPanel />
           </div>
 
           {/* Email */}
-          <div className="rounded-lg border border-white/[0.08] dark:border-white/[0.08] p-4 h-full overflow-hidden">
+          <div className="rounded-lg border border-gray-200 dark:border-white/[0.08] dark:border-gray-200 dark:border-white/[0.08] p-4 h-full overflow-hidden">
             <MailPanel />
           </div>
 
           {/* Chat */}
-          <div className="rounded-lg border border-white/[0.08] dark:border-white/[0.08] p-4 h-full overflow-hidden">
+          <div className="rounded-lg border border-gray-200 dark:border-white/[0.08] dark:border-gray-200 dark:border-white/[0.08] p-4 h-full overflow-hidden">
             <ChatPanel />
           </div>
 
           {/* Notas */}
-          <div className="rounded-lg border border-white/[0.08] dark:border-white/[0.08] p-4 h-full overflow-hidden">
+          <div className="rounded-lg border border-gray-200 dark:border-white/[0.08] dark:border-gray-200 dark:border-white/[0.08] p-4 h-full overflow-hidden">
             <TodoPanel />
           </div>
         </div>
 
         {/* Mobile: Single Column with Swipe */}
         <div 
-          className="lg:hidden bg-white dark:bg-black rounded-lg border border-white/[0.08] dark:border-white/[0.08] p-4 h-full overflow-hidden"
+          className="lg:hidden bg-white dark:bg-black rounded-lg border border-gray-200 dark:border-white/[0.08] dark:border-gray-200 dark:border-white/[0.08] p-4 h-full overflow-hidden"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}

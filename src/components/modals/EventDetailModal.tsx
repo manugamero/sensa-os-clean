@@ -85,7 +85,7 @@ const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClose }) =
   return (
     <div className="h-full w-full flex flex-col bg-white dark:bg-black rounded-lg shadow-xl overflow-hidden">
         {/* Header simplificado: X a la izquierda, toolbar a la derecha */}
-        <div className="flex items-center justify-between p-4 border-b border-white/[0.08]">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-white/[0.08]">
           <button
             onClick={onClose}
             className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
@@ -118,7 +118,7 @@ const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClose }) =
               </button>
 
               {showMoreMenu && (
-                <div className="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-black border border-white/[0.08] rounded-lg shadow-lg z-50">
+                <div className="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-black border border-gray-200 dark:border-white/[0.08] rounded-lg shadow-lg z-50">
                   <button
                     onClick={handleEdit}
                     className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-t-lg"
@@ -133,7 +133,7 @@ const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClose }) =
                     <Copy className="w-4 h-4" />
                     Duplicar evento
                   </button>
-                  <div className="border-t border-white/[0.08] my-1" />
+                  <div className="border-t border-gray-200 dark:border-white/[0.08] my-1" />
                   <button
                     onClick={handleDelete}
                     className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-b-lg"
@@ -183,7 +183,7 @@ const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClose }) =
 
           {/* Descripción */}
           {event.description && (
-            <div className="border-t border-white/[0.08] pt-4">
+            <div className="border-t border-gray-200 dark:border-white/[0.08] pt-4">
               <p className="text-sm text-gray-600 dark:text-gray-400 whitespace-pre-wrap">
                 {event.description}
               </p>

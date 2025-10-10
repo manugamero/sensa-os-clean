@@ -197,7 +197,7 @@ const MailPanel: React.FC = () => {
                   markAsRead(email.id)
                 }
               }}
-              className={`card-hover p-3 rounded-lg border cursor-pointer bg-white dark:bg-black border-white/[0.08] relative ${
+              className={`card-hover p-3 rounded-lg border cursor-pointer bg-white dark:bg-black border-gray-200 dark:border-white/[0.08] relative ${
                 email.isRead ? 'opacity-50' : ''
               }`}
             >

@@ -81,7 +81,7 @@ const NoteDetailModal: React.FC<NoteDetailModalProps> = ({ note, onClose, onUpda
   return (
     <div className="h-full w-full flex flex-col bg-white dark:bg-black rounded-lg shadow-xl overflow-hidden">
         {/* Header simplificado: fecha a la izquierda, toolbar a la derecha */}
-        <div className="flex items-center justify-between p-4 border-b border-white/[0.08]">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-white/[0.08]">
           <div className="text-sm text-gray-600 dark:text-gray-400">
             {formatDate(note.createdAt)}
           </div>
@@ -127,7 +127,7 @@ const NoteDetailModal: React.FC<NoteDetailModalProps> = ({ note, onClose, onUpda
               </button>
 
               {showMoreMenu && (
-                <div className="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-black border border-white/[0.08] rounded-lg shadow-lg z-50">
+                <div className="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-black border border-gray-200 dark:border-white/[0.08] rounded-lg shadow-lg z-50">
                   <button
                     onClick={toggleComplete}
                     className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-t-lg"
@@ -135,7 +135,7 @@ const NoteDetailModal: React.FC<NoteDetailModalProps> = ({ note, onClose, onUpda
                     {note.completed ? <Square className="w-4 h-4" /> : <CheckSquare className="w-4 h-4" />}
                     {note.completed ? 'Marcar pendiente' : 'Marcar completada'}
                   </button>
-                  <div className="border-t border-white/[0.08] my-1" />
+                  <div className="border-t border-gray-200 dark:border-white/[0.08] my-1" />
                   <button
                     onClick={handleDelete}
                     className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-b-lg"
@@ -181,7 +181,7 @@ const NoteDetailModal: React.FC<NoteDetailModalProps> = ({ note, onClose, onUpda
 
           {/* Usuarios con acceso (nota compartida) */}
           {note.sharedWith && note.sharedWith.length > 0 && !isEditing && (
-            <div className="flex items-start gap-2 pt-2 border-t border-white/[0.08]">
+            <div className="flex items-start gap-2 pt-2 border-t border-gray-200 dark:border-white/[0.08]">
               <Users className="w-4 h-4 text-gray-500 dark:text-gray-400 mt-0.5" />
               <div>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Compartida con:</p>
@@ -204,7 +204,7 @@ const NoteDetailModal: React.FC<NoteDetailModalProps> = ({ note, onClose, onUpda
 
           {/* Información de fecha */}
           {!isEditing && (
-            <div className="border-t border-white/[0.08] pt-3">
+            <div className="border-t border-gray-200 dark:border-white/[0.08] pt-3">
               <div className="flex gap-4 text-xs text-gray-500 dark:text-gray-500">
                 <span>Creada: {formatDate(note.createdAt)}</span>
                 <span>·</span>

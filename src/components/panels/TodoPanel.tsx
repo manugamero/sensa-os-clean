@@ -222,9 +222,9 @@ const TodoPanel: React.FC = () => {
         <div className="flex-1 overflow-y-auto">
           {/* Create Form */}
           {showCreateForm && (
-            <div className="mb-4 p-4 border border-white/[0.08] rounded-lg bg-white dark:bg-black">
+            <div className="mb-4 p-4 border border-gray-200 dark:border-white/[0.08] rounded-lg bg-white dark:bg-black">
               <form onSubmit={createTodo} className="space-y-3">
-                <div className="flex items-center gap-2 p-2 border border-white/[0.08] rounded-md bg-white dark:bg-black">
+                <div className="flex items-center gap-2 p-2 border border-gray-200 dark:border-white/[0.08] rounded-md bg-white dark:bg-black">
                   <button
                     type="button"
                     onClick={() => insertMarkdown('**', '**')}
@@ -279,7 +279,7 @@ const TodoPanel: React.FC = () => {
                   ref={textareaRef}
                   value={newTodo.content}
                   onChange={(e) => setNewTodo({ ...newTodo, content: e.target.value })}
-                  className="w-full p-3 border border-white/[0.08] rounded-md focus:ring-0 resize-none bg-white dark:bg-black text-gray-900 dark:text-white"
+                  className="w-full p-3 border border-gray-200 dark:border-white/[0.08] rounded-md focus:ring-0 resize-none bg-white dark:bg-black text-gray-900 dark:text-white"
                   placeholder="Escribe tu nota aquí..."
                   rows={3}
                 />
@@ -315,7 +315,7 @@ const TodoPanel: React.FC = () => {
                   onMouseEnter={() => setHoveredTodo(todoItem.id)}
                   onMouseLeave={() => setHoveredTodo(null)}
                   onClick={() => setSelectedNote(todoItem)}
-                  className={`card-hover border border-white/[0.08] rounded-lg p-3 bg-white dark:bg-black cursor-pointer relative ${todoItem.completed ? 'opacity-50' : ''}`}
+                  className={`card-hover border border-gray-200 dark:border-white/[0.08] rounded-lg p-3 bg-white dark:bg-black cursor-pointer relative ${todoItem.completed ? 'opacity-50' : ''}`}
                 >
                   {/* Done button on hover */}
                   {hoveredTodo === todoItem.id && (

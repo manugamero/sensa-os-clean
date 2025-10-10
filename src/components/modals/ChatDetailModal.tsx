@@ -80,7 +80,7 @@ const ChatDetailModal: React.FC<ChatDetailModalProps> = ({ room, onClose }) => {
   return (
     <div className="h-full w-full flex flex-col bg-white dark:bg-black rounded-lg shadow-xl overflow-hidden">
         {/* Header simplificado: nombre del chat a la izquierda, toolbar a la derecha */}
-        <div className="flex items-center justify-between p-4 border-b border-white/[0.08]">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-white/[0.08]">
           <div className="text-sm font-semibold text-gray-900 dark:text-white">
             {room.name}
           </div>
@@ -110,7 +110,7 @@ const ChatDetailModal: React.FC<ChatDetailModalProps> = ({ room, onClose }) => {
               </button>
 
               {showMoreMenu && (
-                <div className="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-black border border-white/[0.08] rounded-lg shadow-lg z-50">
+                <div className="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-black border border-gray-200 dark:border-white/[0.08] rounded-lg shadow-lg z-50">
                   <button
                     onClick={() => {
                       console.log('Añadir participante')
@@ -178,7 +178,7 @@ const ChatDetailModal: React.FC<ChatDetailModalProps> = ({ room, onClose }) => {
         </div>
 
         {/* Input */}
-        <div className="p-4 border-t border-white/[0.08] bg-gray-50 dark:bg-gray-800">
+        <div className="p-4 border-t border-gray-200 dark:border-white/[0.08] bg-gray-50 dark:bg-gray-800">
           <div className="flex items-center gap-3">
             <button className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors">
               <Paperclip className="w-5 h-5 text-gray-500 dark:text-gray-400" />

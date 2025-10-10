@@ -154,7 +154,7 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
   return (
     <div className="h-full w-full flex flex-col bg-white dark:bg-black overflow-hidden">
         {/* Header simplificado: X a la izquierda, toolbar a la derecha */}
-        <div className="flex items-center justify-between p-4 border-b border-white/[0.08]">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-white/[0.08]">
           <button
             onClick={onClose}
             className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
@@ -197,7 +197,7 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
               </button>
 
               {showMoreMenu && (
-                <div className="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-black border border-white/[0.08] rounded-lg shadow-lg z-50">
+                <div className="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-black border border-gray-200 dark:border-white/[0.08] rounded-lg shadow-lg z-50">
                   <button
                     onClick={handleReplyAll}
                     className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-t-lg"
@@ -224,7 +224,7 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
                       Marcar como leído
                     </button>
                   )}
-                  <div className="border-t border-white/[0.08] my-1" />
+                  <div className="border-t border-gray-200 dark:border-white/[0.08] my-1" />
                   <button
                     onClick={handleSpam}
                     className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
@@ -270,7 +270,7 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
               <div key={message.id}>
                 {/* Separador entre mensajes */}
                 {index > 0 && (
-                  <div className="border-t border-white/[0.08] my-4" />
+                  <div className="border-t border-gray-200 dark:border-white/[0.08] my-4" />
                 )}
 
                 {/* Información del mensaje */}
@@ -305,7 +305,7 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
                           <button
                             key={attIndex}
                             onClick={() => handlePreviewAttachment(message.id, attachment)}
-                            className="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg border border-white/[0.08] hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                            className="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-white/[0.08] hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                           >
                             <Paperclip className="w-3 h-3 text-gray-500 dark:text-gray-400" />
                             <span className="text-xs text-gray-600 dark:text-gray-400 truncate max-w-[150px]">
@@ -337,12 +337,12 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
         </div>
 
         {/* Caja de respuesta */}
-        <div className="border-t border-white/[0.08] p-4">
+        <div className="border-t border-gray-200 dark:border-white/[0.08] p-4">
           <div className="relative">
             <input
               type="text"
               placeholder="Responder a todos..."
-              className="w-full px-3 py-2 pr-10 border border-white/[0.08] rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="w-full px-3 py-2 pr-10 border border-gray-200 dark:border-white/[0.08] rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-400"
             />
             <button
               onClick={handleReplyAll}
