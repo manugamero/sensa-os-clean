@@ -216,7 +216,7 @@ const ChatPanelEmail: React.FC = () => {
       )}
       
       <div className="flex-1 overflow-y-auto">
-        <div className="space-y-2">
+        <div className="space-y-3">
           {threads.map((thread) => (
             <div
               key={thread.id}

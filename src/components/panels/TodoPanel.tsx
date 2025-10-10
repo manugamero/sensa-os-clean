@@ -285,7 +285,7 @@ const TodoPanel: React.FC = () => {
               <p className="text-gray-500 dark:text-gray-400">No hay notas</p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3">
               {todos.filter(todo => showDone ? todo.isDone : !todo.isDone).map((todoItem) => (
                 <div 
                   key={todoItem.id} 

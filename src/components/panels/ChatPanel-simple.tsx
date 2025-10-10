@@ -135,7 +135,7 @@ const ChatPanelSimple: React.FC = () => {
       )}
       
       <div className="flex-1 overflow-y-auto">
-        <div className="space-y-2">
+        <div className="space-y-3">
           {rooms.filter(room => showDone ? room.isDone : !room.isDone).map((room) => (
             <div
               key={room.id}

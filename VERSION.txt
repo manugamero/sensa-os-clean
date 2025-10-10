@@ -1,7 +1,7 @@
-068
+069
 Build: 2025-01-09
 Changes:
-- Fixed modal width to occupy full column width (compensating for column padding)
-- Modal now uses -inset-x-4 and -bottom-4 to extend beyond column padding
-- Removed all debug colors from modals and columns
-- Modal detail now has same width as column border
+- Added rounded-lg border radius to modals (matching column style)
+- Unified modal border color to border-black/[0.08] and border-white/[0.08]
+- Standardized spacing between items to space-y-3 across all panels
+- Modal now has same border radius and color as columns
