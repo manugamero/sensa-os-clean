@@ -231,10 +231,12 @@ const MailPanel: React.FC = () => {
                       const match = email.from.match(/^(.+?)\s*<(.+?)>$/)
                       if (match) {
                         const [, name, emailAddr] = match
+                        // Limpiar comillas del nombre
+                        const cleanName = name.trim().replace(/^["']|["']$/g, '')
                         return (
                           <>
                             <span className={`truncate text-sm ${email.isRead ? 'text-gray-500 dark:text-gray-400' : 'text-gray-900 dark:text-white'}`}>
-                              {name.trim()}
+                              {cleanName}
                             </span>
                             <span className="text-gray-400 dark:text-gray-500 text-xs">·</span>
                             <span className="text-gray-400 dark:text-gray-500 text-xs truncate">
