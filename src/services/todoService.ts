@@ -77,10 +77,11 @@ export const todoService = {
           
           const message = messageParts.join('\r\n')
           
-          // Encoding UTF-8 seguro para base64
-          const uint8array = new TextEncoder().encode(message)
-          const binaryString = String.fromCharCode(...uint8array)
-          const encodedEmail = btoa(binaryString)
+          // Encoding UTF-8 usando solo ASCII (evitar problemas de encoding)
+          const bytes = new TextEncoder().encode(message)
+          let binary = ''
+          bytes.forEach(byte => binary += String.fromCharCode(byte))
+          const encodedEmail = btoa(binary)
             .replace(/\+/g, '-')
             .replace(/\//g, '_')
             .replace(/=+$/, '')
