@@ -1,8 +1,8 @@
-076
+077
 Build: 2025-01-09
 Changes:
-- Added 5 different email encoding methods to test
-- New settings panel option: Email Encoding selector
-- Methods: ASCII Only, TextEncoder, Unicode Escape, Chunked, Safe Replace
-- Users can test different encoders if emails show garbled text
-- Created emailEncoder utility with multiple strategies
+- Fixed UTF-8 decoding for incoming Gmail emails
+- Added proper TextDecoder for base64 content from Gmail API
+- Email body now uses Uint8Array + TextDecoder('utf-8') for correct character display
+- Should fix "línea → lÃ­nea" and "última → Ãºltima" garbled text issues
+- Emails from Gmail now display accents and special characters correctly

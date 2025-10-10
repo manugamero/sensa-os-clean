@@ -46,16 +46,44 @@ export const gmailService = {
           const headers = detail.payload?.headers || []
           const getHeader = (name: string) => headers.find((h: any) => h.name === name)?.value || ''
           
+          // Decodificar base64 con UTF-8 correcto
+          const decodeBase64 = (data: string): string => {
+            try {
+              // Convertir de URL-safe base64 a base64 normal
+              const base64 = data.replace(/-/g, '+').replace(/_/g, '/')
+              
+              // Decodificar base64 a string binario
+              const binaryString = atob(base64)
+              
+              // Convertir bytes a UTF-8
+              const bytes = new Uint8Array(binaryString.length)
+              for (let i = 0; i < binaryString.length; i++) {
+                bytes[i] = binaryString.charCodeAt(i)
+              }
+              
+              // Decodificar UTF-8 correctamente
+              return new TextDecoder('utf-8').decode(bytes)
+            } catch (error) {
+              console.error('Error decoding base64:', error)
+              // Fallback: intentar decodificación simple
+              try {
+                return atob(data.replace(/-/g, '+').replace(/_/g, '/'))
+              } catch {
+                return ''
+              }
+            }
+          }
+          
           // Extraer cuerpo del email
           const getBody = (payload: any): string => {
             if (payload.body?.data) {
-              return atob(payload.body.data.replace(/-/g, '+').replace(/_/g, '/'))
+              return decodeBase64(payload.body.data)
             }
             if (payload.parts) {
               for (const part of payload.parts) {
                 if (part.mimeType === 'text/plain' || part.mimeType === 'text/html') {
                   if (part.body?.data) {
-                    return atob(part.body.data.replace(/-/g, '+').replace(/_/g, '/'))
+                    return decodeBase64(part.body.data)
                   }
                 }
                 if (part.parts) {
