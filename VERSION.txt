@@ -1,8 +1,11 @@
-070
+071
 Build: 2025-01-09
 Changes:
-- Fixed Gmail integration to load full email content and attachments
-- Changed Gmail API format from 'metadata' to 'full' for complete data
-- Added proper attachment extraction and display in EmailDetailModal
-- Unified ALL borders across the entire app to border-white/[0.08] (1px white, 8% opacity)
-- Replaced all border-gray variants with unified border style
+- Fully functional chat system with email invitations
+- Backend sends HTML invitation emails via Gmail API
+- Invitations include join link: https://sos001.vercel.app/?join=ROOM_ID
+- Chat panel loads user conversations from backend
+- New chatService handles conversation creation and persistence
+- Invited users receive formatted email with join button
+- Conversations sync between users when they login
+- Fixed Gmail integration to show full email body and attachments
