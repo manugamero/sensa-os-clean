@@ -140,7 +140,7 @@ export const chatService = {
         msg.roomId === roomId
       )
       
-      return roomMessages.sort((a, b) => 
+      return roomMessages.sort((a: ChatMessage, b: ChatMessage) => 
         new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
       )
     } catch (error) {
