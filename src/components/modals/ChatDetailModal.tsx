@@ -87,13 +87,13 @@ const ChatDetailModal: React.FC<ChatDetailModalProps> = ({ room, onClose }) => {
           
           <div className="flex items-center gap-1">
             <button 
-              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-colors"
               title="Llamada de voz"
             >
               <Phone className="w-4 h-4 text-gray-500 dark:text-gray-400" />
             </button>
             <button 
-              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-colors"
               title="Videollamada"
             >
               <Video className="w-4 h-4 text-gray-500 dark:text-gray-400" />
@@ -103,7 +103,7 @@ const ChatDetailModal: React.FC<ChatDetailModalProps> = ({ room, onClose }) => {
             <div className="relative">
               <button
                 onClick={() => setShowMoreMenu(!showMoreMenu)}
-                className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+                className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-colors"
                 title="Más opciones"
               >
                 <MoreVertical className="w-4 h-4 text-gray-500 dark:text-gray-400" />
@@ -137,7 +137,7 @@ const ChatDetailModal: React.FC<ChatDetailModalProps> = ({ room, onClose }) => {
 
             <button
               onClick={onClose}
-              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-colors"
               title="Cerrar"
             >
               <X className="w-4 h-4 text-gray-500 dark:text-gray-400" />
@@ -180,7 +180,7 @@ const ChatDetailModal: React.FC<ChatDetailModalProps> = ({ room, onClose }) => {
         {/* Input */}
         <div className="p-4 border-t border-gray-200 dark:border-white/[0.08] bg-gray-50 dark:bg-gray-800">
           <div className="flex items-center gap-3">
-            <button className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors">
+            <button className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full transition-colors">
               <Paperclip className="w-5 h-5 text-gray-500 dark:text-gray-400" />
             </button>
             <div className="flex-1 relative">
@@ -193,7 +193,7 @@ const ChatDetailModal: React.FC<ChatDetailModalProps> = ({ room, onClose }) => {
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full bg-white dark:bg-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-500"
               />
             </div>
-            <button className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors">
+            <button className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full transition-colors">
               <Smile className="w-5 h-5 text-gray-500 dark:text-gray-400" />
             </button>
             <button

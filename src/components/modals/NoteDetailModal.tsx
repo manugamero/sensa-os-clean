@@ -89,7 +89,7 @@ const NoteDetailModal: React.FC<NoteDetailModalProps> = ({ note, onClose, onUpda
           <div className="flex items-center gap-1">
             <button
               onClick={toggleComplete}
-              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-colors"
               title={note.completed ? 'Marcar como pendiente' : 'Marcar como completada'}
             >
               {note.completed ? (
@@ -101,7 +101,7 @@ const NoteDetailModal: React.FC<NoteDetailModalProps> = ({ note, onClose, onUpda
             {isEditing ? (
               <button
                 onClick={handleSave}
-                className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+                className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-colors"
                 title="Guardar"
               >
                 <Save className="w-4 h-4 text-gray-500 dark:text-gray-400" />
@@ -109,7 +109,7 @@ const NoteDetailModal: React.FC<NoteDetailModalProps> = ({ note, onClose, onUpda
             ) : (
               <button
                 onClick={() => setIsEditing(true)}
-                className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+                className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-colors"
                 title="Editar"
               >
                 <Edit className="w-4 h-4 text-gray-500 dark:text-gray-400" />
@@ -120,7 +120,7 @@ const NoteDetailModal: React.FC<NoteDetailModalProps> = ({ note, onClose, onUpda
             <div className="relative">
               <button
                 onClick={() => setShowMoreMenu(!showMoreMenu)}
-                className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+                className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-colors"
                 title="Más opciones"
               >
                 <MoreVertical className="w-4 h-4 text-gray-500 dark:text-gray-400" />
@@ -149,7 +149,7 @@ const NoteDetailModal: React.FC<NoteDetailModalProps> = ({ note, onClose, onUpda
 
             <button
               onClick={onClose}
-              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-colors"
               title="Cerrar"
             >
               <X className="w-4 h-4 text-gray-500 dark:text-gray-400" />

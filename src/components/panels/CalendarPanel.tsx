@@ -167,33 +167,33 @@ const CalendarPanel: React.FC = () => {
         <div className="flex items-center gap-1">
           <button
             onClick={() => setShowDone(!showDone)}
-            className={`p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors ${showDone ? 'bg-gray-100 dark:bg-gray-900' : ''}`}
+            className={`p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-colors ${showDone ? 'bg-gray-100 dark:bg-gray-900' : ''}`}
             title={showDone ? 'Mostrar pendientes' : 'Mostrar completados'}
           >
             <Check className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </button>
           <button
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-colors"
             title="Buscar"
           >
             <Search className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </button>
           <button
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-colors"
             title="Filtrar"
           >
             <Filter className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </button>
           <button
             onClick={loadEvents}
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-colors"
             title="Actualizar"
           >
             <RefreshCw className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </button>
           <button
             onClick={() => setShowCreateForm(!showCreateForm)}
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-colors"
             title="Añadir evento"
           >
             <Plus className="w-4 h-4 text-gray-500 dark:text-gray-400" />

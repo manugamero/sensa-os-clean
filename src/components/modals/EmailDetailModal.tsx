@@ -157,7 +157,7 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-white/[0.08]">
           <button
             onClick={onClose}
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-colors"
             title="Cerrar"
           >
             <X className="w-4 h-4 text-gray-500 dark:text-gray-400" />
@@ -166,21 +166,21 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
           <div className="flex items-center gap-1">
             <button
               onClick={handleReply}
-              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-colors"
               title="Responder"
             >
               <Reply className="w-4 h-4 text-gray-500 dark:text-gray-400" />
             </button>
             <button
               onClick={handleStar}
-              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-colors"
               title="Destacar"
             >
               <Star className="w-4 h-4 text-gray-500 dark:text-gray-400" />
             </button>
             <button
               onClick={handleArchive}
-              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+              className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-colors"
               title="Archivar"
             >
               <Archive className="w-4 h-4 text-gray-500 dark:text-gray-400" />
@@ -190,7 +190,7 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
             <div className="relative">
               <button
                 onClick={() => setShowMoreMenu(!showMoreMenu)}
-                className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+                className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-colors"
                 title="Más opciones"
               >
                 <MoreVertical className="w-4 h-4 text-gray-500 dark:text-gray-400" />
@@ -346,7 +346,7 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
             />
             <button
               onClick={handleReplyAll}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-colors"
               title="Enviar"
             >
               <ReplyAll className="w-4 h-4 text-gray-500 dark:text-gray-400" />

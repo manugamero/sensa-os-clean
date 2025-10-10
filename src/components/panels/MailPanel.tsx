@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Paperclip, Search, Filter, RefreshCw, Plus, Pin, Check } from 'lucide-react'
+import { Paperclip, Search, Filter, RefreshCw, Plus, Pin, Check, Archive } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { gmailService } from '../../services/gmailService'
 import EmailDetailModal from '../modals/EmailDetailModal'
@@ -24,6 +24,7 @@ interface Email {
   }>
   isPinned?: boolean
   isDone?: boolean
+  isArchived?: boolean
 }
 
 const MailPanel: React.FC = () => {
@@ -35,6 +36,7 @@ const MailPanel: React.FC = () => {
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null)
   const [hoveredEmail, setHoveredEmail] = useState<string | null>(null)
   const [showDone, setShowDone] = useState(false)
+  const [showArchived, setShowArchived] = useState(false)
 
   useEffect(() => {
     loadEmails()
@@ -144,32 +146,32 @@ const MailPanel: React.FC = () => {
         <div className="flex items-center gap-1">
           <button
             onClick={() => setShowDone(!showDone)}
-            className={`p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors ${showDone ? 'bg-gray-100 dark:bg-gray-900' : ''}`}
+            className={`p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-colors ${showDone ? 'bg-gray-100 dark:bg-gray-900' : ''}`}
             title={showDone ? 'Mostrar pendientes' : 'Mostrar completados'}
           >
             <Check className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </button>
           <button
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-colors"
             title="Buscar"
           >
             <Search className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </button>
           <button
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-colors"
             title="Filtrar"
           >
             <Filter className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </button>
           <button
             onClick={loadEmails}
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-colors"
             title="Actualizar"
           >
             <RefreshCw className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </button>
           <button
-            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded transition-colors"
+            className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-colors"
             title="Redactar email"
           >
             <Plus className="w-4 h-4 text-gray-500 dark:text-gray-400" />
@@ -221,7 +223,7 @@ const MailPanel: React.FC = () => {
                 </div>
               )}
               
-              <div className="h-[60px] flex flex-col justify-between">
+              <div className="flex flex-col gap-0.5">
                 {/* Fila 1: De y Fecha */}
                 <div className="flex items-center justify-between h-5">
                   <div className="flex items-center gap-2 flex-1 min-w-0">
