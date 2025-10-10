@@ -1,10 +1,7 @@
-074
+075
 Build: 2025-01-09
 Changes:
-- Shared notes system with email invitations like chat
-- Notes now support multiple collaborators via email mentions
-- Real-time synchronization using localStorage events
-- Email notifications sent to mentioned users with join link
-- Note detail modal shows all users with access
-- Live sync indicator in shared notes
-- Users see "Sincronizacion en tiempo real activa" message
+- Fixed UTF-8 encoding using TextEncoder for proper international character support
+- Changed email text to English to avoid encoding issues temporarily
+- Improved base64 encoding to handle UTF-8 correctly
+- Email invitations now display without garbled characters

@@ -50,19 +50,19 @@ export const todoService = {
         try {
           const noteLink = `https://sos001.vercel.app/?note=${note.id}`
           
-          const subject = 'Te han mencionado en una nota de Sensa OS'
+          const subject = 'You have been mentioned in a Sensa OS note'
           const htmlBody = `<html>
 <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-  <h2 style="color: #000;">Te han mencionado en una nota</h2>
-  <p>${currentUserEmail} te ha mencionado en una nota colaborativa en Sensa OS.</p>
-  <p><strong>Contenido:</strong> ${content.substring(0, 100)}${content.length > 100 ? '...' : ''}</p>
+  <h2 style="color: #000;">You have been mentioned in a note</h2>
+  <p>${currentUserEmail} has mentioned you in a collaborative note in Sensa OS.</p>
+  <p><strong>Content:</strong> ${content.substring(0, 100)}${content.length > 100 ? '...' : ''}</p>
   <div style="margin: 30px 0;">
     <a href="${noteLink}" style="background-color: #000; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
-      Ver nota compartida
+      View shared note
     </a>
   </div>
-  <p style="color: #666; font-size: 14px;">O copia este enlace: ${noteLink}</p>
-  <p style="color: #999; font-size: 12px;">Esta nota se sincroniza en tiempo real entre todos los usuarios con acceso.</p>
+  <p style="color: #666; font-size: 14px;">Or copy this link: ${noteLink}</p>
+  <p style="color: #999; font-size: 12px;">This note syncs in real-time between all users with access.</p>
 </body>
 </html>`
           
@@ -76,7 +76,11 @@ export const todoService = {
           ]
           
           const message = messageParts.join('\r\n')
-          const encodedEmail = btoa(message)
+          
+          // Encoding UTF-8 seguro para base64
+          const uint8array = new TextEncoder().encode(message)
+          const binaryString = String.fromCharCode(...uint8array)
+          const encodedEmail = btoa(binaryString)
             .replace(/\+/g, '-')
             .replace(/\//g, '_')
             .replace(/=+$/, '')

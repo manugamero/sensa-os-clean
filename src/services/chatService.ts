@@ -46,22 +46,22 @@ export const chatService = {
         const inviteLink = `https://sos001.vercel.app/?join=${room.id}`
         
         // Crear el email en formato MIME correcto
-        const subject = 'Invitacion a chat en Sensa OS'
+        const subject = 'Invitation to chat in Sensa OS'
         const htmlBody = `<html>
 <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-  <h2 style="color: #000;">Has sido invitado a un chat</h2>
-  <p>${currentUserEmail} te ha invitado a una conversacion en Sensa OS.</p>
-  <p><strong>Nombre de la conversacion:</strong> ${room.name}</p>
+  <h2 style="color: #000;">You have been invited to a chat</h2>
+  <p>${currentUserEmail} has invited you to a conversation in Sensa OS.</p>
+  <p><strong>Conversation name:</strong> ${room.name}</p>
   <div style="margin: 30px 0;">
     <a href="${inviteLink}" style="background-color: #000; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
-      Unirse a la conversacion
+      Join conversation
     </a>
   </div>
-  <p style="color: #666; font-size: 14px;">O copia este enlace: ${inviteLink}</p>
+  <p style="color: #666; font-size: 14px;">Or copy this link: ${inviteLink}</p>
 </body>
 </html>`
         
-        // Construir el mensaje MIME sin doble encoding
+        // Construir el mensaje MIME
         const messageParts = [
           `To: ${invitedEmail}`,
           `Subject: ${subject}`,
@@ -73,8 +73,10 @@ export const chatService = {
         
         const message = messageParts.join('\r\n')
         
-        // Solo un encoding a base64 URL-safe
-        const encodedEmail = btoa(message)
+        // Encoding UTF-8 seguro para base64
+        const uint8array = new TextEncoder().encode(message)
+        const binaryString = String.fromCharCode(...uint8array)
+        const encodedEmail = btoa(binaryString)
           .replace(/\+/g, '-')
           .replace(/\//g, '_')
           .replace(/=+$/, '')
