@@ -5,12 +5,14 @@ interface Event {
   id: string
   summary: string
   start: {
-    dateTime: string
-    timeZone: string
+    dateTime?: string
+    date?: string
+    timeZone?: string
   }
   end: {
-    dateTime: string
-    timeZone: string
+    dateTime?: string
+    date?: string
+    timeZone?: string
   }
   attendees?: Array<{
     email: string
@@ -28,8 +30,23 @@ interface EventDetailModalProps {
 const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClose }) => {
   const [showMoreMenu, setShowMoreMenu] = useState(false)
 
-  const formatDateTime = (dateTime: string) => {
-    return new Date(dateTime).toLocaleString('es-ES', {
+  const formatDateTime = (start: { dateTime?: string; date?: string }, end?: { dateTime?: string; date?: string }) => {
+    const startStr = start.dateTime || start.date
+    if (!startStr) return 'Fecha no disponible'
+    
+    const startDate = new Date(startStr)
+    const isAllDay = !start.dateTime
+    
+    if (isAllDay) {
+      return startDate.toLocaleDateString('es-ES', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      }) + ' (Todo el día)'
+    }
+    
+    let result = startDate.toLocaleString('es-ES', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -37,6 +54,17 @@ const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClose }) =
       hour: '2-digit',
       minute: '2-digit'
     })
+    
+    if (end && end.dateTime) {
+      const endDate = new Date(end.dateTime)
+      const endTime = endDate.toLocaleTimeString('es-ES', {
+        hour: '2-digit',
+        minute: '2-digit'
+      })
+      result += ` - ${endTime}`
+    }
+    
+    return result
   }
 
   const handleEdit = () => {
@@ -132,12 +160,9 @@ const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClose }) =
           {/* Fecha y hora */}
           <div className="flex items-start gap-2">
             <Clock className="w-4 h-4 text-gray-500 dark:text-gray-400 mt-0.5" />
-            <div className="space-y-1">
+            <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                {formatDateTime(event.start.dateTime)}
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-500">
-                Hasta: {formatDateTime(event.end.dateTime)}
+                {formatDateTime(event.start, event.end)}
               </p>
             </div>
           </div>
