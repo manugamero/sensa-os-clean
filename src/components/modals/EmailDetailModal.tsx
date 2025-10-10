@@ -5,11 +5,18 @@ interface Email {
   id: string
   subject: string
   from: string
+  to?: string
   snippet: string
   date: string
   isRead: boolean
   hasAttachments: boolean
   body?: string
+  attachments?: Array<{
+    filename: string
+    mimeType: string
+    size: number
+    attachmentId: string
+  }>
 }
 
 interface EmailDetailModalProps {
