@@ -26,9 +26,10 @@ interface EmailDetailModalProps {
   email: Email
   onClose: () => void
   onMarkAsRead?: (emailId: string) => void
+  onArchive?: (emailId: string) => void
 }
 
-const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onMarkAsRead }) => {
+const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onMarkAsRead, onArchive }) => {
   const [showMoreMenu, setShowMoreMenu] = useState(false)
   const [threadMessages, setThreadMessages] = useState<Email[]>([email])
   const [loadingThread, setLoadingThread] = useState(false)
@@ -120,8 +121,9 @@ const EmailDetailModal: React.FC<EmailDetailModalProps> = ({ email, onClose, onM
   }
 
   const handleArchive = () => {
-    console.log('Archivando email:', email.id)
-    // Aquí iría la lógica para archivar
+    if (onArchive) {
+      onArchive(email.id)
+    }
     onClose()
   }
 

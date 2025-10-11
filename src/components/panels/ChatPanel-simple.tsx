@@ -91,9 +91,36 @@ const ChatPanelSimple: React.FC = () => {
 
   const toggleDone = (roomId: string, e: React.MouseEvent) => {
     e.stopPropagation()
-    setRooms(rooms.map(room => 
+    
+    const room = rooms.find(r => r.id === roomId)
+    const willBeDone = room && !room.isDone
+    
+    // Actualizar el estado
+    const updatedRooms = rooms.map(room => 
       room.id === roomId ? { ...room, isDone: !room.isDone } : room
-    ))
+    )
+    setRooms(updatedRooms)
+    
+    // Si se marcó como done y el modal está abierto, abrir el siguiente
+    if (willBeDone && selectedRoom?.id === roomId) {
+      // Filtrar según el estado actual de showDone
+      const currentFilteredRooms = updatedRooms.filter(r => {
+        if (showDone && !r.isDone) return false
+        if (!showDone && r.isDone) return false
+        return true
+      })
+      
+      const currentIndex = currentFilteredRooms.findIndex(r => r.id === roomId)
+      let nextRoom: ChatRoom | null = null
+      
+      if (currentIndex !== -1 && currentIndex < currentFilteredRooms.length - 1) {
+        nextRoom = currentFilteredRooms[currentIndex + 1]
+      } else if (currentIndex > 0) {
+        nextRoom = currentFilteredRooms[currentIndex - 1]
+      }
+      
+      setSelectedRoom(nextRoom)
+    }
   }
 
   return (

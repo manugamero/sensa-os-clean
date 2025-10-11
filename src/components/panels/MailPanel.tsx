@@ -56,12 +56,44 @@ const MailPanel: React.FC = () => {
 
   const markAsRead = async (emailId: string) => {
     try {
-      await gmailService.markAsRead('', emailId)
+      await gmailService.markAsRead(emailId)
       setEmails(emails.map(email => 
         email.id === emailId ? { ...email, isRead: true } : email
       ))
     } catch (error) {
       console.error('Error marking email as read:', error)
+    }
+  }
+
+  const archiveEmail = async (emailId: string) => {
+    try {
+      await gmailService.archiveEmail(emailId)
+      
+      // Encontrar el índice del email actual en la lista filtrada
+      const currentIndex = filteredEmails.findIndex(e => e.id === emailId)
+      
+      // Determinar el siguiente email a abrir
+      let nextEmail: Email | null = null
+      if (currentIndex !== -1 && currentIndex < filteredEmails.length - 1) {
+        // Si hay un email siguiente, abrirlo
+        nextEmail = filteredEmails[currentIndex + 1]
+      } else if (currentIndex > 0) {
+        // Si estamos en el último, abrir el anterior
+        nextEmail = filteredEmails[currentIndex - 1]
+      }
+      
+      // Remover el email de la lista
+      setEmails(emails.filter(email => email.id !== emailId))
+      
+      // Abrir el siguiente email si existe
+      if (nextEmail) {
+        setSelectedEmail(nextEmail)
+      } else {
+        setSelectedEmail(null)
+      }
+    } catch (error) {
+      console.error('Error archiving email:', error)
+      alert('Error al archivar el email')
     }
   }
 
@@ -289,6 +321,8 @@ const MailPanel: React.FC = () => {
           <EmailDetailModal
             email={selectedEmail}
             onClose={() => setSelectedEmail(null)}
+            onMarkAsRead={markAsRead}
+            onArchive={archiveEmail}
           />
         </ModalWrapper>
       )}

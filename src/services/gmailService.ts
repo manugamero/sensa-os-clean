@@ -207,34 +207,66 @@ export const gmailService = {
     }
   },
 
-  async markAsRead(accessToken: string, emailId: string): Promise<any> {
+  async markAsRead(emailId: string): Promise<any> {
     try {
       const validToken = await tokenService.getValidToken()
       if (!validToken) {
         throw new Error('No valid authentication token available')
       }
 
-      const response = await fetch(`/api/gmail/emails/${emailId}/read`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${validToken}`
-        },
-        body: JSON.stringify({ accessToken: validToken })
-      })
+      const response = await fetch(
+        `https://gmail.googleapis.com/gmail/v1/users/me/messages/${emailId}/modify`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${validToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            removeLabelIds: ['UNREAD']
+          })
+        }
+      )
       
       if (!response.ok) {
-        const errorData = await response.json()
-        const shouldRetry = await tokenService.handleApiError(errorData)
-        if (shouldRetry) {
-          return await this.markAsRead(accessToken, emailId)
-        }
         throw new Error('Failed to mark email as read')
       }
       
       return response.json()
     } catch (error) {
       console.error('Error marking email as read:', error)
+      throw error
+    }
+  },
+
+  async archiveEmail(emailId: string): Promise<any> {
+    try {
+      const validToken = await tokenService.getValidToken()
+      if (!validToken) {
+        throw new Error('No valid authentication token available')
+      }
+
+      const response = await fetch(
+        `https://gmail.googleapis.com/gmail/v1/users/me/messages/${emailId}/modify`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${validToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            removeLabelIds: ['INBOX']
+          })
+        }
+      )
+      
+      if (!response.ok) {
+        throw new Error('Failed to archive email')
+      }
+      
+      return response.json()
+    } catch (error) {
+      console.error('Error archiving email:', error)
       throw error
     }
   },

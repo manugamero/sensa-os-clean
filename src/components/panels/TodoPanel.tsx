@@ -147,9 +147,36 @@ const TodoPanel: React.FC = () => {
 
   const toggleDone = (todoId: string, e: React.MouseEvent) => {
     e.stopPropagation()
-    setTodos(todos.map(todo => 
+    
+    const todo = todos.find(t => t.id === todoId)
+    const willBeDone = todo && !todo.isDone
+    
+    // Actualizar el estado
+    const updatedTodos = todos.map(todo => 
       todo.id === todoId ? { ...todo, isDone: !todo.isDone } : todo
-    ))
+    )
+    setTodos(updatedTodos)
+    
+    // Si se marcó como done y el modal está abierto, abrir el siguiente
+    if (willBeDone && selectedNote?.id === todoId) {
+      // Filtrar según el estado actual de showDone
+      const currentFilteredTodos = updatedTodos.filter(t => {
+        if (showDone && !t.isDone) return false
+        if (!showDone && t.isDone) return false
+        return true
+      })
+      
+      const currentIndex = currentFilteredTodos.findIndex(t => t.id === todoId)
+      let nextTodo: Todo | null = null
+      
+      if (currentIndex !== -1 && currentIndex < currentFilteredTodos.length - 1) {
+        nextTodo = currentFilteredTodos[currentIndex + 1]
+      } else if (currentIndex > 0) {
+        nextTodo = currentFilteredTodos[currentIndex - 1]
+      }
+      
+      setSelectedNote(nextTodo)
+    }
   }
 
   const formatMarkdown = (content: string) => {

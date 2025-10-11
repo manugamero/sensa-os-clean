@@ -62,9 +62,36 @@ const CalendarPanel: React.FC = () => {
 
   const toggleDone = (eventId: string, e: React.MouseEvent) => {
     e.stopPropagation()
-    setEvents(events.map(event => 
+    
+    const event = events.find(e => e.id === eventId)
+    const willBeDone = event && !event.isDone
+    
+    // Actualizar el estado
+    const updatedEvents = events.map(event => 
       event.id === eventId ? { ...event, isDone: !event.isDone } : event
-    ))
+    )
+    setEvents(updatedEvents)
+    
+    // Si se marcó como done y el modal está abierto, abrir el siguiente
+    if (willBeDone && selectedEvent?.id === eventId) {
+      // Filtrar eventos según el estado actual de showDone
+      const currentFilteredEvents = updatedEvents.filter(e => {
+        if (showDone && !e.isDone) return false
+        if (!showDone && e.isDone) return false
+        return true
+      })
+      
+      const currentIndex = currentFilteredEvents.findIndex(e => e.id === eventId)
+      let nextEvent: Event | null = null
+      
+      if (currentIndex !== -1 && currentIndex < currentFilteredEvents.length - 1) {
+        nextEvent = currentFilteredEvents[currentIndex + 1]
+      } else if (currentIndex > 0) {
+        nextEvent = currentFilteredEvents[currentIndex - 1]
+      }
+      
+      setSelectedEvent(nextEvent)
+    }
   }
 
   const createEvent = async (e: React.FormEvent) => {
